@@ -26,7 +26,10 @@ public class Constants {
     /** <h2> String constants </h2>*/
     // Messeges:
     public static final String
-        ILLEGAL_CODE_MESSAGE = "",
-        IO_ERROR_MESSAGE = "";
+            ILLEGAL_CODE_MESSAGE = "",
+            IO_ERROR_MESSAGE = "",
+            SYMBOL_TABLE_VAR_ERROR_MESSAGE = "Scope error",
+            SYMBOL_TABLE_SCOPE_ERROR_MESSAGE = "Scope error";
+
 
 }
