@@ -1,4 +1,4 @@
-package ex5;
+package ex5.scope_managing;
 
 import ex5.util.Constants;
 
@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 public class SymbolTable {
-    private final List<Map<String, String>> table;
+    private final List<Map<String, Constants.VariableType>> table;
 
     public SymbolTable() {
-        table = new ArrayList<Map<String, String>>();
+        table = new ArrayList<Map<String, Constants.VariableType>>();
     }
 
     public void addScope() {
@@ -26,13 +26,13 @@ public class SymbolTable {
         }
     }
 
-    public void addVarToScope(String var, String type) throws SymbolTableException {
+    public void addVarToScope(String var, Constants.VariableType type) throws SymbolTableException {
         // Add var to the last scope:
         if (table.isEmpty()) {
             throw new SymbolTableException(Constants.SYMBOL_TABLE_SCOPE_ERROR_MESSAGE);
         }
 
-        Map<String, String> currentScope = table.get(table.size() - 1);
+        Map<String, Constants.VariableType> currentScope = table.get(table.size() - 1);
         // if already exists, throw error:
         if(currentScope.containsKey(var)) {
             throw new SymbolTableException(Constants.SYMBOL_TABLE_VAR_ERROR_MESSAGE);
@@ -49,7 +49,7 @@ public class SymbolTable {
         return false;
     }
 
-    public String getVarType(String var) {
+    public Constants.VariableType getVarType(String var) {
         for (int i = table.size() - 1; i >= 0; i--) {
             if (table.get(i).containsKey(var)) {
                 return table.get(i).get(var);

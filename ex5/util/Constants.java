@@ -23,13 +23,38 @@ package ex5.util;
 
 
 public class Constants {
+    /** <h2> Enums </h2> */
+    public enum ScopeKind {
+        METHOD, IF, WHILE
+    }
+
+    public enum VariableType {
+        INT, DOUBLE, STRING, BOOLEAN, CHAR
+    }
+
     /** <h2> String constants </h2>*/
     // Messeges:
     public static final String
             ILLEGAL_CODE_MESSAGE = "",
             IO_ERROR_MESSAGE = "",
-            SYMBOL_TABLE_VAR_ERROR_MESSAGE = "Scope error",
-            SYMBOL_TABLE_SCOPE_ERROR_MESSAGE = "Scope error";
 
+            SYMBOL_TABLE_EXCEPTION_GENERAL_ERROR_MESSAGE = "SymbolTable Exception: ",
+            SYMBOL_TABLE_VAR_ERROR_MESSAGE = "invalid var.",
+            SYMBOL_TABLE_SCOPE_ERROR_MESSAGE = "invalid Scope.",
+
+            SCOPE_MANAGER_EXCEPTION_GENERAL_ERROR_MESSAGE = "ScopeManager Exception: ",
+            INVALID_EXIT_SCOPE_MESSAGE = "invalid exit of scope.";
+
+
+    // saved words:
+    public static final String
+            METHOD = "Method",
+            IF = "if",
+            WHILE = "while",
+            INT = "int",
+            DOUBLE = "double",
+            STRING = "String",
+            BOOLEAN = "boolean",
+            CHAR = "char";
 
 }
