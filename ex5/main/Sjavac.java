@@ -2,6 +2,7 @@ package ex5.main;
 
 import ex5.FileReader;
 import ex5.Validator;
+import ex5.scope_managing.ScopeManager;
 import ex5.scope_managing.SymbolTable;
 
 import java.io.IOException;
@@ -12,6 +13,7 @@ public class Sjavac {
     private final SymbolTable symbolTable;
     // TODO: needed? or Validator methods are static?
     private Validator validator;
+    private ScopeManager scopeManager;
 
     public Sjavac(String filePath) {
         // Read and pre-process the file:
@@ -20,6 +22,7 @@ public class Sjavac {
 
         symbolTable = new SymbolTable();
         validator = new Validator(symbolTable);
+        scopeManager = new ScopeManager();
     }
 
     public boolean run() {
@@ -30,6 +33,11 @@ public class Sjavac {
                 return false;
             }
         }
+        // Check there are no un-closed scopes:
+        if (!scopeManager.isScopeDequeEmpty()) {
+            return false;
+        }
+
         return true;
     }
 
