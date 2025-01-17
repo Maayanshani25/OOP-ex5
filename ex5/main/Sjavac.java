@@ -1,11 +1,10 @@
 package ex5.main;
 
-// TODO: should be in ex5 package?
-
 public class Sjavac {
 
     public static void main(String[] args) {
         String source_file_name = args[0];
+        // TODO: if the args num is invalid, filename is wrong, or file is not sJava - throw IOException
 
 //        // TODO: if the code is legal:
 //        System.out.println(0);
