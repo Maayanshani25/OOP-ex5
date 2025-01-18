@@ -4,6 +4,8 @@ import ex5.FileReader;
 import ex5.Validator;
 import ex5.scope_managing.ScopeManager;
 import ex5.scope_managing.SymbolTable;
+import ex5.tests.SymbolTableTest;
+import ex5.tests.VariablesParserTest;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,24 +43,36 @@ public class Sjavac {
         return true;
     }
 
-    // TODO: make sure handling IOExceptions correctly
-    public static void main(String[] args) throws IOException {
-        // TODO: if the args num is invalid, filename is wrong, or file is not sJava - throw IOException
-        //  (for now, being catch in the FileReader)
-        if (args.length != 1) {
-            throw new IOException();
-        }
-        String source_file_name = args[0];
-        Sjavac sjavac = new Sjavac(source_file_name);
+//    // TODO: make sure handling IOExceptions correctly
+//    public static void main(String[] args) throws IOException {
+//        // TODO: if the args num is invalid, filename is wrong, or file is not sJava - throw IOException
+//        //  (for now, being catch in the FileReader)
+//        if (args.length != 1) {
+//            throw new IOException();
+//        }
+//        String source_file_name = args[0];
+//        Sjavac sjavac = new Sjavac(source_file_name);
+//
+//
+////        // TODO: if the code is legal:
+////        System.out.println(0);
+////        // TODO: if the code is illegal:
+////        System.out.println(1);
+////        System.err(Constants.ILLEGAL_CODE_MESSAGE);
+////        // TODO: in case of IO errors:
+////        System.out.println(2);
+////        System.err(Constants.IO_ERROR_MESSAGE);
+//    }
 
+    // main function for tests
+    public static void main(String[] args) {
+        System.out.println("Running all tests...\n");
 
-//        // TODO: if the code is legal:
-//        System.out.println(0);
-//        // TODO: if the code is illegal:
-//        System.out.println(1);
-//        System.err(Constants.ILLEGAL_CODE_MESSAGE);
-//        // TODO: in case of IO errors:
-//        System.out.println(2);
-//        System.err(Constants.IO_ERROR_MESSAGE);
+        // Call runTests for each test class
+//        SymbolTableTest.runTests();
+        VariablesParserTest.runTests();
+
+        System.out.println("All tests completed.");
     }
+
 }

@@ -1,6 +1,10 @@
 package ex5.parsing;
 
-// TODO MAAYAN: static methods only?
+
+import ex5.scope_managing.SymbolTable;
+import ex5.scope_managing.SymbolTableException;
 
 public interface Parser {
+
+    void parse(String line) throws ParserException, SymbolTableException; // No boolean, exceptions handle errors
 }

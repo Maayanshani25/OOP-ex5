@@ -38,12 +38,16 @@ public class Constants {
             ILLEGAL_CODE_MESSAGE = "",
             IO_ERROR_MESSAGE = "",
 
-            SYMBOL_TABLE_EXCEPTION_GENERAL_ERROR_MESSAGE = "SymbolTable Exception: ",
+            SYMBOL_TABLE_EXCEPTION_GENERAL_ERROR_MESSAGE = "SymbolTable Error: ",
             SYMBOL_TABLE_VAR_ERROR_MESSAGE = "invalid var.",
             SYMBOL_TABLE_SCOPE_ERROR_MESSAGE = "invalid Scope.",
 
-            SCOPE_MANAGER_EXCEPTION_GENERAL_ERROR_MESSAGE = "ScopeManager Exception: ",
-            INVALID_EXIT_SCOPE_MESSAGE = "invalid exit of scope.";
+            SCOPE_MANAGER_EXCEPTION_GENERAL_ERROR_MESSAGE = "ScopeManager Error: ",
+            INVALID_EXIT_SCOPE_MESSAGE = "invalid exit of scope.",
+
+            PARSER_EXCEPTION_GENERAL_ERROR_MESSAGE = "Parser Error: ";
+
+    public static final String VARIABLE_NAME_REGEX = "([a-zA-Z]|_[a-zA-Z0-9])[a-zA-Z0-9_]*";
 
 
     // saved words:
