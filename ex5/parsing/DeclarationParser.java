@@ -16,19 +16,15 @@ public class DeclarationParser implements Parser {
 
     private static final String VARIABLE_NAME_REGEX = "([a-zA-Z]|_[a-zA-Z0-9])[a-zA-Z0-9_]*";
 
-    public static final String INTEGER_VALUE = "[-+]?\\d+";
-    public static final String DOUBLE_VALUE = "[-+]?(\\d*\\.\\d+|\\d+\\.\\d*|\\d+)";
-    public static final String STRING_VALUE = "\"[^\\" + "\\'\",]*\"";
-    public static final String BOOLEAN_VALUE = "(true|false|[-+]?\\d+(\\.\\d+)?)";
-    public static final String CHAR_VALUE = "'[^\\\"\\\\',]'";
-
-    private static final String VALUE = "(" + INTEGER_VALUE + "|" + DOUBLE_VALUE + "|" + STRING_VALUE + "|" + BOOLEAN_VALUE + "|" + CHAR_VALUE + ")";
-    private static final String SINGLE_DECLARATION = VARIABLE_NAME_REGEX + "(\\s*=\\s*" + VALUE + ")?";
-    private static final String MULTIPLE_DECLARATIONS = SINGLE_DECLARATION + "(\\s*,\\s*" + SINGLE_DECLARATION + ")*";
-    private static final String VARIABLE_DECLARATION = "^(int|double|String|boolean|char)\\s+" + MULTIPLE_DECLARATIONS + "\\s*;$";
+    public static final String INT_VALUE_REGEX = "[-+]?\\d+";
+    public static final String DOUBLE_VALUE_REGEX = "[-+]?(\\d*\\.\\d+|\\d+\\.\\d*|\\d+)";
+    public static final String STRING_VALUE_REGEX = "\"[^\\" + "\\'\",]*\"";
+    public static final String BOOLEAN_VALUE_REGEX = "(true|false|[-+]?\\d+(\\.\\d+)?)";
+    public static final String CHAR_VALUE_REGEX = "'[^\\\"\\\\',]'";
 
     private final SymbolTable symbolTable;
     private String currentLine;
+
 
     /**
      * Constructor for VariablesParser.
@@ -57,26 +53,27 @@ public class DeclarationParser implements Parser {
         // Check if the line starts with one of the keywords
         if (matcher.find()) {
             String keyword = matcher.group(1); // Get the matching keyword
-            System.out.println("Line starts with keyword: " + keyword);
 
             // Perform specific actions based on the keyword
             switch (keyword) {
                 case "final":
                     // Handle final keyword logic here
                     break;
-                case "int":
-                    parseInt();
+                case INT:
+//                    parseInt();
+                    parseType(INT_VALUE_REGEX, VariableType.INT, INT);
                     break;
-                case "double":
+                case DOUBLE:
                     // Handle double keyword logic here
+                    parseType(DOUBLE_VALUE_REGEX, VariableType.DOUBLE, DOUBLE);
                     break;
-                case "string":
-                    // Handle string keyword logic here
+                case STRING:
+                    parseType(STRING_VALUE_REGEX, VariableType.STRING, STRING);
                     break;
-                case "char":
+                case CHAR:
                     // Handle char keyword logic here
                     break;
-                case "boolean":
+                case BOOLEAN:
                     // Handle boolean keyword logic here
                     break;
             }
@@ -85,13 +82,11 @@ public class DeclarationParser implements Parser {
         }
     }
 
-
-    // todo: change it to func that get the regex int/double/boolean/value and check if the line is valid
-    //  instead of parseInt/parseDouble/parseBoolean/parseString/parseChar
-    private void parseInt() throws ParserException, SymbolTableException {
-        final String singleDeclaration = "(" + VARIABLE_NAME_REGEX + ")(\\s*=\\s*" + INTEGER_VALUE + ")?";
+    private void parseType(String typeValueRegex, VariableType variableType, String type)
+            throws ParserException, SymbolTableException {
+        final String singleDeclaration = "(" + VARIABLE_NAME_REGEX + ")(\\s*=\\s*" + typeValueRegex + ")?";
         final String multipleDeclarations = singleDeclaration + "(\\s*,\\s*" + singleDeclaration + ")*";
-        final String correctLineRegex = "^(int)\\s+" + multipleDeclarations + "\\s*;$";
+        final String correctLineRegex = "^" + type + "\\s+" + multipleDeclarations + "\\s*;$";
 
 
         // Compile the regex to match the full declaration line
@@ -99,7 +94,7 @@ public class DeclarationParser implements Parser {
         Matcher matcher = pattern.matcher(currentLine);
 
         if (matcher.matches()) { // Ensure the entire line matches the correct structure
-            // Skip the "int" and its trailing space
+            // Skip the "type" and its trailing space
             String declarationsPart = currentLine.substring(matcher.end(1)).trim();
 
             // Extract individual declarations from the remaining part
@@ -109,19 +104,18 @@ public class DeclarationParser implements Parser {
             while (singleMatcher.find()) {
                 String variable = singleMatcher.group(1); // Capture the variable name
                 if (variable == null || variable.isEmpty()) {
-                    throw new ParserException("Missing variable name in declaration.");
+                    throw new ParserException(PARSER_EXCEPTION_MESSAGE);
                 }
-                // todo: for debuging
-                System.out.println("variable name: " + variable);
+//                // todo: for debugging
+//                System.out.println("variable name: " + variable);
 
                 // Add the variable to the symbol table
-                symbolTable.addVarToScope(variable, VariableType.INT);
+                symbolTable.addVarToScope(variable, variableType);
             }
         } else {
             throw new ParserException("Invalid variable declaration: " + currentLine);
         }
     }
-
 
     private void parseDouble() {
 

@@ -45,11 +45,12 @@ public class Constants {
             SCOPE_MANAGER_EXCEPTION_GENERAL_ERROR_MESSAGE = "ScopeManager Error: ",
             INVALID_EXIT_SCOPE_MESSAGE = "invalid exit of scope.",
 
-            PARSER_EXCEPTION_GENERAL_ERROR_MESSAGE = "Parser Error: ";
+            PARSER_EXCEPTION_GENERAL_ERROR_MESSAGE = "Parser Error: ",
+            PARSER_EXCEPTION_MESSAGE = "Missing variable name in declaration.";
 
     public static final String VARIABLE_NAME_REGEX = "([a-zA-Z]|_[a-zA-Z0-9])[a-zA-Z0-9_]*";
 
-    public static final String TYPE_REGEX = "^(final|int|double|string|char|boolean)\\b";
+    public static final String TYPE_REGEX = "^(final|int|double|String|char|boolean)\\b";
 
 
 
