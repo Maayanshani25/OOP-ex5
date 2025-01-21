@@ -11,9 +11,11 @@ public class Validator {
     // TODO: from the instructions - should use the relevant Exceptions and not just true or false
     public static boolean isValidLine(String line) {
         // TODO: write this method
-        //    - check is "()*//" - or how it should be -comment line legal according to 5.1 last line in page
-        //     - can create a keyword regex like
+        //    - check if ends with {,},; else trow error (if is "()*//" but end with the legal chars, the parser responsibility
+        //    - check if is a keyword regex like
         //     (int|double|String|boolean|char|final|void|if|while|return)
+
+        // TODO: check if ends with {,},; else trow error
         // if is Method syntax - call MethodParser, and use ScopeManager.getMethodsCounter()
         // when it's method tou should first open a new scope and then add the variables to the symbol
         // table in the new scope. p6 line 3

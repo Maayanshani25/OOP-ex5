@@ -32,6 +32,10 @@ public class Constants {
         INT, DOUBLE, STRING, BOOLEAN, CHAR
     }
 
+    public enum AssignmentStatus {
+        ASSIGNED, DECLARED, DECLARED_LAST_ROW
+    }
+
     /** <h2> String constants </h2>*/
     // Messeges:
     public static final String
