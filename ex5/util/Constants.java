@@ -49,6 +49,9 @@ public class Constants {
 
     public static final String VARIABLE_NAME_REGEX = "([a-zA-Z]|_[a-zA-Z0-9])[a-zA-Z0-9_]*";
 
+    public static final String TYPE_REGEX = "^(final|int|double|string|char|boolean)\\b";
+
+
 
     // saved words:
     public static final String
@@ -59,6 +62,7 @@ public class Constants {
             DOUBLE = "double",
             STRING = "String",
             BOOLEAN = "boolean",
-            CHAR = "char";
+            CHAR = "char",
+            FINAL = "final";
 
 }
