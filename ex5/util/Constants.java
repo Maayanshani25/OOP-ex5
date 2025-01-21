@@ -57,6 +57,16 @@ public class Constants {
             PARSER_WRONG_LINE_FORMAT = "Invalid variable declaration: ",
             INVALID_TYPE_ERROR = "Invalid type keyword: ",
             FINAL_VARIABLE_ASSIGNMENT_ERROR = "Final variable '%s' must have an assigned value.",
+            METHOD_GENERAL_SYNTAX_ERROR = "Method syntax is invalid.",
+            METHOD_DECLARE_SYNTAX_ERROR = "Method declaration syntax is invalid.",
+            INVALID_METHOD_NAME_ERROR = "Method declaration syntax is invalid.",
+            METHOD_DECLARE_IN_METHOD_SCOPE_ERROR = "Method can not be declare in another method scope.",
+            METHOD_NAME_ALREADY_EXIST_ERROR = "Two methods with the same name are illegal",
+            METHOD_PARAMETERS_ALREADY_EXIST_ERROR = "Method's parameters name already exist.",
+            METHOD_INVALID_PARAMETERS_ERROR = "Method's parameters are invalid.",
+            METHOD_CALL_SYNTAX_ERROR = "Method call syntax is invalid.",
+            METHOD_CALL_OUT_OF_METHOD_SCOPE = "Method must be call in another method scope.",
+            METHOD_NAME_DOESNT_EXIST = "Method name does not exists.",
             LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE = "Loop or condition syntax error.";
 
 

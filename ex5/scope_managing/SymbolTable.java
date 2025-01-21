@@ -47,6 +47,17 @@ public class SymbolTable {
         }
     }
 
+    public void addVarToScope(String varName, Variable var) throws SymbolTableException {
+        if (!table.isEmpty()) {
+            throw new SymbolTableException(SYMBOL_TABLE_SCOPE_ERROR_MESSAGE);
+        }
+
+        Map<String, Variable> currentScope = table.get(table.size() - 1);
+        if (currentScope.containsKey(varName)) {
+            throw new SymbolTableException(SYMBOL_TABLE_VAR_ERROR_MESSAGE + ": " + varName);
+        }
+        currentScope.put(varName, var);
+    }
 
     public void addVarToScope(String varName,
                               VariableType type,
