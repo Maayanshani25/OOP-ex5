@@ -9,6 +9,8 @@ import java.util.regex.Pattern;
 
 import static ex5.util.Constants.*;
 
+// TODO: who is responsible to check scope length? at least java.lang.Integer.MAX VALUE
+
 
 public class IfAndWhileParser implements Parser {
     // TODO: move to Constants
@@ -37,10 +39,6 @@ public class IfAndWhileParser implements Parser {
     @Override
     public void parse(String line) throws ParserException, SymbolTableException {
         String currentLine = line.trim(); // Trim leading and trailing whitespace
-
-        // TODO: conditions to check:
-        //  is in method?
-        //  is "if/while (statement) {"
 
         // Check if in Method scope:
         if (scopeManager.getMethodsCounter() < 1) {
