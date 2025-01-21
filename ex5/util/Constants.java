@@ -52,14 +52,23 @@ public class Constants {
             OUT_OF_METHOD_SCOPE_ERROR_MESSAGE = "loop or condition out of method scope.",
 
             PARSER_EXCEPTION_GENERAL_ERROR_MESSAGE = "Parser Error: ",
-            // TODO MAAYAN: the name is not clear enough
-            PARSER_NO_VARIABLE_NAME_MESSAGE = "Missing variable name in declaration.",
+            WRONG_DECLARATION_FORMAT = "Line does not start with a valid keyword.",
+            INVALID_VARIABLE_DECLARATION = "Invalid variable declaration format: ",
             PARSER_WRONG_LINE_FORMAT = "Invalid variable declaration: ",
+            INVALID_TYPE_ERROR = "Invalid type keyword: ",
+            FINAL_VARIABLE_ASSIGNMENT_ERROR = "Final variable '%s' must have an assigned value.",
             LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE = "Loop or condition syntax error.";
 
+    /** REGEX patterns */
     public static final String VARIABLE_NAME_REGEX = "([a-zA-Z]|_[a-zA-Z0-9])[a-zA-Z0-9_]*";
-
-    public static final String TYPE_REGEX = "^(final|int|double|String|char|boolean)\\b";
+    public static final String TYPE_REGEX = "^(final\\s+)?(int|double|String|char|boolean)\\b";
+    public static final String INT_VALUE_REGEX = "[-+]?\\d+";
+    public static final String DOUBLE_VALUE_REGEX = "[-+]?(\\d*\\.\\d+|\\d+\\.\\d*|\\d+)";
+    public static final String STRING_VALUE_REGEX = "\"[^\\" + "\\'\",]*\"";
+    public static final String BOOLEAN_VALUE_REGEX = "(true|false|[-+]?\\d+(\\.\\d+)?)";
+    public static final String CHAR_VALUE_REGEX = "'[^\\\"\\\\',]'";
+    public static final String COMMA_SEPARATION_REGEX = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
+    public static final String FINAL_START_REGEX = "^(final\\s+)?";
 
 
 
