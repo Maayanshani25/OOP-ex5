@@ -16,6 +16,7 @@ public class DeclarationParser implements Parser {
 
     private static final String VARIABLE_NAME_REGEX = "([a-zA-Z]|_[a-zA-Z0-9])[a-zA-Z0-9_]*";
 
+    // TODO MAAYAN: should be private?
     public static final String INT_VALUE_REGEX = "[-+]?\\d+";
     public static final String DOUBLE_VALUE_REGEX = "[-+]?(\\d*\\.\\d+|\\d+\\.\\d*|\\d+)";
     public static final String STRING_VALUE_REGEX = "\"[^\\" + "\\'\",]*\"";

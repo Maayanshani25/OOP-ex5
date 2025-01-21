@@ -2,18 +2,32 @@ package ex5;
 
 // TODO: think about the relevant package
 
-import ex5.util.Constants;
+import static ex5.util.Constants.*;
 
 public class Variable {
-    private String name;
-    private Constants.VariableType type;
-    private Constants.AssignmentStatus status;
+    private final String name;
+    private final VariableType type;
+    private AssignmentStatus status;
 
-    public Variable(String name, Constants.VariableType type, Constants.AssignmentStatus status) {
+    public Variable(String name, VariableType type, AssignmentStatus status) {
         this.name = name;
         this.type = type;
         this.status = status;
     }
 
-    // TODO: add gets and sets
+    public String getName() {
+        return name;
+    }
+
+    public VariableType getType() {
+        return type;
+    }
+
+    public AssignmentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AssignmentStatus status) {
+        this.status = status;
+    }
 }

@@ -1,5 +1,6 @@
 package ex5.scope_managing;
 
+import ex5.Variable;
 import ex5.util.Constants;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.Map;
  * Scopes are managed as a stack, where new scopes can be added and removed as needed.
  */
 public class SymbolTable {
-    private final List<Map<String, Constants.VariableType>> table;
+    private final List<Map<String, Variable>> table;
 
     /**
      * Constructs an empty SymbolTable with no scopes.
@@ -46,31 +47,31 @@ public class SymbolTable {
     /**
      * Adds a variable to the current scope.
      *
-     * @param var  The variable name.
-     * @param type The type of the variable.
+     * @param varName  The variable name.
+     * @param var The data of the variable.
      * @throws SymbolTableException if no scopes exist or the variable already exists in the current scope.
      */
-    public void addVarToScope(String var, Constants.VariableType type) throws SymbolTableException {
+    public void addVarToScope(String varName, Variable var) throws SymbolTableException {
         if (table.isEmpty()) {
             throw new SymbolTableException(Constants.SYMBOL_TABLE_SCOPE_ERROR_MESSAGE);
         }
 
-        Map<String, Constants.VariableType> currentScope = table.get(table.size() - 1);
-        if (currentScope.containsKey(var)) {
-            throw new SymbolTableException(Constants.SYMBOL_TABLE_VAR_ERROR_MESSAGE + ": " + var);
+        Map<String, Variable> currentScope = table.get(table.size() - 1);
+        if (currentScope.containsKey(varName)) {
+            throw new SymbolTableException(Constants.SYMBOL_TABLE_VAR_ERROR_MESSAGE + ": " + varName);
         }
-        currentScope.put(var, type);
+        currentScope.put(varName, var);
     }
 
     /**
      * Checks if a variable is declared in any scope.
      *
-     * @param var The variable name.
+     * @param varName The variable name.
      * @return true if the variable exists in any scope, false otherwise.
      */
-    public boolean isVariableDeclared(String var) {
+    public boolean isVariableDeclared(String varName) {
         for (int i = table.size() - 1; i >= 0; i--) {
-            if (table.get(i).containsKey(var)) {
+            if (table.get(i).containsKey(varName)) {
                 return true;
             }
         }
@@ -78,15 +79,15 @@ public class SymbolTable {
     }
 
     /**
-     * Retrieves the type of a variable from the nearest scope.
+     * Retrieves the type of variable from the nearest scope.
      *
-     * @param var The variable name.
+     * @param varName The variable name.
      * @return The variable type if found, null otherwise.
      */
-    public Constants.VariableType getVarType(String var) {
+    public Constants.VariableType getVarType(String varName) {
         for (int i = table.size() - 1; i >= 0; i--) {
-            if (table.get(i).containsKey(var)) {
-                return table.get(i).get(var);
+            if (table.get(i).containsKey(varName)) {
+                return table.get(i).get(varName).getType();
             }
         }
         return null; // Variable not found

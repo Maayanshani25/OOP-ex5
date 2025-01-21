@@ -48,9 +48,12 @@ public class Constants {
 
             SCOPE_MANAGER_EXCEPTION_GENERAL_ERROR_MESSAGE = "ScopeManager Error: ",
             INVALID_EXIT_SCOPE_MESSAGE = "invalid exit of scope.",
+            OUT_OF_METHOD_SCOPE_ERROR_MESSAGE = "loop or condition out of method scope.",
 
             PARSER_EXCEPTION_GENERAL_ERROR_MESSAGE = "Parser Error: ",
-            PARSER_EXCEPTION_MESSAGE = "Missing variable name in declaration.";
+            // TODO MAAYAN: the name is not clear enough
+            PARSER_EXCEPTION_MESSAGE = "Missing variable name in declaration.",
+            LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE = "Loop or condition syntax error.";
 
     public static final String VARIABLE_NAME_REGEX = "([a-zA-Z]|_[a-zA-Z0-9])[a-zA-Z0-9_]*";
 
@@ -67,6 +70,8 @@ public class Constants {
             DOUBLE = "double",
             STRING = "String",
             BOOLEAN = "boolean",
+            TRUE = "true",
+            FALSE = "false",
             CHAR = "char",
             FINAL = "final";
 
