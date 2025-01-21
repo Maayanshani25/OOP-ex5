@@ -94,6 +94,8 @@ public class DeclarationParserTest {
             "String name = Alice;",                       // Missing double quotes around value
             "String a = \"Unclosed string;",              // Unclosed string literal
             "String a,, b;",                              // Double commas
+            "String babab=;",                              // Double commas
+            "String babab = ;",                              // Double commas
             "String ;",                                   // Missing variable name
             "String a b;",                                // Missing comma between variables
             "String a = \"value\", b,;",                  // Trailing comma
@@ -146,6 +148,29 @@ public class DeclarationParserTest {
             "boolean c = true false;",       // Missing comma between declarations
             "boolean @flag = 5;",            // Variable name contains illegal character
     };
+
+    static String[] validFinalDeclarations = {
+            "final int a = 5;",                // Single final variable with initialization
+            "final double pi = 3.14;",         // Single final variable with double value
+            "final String text = \"Hello\";",  // Final string variable with value
+            "final char letter = 'A';",        // Final char variable with initialization
+            "final boolean flag = true;",      // Final boolean variable with true/false
+            "final int x = 10, y = 20;",       // Multiple final variables, all initialized
+            "final double aaa = 1.5, b = -3.2;", // Final variables with positive/negative values
+            "final char aaaa = 'Z', bbbb = 'X';"     // Final char variables, all initialized
+    };
+
+    static String[] invalidFinalDeclarations = {
+            "final int a;",                    // Final variable without initialization
+            "final double pi;",                // Final double variable without initialization
+            "final String text;",              // Final string variable without initialization
+            "final boolean flag;",             // Final boolean variable without initialization
+            "final char letter;",              // Final char variable without initialization
+            "final int x, y = 5;",             // One final variable without initialization
+            "final double a = 1.5, b;",        // One final variable without initialization
+            "final boolean a, b = true, c;"    // Final variable without initialization
+    };
+
 
     static void testIntDeclaration() {
         SymbolTable symbolTable = new SymbolTable();
@@ -339,10 +364,45 @@ public class DeclarationParserTest {
         System.out.println("Failed: " + failed + "\n");
     }
 
+    static void testFinalDeclaration() {
+        SymbolTable symbolTable = new SymbolTable();
+        symbolTable.addScope();
+        DeclarationParser declarationParser = new DeclarationParser(symbolTable);
+
+        int passed = 0;
+        int failed = 0;
+
+        // Test valid declarations
+        for (String declaration : validFinalDeclarations) {
+            try {
+                declarationParser.parse(declaration);
+                passed++;
+            } catch (Exception e) {
+                System.out.println("Test failed: " + declaration + " should be valid.");
+                System.out.println("Error: " + e.getMessage());
+                failed++;
+            }
+        }
+
+        // Test invalid declarations
+        for (String declaration : invalidFinalDeclarations) {
+            try {
+                declarationParser.parse(declaration);
+                System.out.println("Test failed: " + declaration + " should be invalid.");
+                failed++;
+            } catch (Exception e) {
+                passed++;
+            }
+        }
+
+        // Print summary
+        System.out.println("Test Results:");
+        System.out.println("Passed: " + passed);
+        System.out.println("Failed: " + failed + "\n");
+    }
 
 
-
-    static void testVariableNames() {
+        static void testVariableNames() {
         // Define valid and invalid variable names
         String[] validNames = {"g2", "b_3", "_a", "_0", "a_"};
         String[] invalidNames = {"2g", "_", "2__", "54_a", "__", "___b"};
@@ -395,6 +455,8 @@ public class DeclarationParserTest {
         testCharDeclaration();
         System.out.println("Running Boolean Declaration tests...");
         testBooleanDeclaration();
+        System.out.println("Running Final Declaration tests...");
+        testFinalDeclaration();
         System.out.println("All DeclarationParser tests completed.\n");
     }
 }

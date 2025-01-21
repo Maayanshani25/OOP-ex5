@@ -48,8 +48,11 @@ public class SymbolTable {
     }
 
 
-    public void addVarToScope(String varName, VariableType type,
-                              AssignmentStatus status, Boolean isFinal) throws SymbolTableException {
+    public void addVarToScope(String varName,
+                              VariableType type,
+                              AssignmentStatus status,
+                              Boolean isFinal)
+            throws SymbolTableException {
         if (table.isEmpty()) {
             throw new SymbolTableException(SYMBOL_TABLE_SCOPE_ERROR_MESSAGE);
         }
