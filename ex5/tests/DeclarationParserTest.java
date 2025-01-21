@@ -9,13 +9,13 @@ import ex5.scope_managing.SymbolTable;
 
 import static ex5.util.Constants.VARIABLE_NAME_REGEX;
 
-public class VariablesParserTest {
+public class DeclarationParserTest {
 
     static String[] validIntDeclarations = {
 //                "int a;",                        // Single variable, no initialization
 //                "int b, c, d;",                  // Multiple variables, no initialization
             "int e = 5;",                    // Single variable, with initialization
-            "int f = 3, g = 4, h = 5;",      // Multiple variables, with initialization
+            "int f = 3, g = 4, h;",      // Multiple variables, with initialization
             "int _underscore;",              // Variable name starting with an underscore
             "int _a, b_c, _123;",            // Variables with underscores and digits
 //                "int a = -1;",                   // Single variable, negative integer
@@ -103,21 +103,49 @@ public class VariablesParserTest {
             "String hashtag = \"i%#\"",                  // No semicolon
     };
 
+    static String[] validCharDeclarations = {
+            "char letter = 'a';",               // Single variable with initialization
+            "char grade = 'A', symbol = '#';",  // Multiple variables with initialization
+            "char _underscore;",                // Variable name starting with an underscore
+            "char _a, b_c, _123;",              // Variables with underscores and digits
+            "char initial = 'Z', sign = '+';",  // Variables initialized with valid characters
+            "char c1 = '@', c2 = '$';",         // Variables with special characters
+            "char a = '1', b = '2', c = '3';",  // Variables initialized with numeric characters
+    };
 
+    static String[] invalidCharDeclarations = {
+            "char 1stChar = 'a';",              // Variable name cannot start with a digit
+            "char a = 'ab';",                   // Invalid value: more than one character
+            "char x = 5;",                      // Incorrect type initialization
+            "char = 'a';",                      // Missing variable name
+            "char a = \"string\";",             // Incorrect value type (double quotes)
+            "char @invalid;",                   // Invalid character in variable name
+            "char letter = ;",                  // Missing value after assignment
+            "char a, ;",                        // Comma without variable
+    };
 
-    public static void runTests() {
-        System.out.println("Running VariablesParser tests...");
-        testVariableNames();
-        System.out.println("All VariablesParser tests completed.\n");
-        System.out.println("Running DeclarationParser tests...");
-        System.out.println("Running Int Declaration tests...");
-        testIntDeclaration();
-        System.out.println("Running Double Declaration tests...");
-        testDoubleDeclaration();
-        System.out.println("Running String Declaration tests...");
-        testStringDeclaration();
-        System.out.println("All DeclarationParser tests completed.\n");
-    }
+    static String[] validBooleanDeclarations = {
+            "boolean a = true;",             // Standard boolean value
+            "boolean b = false;",            // Standard boolean value
+            "boolean c = 1;",                // Numeric value (int)
+            "boolean d = 0;",                // Numeric value (int)
+            "boolean e = 5.2;",              // Numeric value (double)
+            "boolean flag;",                 // Declaration without initialization
+            "boolean _ready, active;",       // Multiple variables without initialization
+            "boolean x = -3.14, y = 0;",     // Mixed initialization with double and int
+            "boolean z = true, w = 1;"       // Mixed initialization with boolean and int
+    };
+
+    static String[] invalidBooleanDeclarations = {
+            "boolean a = 'true';",           // String instead of boolean or number
+            "boolean b = \"false\";",        // String instead of boolean or number
+            "boolean c = 1.2.3;",            // Malformed number
+            "boolean d = ;",                 // Missing value after assignment
+            "boolean 1isReady = true;",      // Variable name starts with a digit
+            "boolean a = 0,, b;",            // Double commas
+            "boolean c = true false;",       // Missing comma between declarations
+            "boolean @flag = 5;",            // Variable name contains illegal character
+    };
 
     static void testIntDeclaration() {
         SymbolTable symbolTable = new SymbolTable();
@@ -154,9 +182,9 @@ public class VariablesParserTest {
         }
 
         // Print summary
-        System.out.println("\nTest Results:");
+        System.out.println("Test Results:");
         System.out.println("Passed: " + passed);
-        System.out.println("Failed: " + failed);
+        System.out.println("Failed: " + failed + "\n");
     }
 
     static void testDoubleDeclaration() {
@@ -193,9 +221,9 @@ public class VariablesParserTest {
         }
 
         // Print summary
-        System.out.println("\nTest Results:");
+        System.out.println("Test Results:");
         System.out.println("Passed: " + passed);
-        System.out.println("Failed: " + failed);
+        System.out.println("Failed: " + failed + "\n");
     }
 
     static void testStringDeclaration() {
@@ -232,10 +260,86 @@ public class VariablesParserTest {
         }
 
         // Print summary
-        System.out.println("\nTest Results:");
+        System.out.println("Test Results:");
         System.out.println("Passed: " + passed);
-        System.out.println("Failed: " + failed);
+        System.out.println("Failed: " + failed + "\n");
     }
+
+    static void testCharDeclaration() {
+        SymbolTable symbolTable = new SymbolTable();
+        symbolTable.addScope();
+        DeclarationParser declarationParser = new DeclarationParser(symbolTable);
+
+        int passed = 0;
+        int failed = 0;
+
+        // Test valid declarations
+        for (String declaration : validCharDeclarations) {
+            try {
+                declarationParser.parse(declaration);
+                passed++;
+            } catch (Exception e) {
+                System.out.println("Test failed: " + declaration + " should be valid.");
+                System.out.println("Error: " + e.getMessage());
+                failed++;
+            }
+        }
+
+        // Test invalid declarations
+        for (String declaration : invalidCharDeclarations) {
+            try {
+                declarationParser.parse(declaration);
+                System.out.println("Test failed: " + declaration + " should be invalid.");
+                failed++;
+            } catch (Exception e) {
+                passed++;
+            }
+        }
+
+        // Print summary
+        System.out.println("Test Results:");
+        System.out.println("Passed: " + passed);
+        System.out.println("Failed: " + failed + "\n");
+    }
+
+    static void testBooleanDeclaration() {
+        SymbolTable symbolTable = new SymbolTable();
+        symbolTable.addScope();
+        DeclarationParser declarationParser = new DeclarationParser(symbolTable);
+
+        int passed = 0;
+        int failed = 0;
+
+        // Test valid declarations
+        for (String declaration : validBooleanDeclarations) {
+            try {
+                declarationParser.parse(declaration);
+                passed++;
+            } catch (Exception e) {
+                System.out.println("Test failed: " + declaration + " should be valid.");
+                System.out.println("Error: " + e.getMessage());
+                failed++;
+            }
+        }
+
+        // Test invalid declarations
+        for (String declaration : invalidBooleanDeclarations) {
+            try {
+                declarationParser.parse(declaration);
+                System.out.println("Test failed: " + declaration + " should be invalid.");
+                failed++;
+            } catch (Exception e) {
+                passed++;
+            }
+        }
+
+        // Print summary
+        System.out.println("Test Results:");
+        System.out.println("Passed: " + passed);
+        System.out.println("Failed: " + failed + "\n");
+    }
+
+
 
 
     static void testVariableNames() {
@@ -271,10 +375,27 @@ public class VariablesParserTest {
         }
 
         // Print summary
-        System.out.println("\nTest Results:");
+        System.out.println("Test Results:");
         System.out.println("Passed: " + passed);
-        System.out.println("Failed: " + failed);
+        System.out.println("Failed: " + failed + "\n");
     }
 
+    public static void runTests() {
+        System.out.println("Running VariablesParser tests...");
+        testVariableNames();
+        System.out.println("All VariablesParser tests completed.\n");
+        System.out.println("Running DeclarationParser tests...");
+        System.out.println("Running Int Declaration tests...");
+        testIntDeclaration();
+        System.out.println("Running Double Declaration tests...");
+        testDoubleDeclaration();
+        System.out.println("Running String Declaration tests...");
+        testStringDeclaration();
+        System.out.println("Running Char Declaration tests...");
+        testCharDeclaration();
+        System.out.println("Running Boolean Declaration tests...");
+        testBooleanDeclaration();
+        System.out.println("All DeclarationParser tests completed.\n");
+    }
 }
 

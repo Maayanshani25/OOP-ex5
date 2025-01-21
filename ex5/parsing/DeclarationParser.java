@@ -22,6 +22,7 @@ public class DeclarationParser implements Parser {
     public static final String STRING_VALUE_REGEX = "\"[^\\" + "\\'\",]*\"";
     public static final String BOOLEAN_VALUE_REGEX = "(true|false|[-+]?\\d+(\\.\\d+)?)";
     public static final String CHAR_VALUE_REGEX = "'[^\\\"\\\\',]'";
+    public static final String COMMA_SEPARATION_REGEX = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
 
     private final SymbolTable symbolTable;
     private String currentLine;
@@ -45,8 +46,6 @@ public class DeclarationParser implements Parser {
     public void parse(String line) throws ParserException, SymbolTableException{
         currentLine = line.trim(); // Trim leading and trailing whitespace
 
-        // Define the regex to check the line's prefix
-
         // Compile the regex
         Pattern pattern = Pattern.compile(TYPE_REGEX);
         Matcher matcher = pattern.matcher(currentLine);
@@ -57,25 +56,24 @@ public class DeclarationParser implements Parser {
 
             // Perform specific actions based on the keyword
             switch (keyword) {
-                case "final":
+                case FINAL:
                     // Handle final keyword logic here
+                    // add enformcemnt that the final variable is assigned
                     break;
                 case INT:
-//                    parseInt();
                     parseType(INT_VALUE_REGEX, VariableType.INT, INT);
                     break;
                 case DOUBLE:
-                    // Handle double keyword logic here
                     parseType(DOUBLE_VALUE_REGEX, VariableType.DOUBLE, DOUBLE);
                     break;
                 case STRING:
                     parseType(STRING_VALUE_REGEX, VariableType.STRING, STRING);
                     break;
                 case CHAR:
-                    // Handle char keyword logic here
+                    parseType(CHAR_VALUE_REGEX, VariableType.CHAR, CHAR);
                     break;
                 case BOOLEAN:
-                    // Handle boolean keyword logic here
+                    parseType(BOOLEAN_VALUE_REGEX, VariableType.BOOLEAN, BOOLEAN);
                     break;
             }
         } else {
@@ -85,38 +83,57 @@ public class DeclarationParser implements Parser {
 
     private void parseType(String typeValueRegex, VariableType variableType, String type)
             throws ParserException, SymbolTableException {
-        final String singleDeclaration = "(" + VARIABLE_NAME_REGEX + ")(\\s*=\\s*" + typeValueRegex + ")?";
+        // Match a single variable name, optionally followed by an assignment
+        final String singleDeclaration = "(" + VARIABLE_NAME_REGEX + ")(\\s*=\\s*(" + typeValueRegex + "))?";
+        // Allow multiple declarations separated by commas
         final String multipleDeclarations = singleDeclaration + "(\\s*,\\s*" + singleDeclaration + ")*";
+        // Match the complete line including type and semicolon
         final String correctLineRegex = "^" + type + "\\s+" + multipleDeclarations + "\\s*;$";
 
-
-        // Compile the regex to match the full declaration line
         Pattern pattern = Pattern.compile(correctLineRegex);
         Matcher matcher = pattern.matcher(currentLine);
 
-        if (matcher.matches()) { // Ensure the entire line matches the correct structure
-            // Skip the "type" and its trailing space
-            String declarationsPart = currentLine.substring(matcher.end(1)).trim();
+        // todo: for debugging
+//        System.out.println("currentLine: " + currentLine);
+        if (matcher.matches()) {
+            // Remove the type keyword and trailing semicolon
+            String declarationsPart = currentLine.substring(type.length()).trim();
+            declarationsPart = declarationsPart.substring(0, declarationsPart.length() - 1).trim();
 
-            // Extract individual declarations from the remaining part
-            Pattern singlePattern = Pattern.compile(singleDeclaration);
-            Matcher singleMatcher = singlePattern.matcher(declarationsPart);
+            // Split by comma, but not within value expressions
+            String[] declarations = declarationsPart.split(COMMA_SEPARATION_REGEX);
 
-            while (singleMatcher.find()) {
-                String variable = singleMatcher.group(1); // Capture the variable name
-                if (variable == null || variable.isEmpty()) {
-                    throw new ParserException(PARSER_EXCEPTION_MESSAGE);
+            for (String declaration : declarations) {
+                declaration = declaration.trim();
+                Pattern singlePattern = Pattern.compile("(" + VARIABLE_NAME_REGEX + ")(\\s*=\\s*(" + typeValueRegex + "))?");
+                Matcher singleMatcher = singlePattern.matcher(declaration);
+
+                if (singleMatcher.matches()) {
+                    String variableName = singleMatcher.group(1);
+                    if (variableName == null || variableName.isEmpty()) {
+                        throw new ParserException("Invalid variable declaration: variable name is missing.");
+                    }
+
+                    String value = singleMatcher.group(3); // Group 3 contains just the value, not the equals sign
+                    boolean hasValue = value != null && !value.trim().isEmpty();
+                    AssignmentStatus assignmentStatus = hasValue ? AssignmentStatus.ASSIGNED : AssignmentStatus.DECLARED;
+
+                    // todo: for debugging
+//                    System.out.println("Variable: " + variableName +
+//                            ", Value: " + (hasValue ? value : "none") +
+//                            ", Has value: " + hasValue);
+
+                    // Add the variable to the symbol table
+                     symbolTable.addVarToScope(variableName, variableType, assignmentStatus, false);
+                } else {
+                    throw new ParserException("Invalid variable declaration format: " + declaration);
                 }
-//                // todo: for debugging
-//                System.out.println("variable name: " + variable);
-
-                // Add the variable to the symbol table
-                symbolTable.addVarToScope(variable, variableType);
             }
         } else {
-            throw new ParserException("Invalid variable declaration: " + currentLine);
+            throw new ParserException("Invalid variable declaration line: " + currentLine);
         }
     }
+
 
     private void parseDouble() {
 

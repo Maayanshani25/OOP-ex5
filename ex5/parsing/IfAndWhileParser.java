@@ -73,34 +73,34 @@ public class IfAndWhileParser implements Parser {
         Pattern orPattern = Pattern.compile(OR_CONDITION_REGEX);
         Matcher orMatcher = orPattern.matcher(condition);
 
-        Pattern andPattern = Pattern.compile(AND_CONDITION_REGEX);
-        Matcher andMatcher = andPattern.matcher(condition);
-        if (recursiveCondition(orMatcher) || recursiveCondition(andMatcher)) {
-                return;
-        }
-
-//        while (orMatcher.find()) {
-//            String leftCondition = orMatcher.group(1).trim();
-//            String rightCondition = orMatcher.group(2).trim();
-//            if (!parseSingleCondition(leftCondition) || !parseSingleCondition(rightCondition)) {
-//                throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
-//            }
-//            return;
-//        }
-
-//        // Check recursive AND condition:
 //        Pattern andPattern = Pattern.compile(AND_CONDITION_REGEX);
 //        Matcher andMatcher = andPattern.matcher(condition);
-
-//
-//        while (andMatcher.find()) {
-//            String leftCondition = andMatcher.group(1).trim();
-//            String rightCondition = andMatcher.group(2).trim();
-//            if (!parseSingleCondition(leftCondition) || !parseSingleCondition(rightCondition)) {
-//                throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
-//            }
-//            return;
+//        if (recursiveCondition(orMatcher) || recursiveCondition(andMatcher)) {
+//                return;
 //        }
+
+        while (orMatcher.find()) {
+            String leftCondition = orMatcher.group(1).trim();
+            String rightCondition = orMatcher.group(2).trim();
+            if (!parseSingleCondition(leftCondition) || !parseSingleCondition(rightCondition)) {
+                throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
+            }
+            return;
+        }
+
+        // Check recursive AND condition:
+        Pattern andPattern = Pattern.compile(AND_CONDITION_REGEX);
+        Matcher andMatcher = andPattern.matcher(condition);
+
+
+        while (andMatcher.find()) {
+            String leftCondition = andMatcher.group(1).trim();
+            String rightCondition = andMatcher.group(2).trim();
+            if (!parseSingleCondition(leftCondition) || !parseSingleCondition(rightCondition)) {
+                throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
+            }
+            return;
+        }
 
         if (!parseSingleCondition(condition)) {
             throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
@@ -134,7 +134,7 @@ public class IfAndWhileParser implements Parser {
         }
 
         // Check if is initialized bool\int\double variable
-        if (symbolTable.isVariableDeclared(token) && isValidType(token)) {
+        if (symbolTable.isVariableAssigned(token) && isValidType(token)) {
             return true;
         }
 

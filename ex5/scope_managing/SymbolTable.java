@@ -1,12 +1,15 @@
 package ex5.scope_managing;
 
 import ex5.Variable;
-import ex5.util.Constants;
+import static ex5.util.Constants.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+// TODO: add new documentation
+
 
 /**
  * A SymbolTable manages variables and their types across multiple nested scopes.
@@ -40,27 +43,44 @@ public class SymbolTable {
         if (!table.isEmpty()) {
             table.remove(table.size() - 1);
         } else {
-            throw new SymbolTableException(Constants.SYMBOL_TABLE_SCOPE_ERROR_MESSAGE);
+            throw new SymbolTableException(SYMBOL_TABLE_SCOPE_ERROR_MESSAGE);
         }
     }
 
-    /**
-     * Adds a variable to the current scope.
-     *
-     * @param varName  The variable name.
-     * @param var The data of the variable.
-     * @throws SymbolTableException if no scopes exist or the variable already exists in the current scope.
-     */
-    public void addVarToScope(String varName, Variable var) throws SymbolTableException {
+
+    public void addVarToScope(String varName, VariableType type,
+                              AssignmentStatus status, Boolean isFinal) throws SymbolTableException {
         if (table.isEmpty()) {
-            throw new SymbolTableException(Constants.SYMBOL_TABLE_SCOPE_ERROR_MESSAGE);
+            throw new SymbolTableException(SYMBOL_TABLE_SCOPE_ERROR_MESSAGE);
         }
+
+        Variable var = new Variable(varName, type, status, isFinal);
 
         Map<String, Variable> currentScope = table.get(table.size() - 1);
         if (currentScope.containsKey(varName)) {
-            throw new SymbolTableException(Constants.SYMBOL_TABLE_VAR_ERROR_MESSAGE + ": " + varName);
+            throw new SymbolTableException(SYMBOL_TABLE_VAR_ERROR_MESSAGE + ": " + varName);
         }
         currentScope.put(varName, var);
+    }
+
+    // TODO MAAYAN: check if this is what you meant
+    public void assignVar(String varName, VariableType variableType) throws SymbolTableException {
+        // todo: implement.
+        //   check if it's not final.
+        //   check if the type is correct.
+        //   change status to assign
+        for (int i = table.size() - 1; i >= 0; i--) {
+            if (table.get(i).containsKey(varName)) {
+                Variable curVar = table.get(i).get(varName);
+                if (curVar.getIsFinal() || curVar.getType() != variableType) {
+                    throw new SymbolTableException(SYMBOL_TABLE_ASSIGN_ERROR_MESSAGE);
+                }
+                curVar.setStatus(AssignmentStatus.ASSIGNED);
+                table.get(i).put(varName, curVar);
+            }
+        }
+
+
     }
 
     /**
@@ -78,13 +98,22 @@ public class SymbolTable {
         return false;
     }
 
+    public boolean isVariableAssigned(String varName) {
+        for (int i = table.size() - 1; i >= 0; i--) {
+            if (table.get(i).containsKey(varName)) {
+                return (table.get(i).get(varName).getStatus()==AssignmentStatus.ASSIGNED);
+            }
+        }
+        return false;
+    }
+
     /**
      * Retrieves the type of variable from the nearest scope.
      *
      * @param varName The variable name.
      * @return The variable type if found, null otherwise.
      */
-    public Constants.VariableType getVarType(String varName) {
+    public VariableType getVarType(String varName) {
         for (int i = table.size() - 1; i >= 0; i--) {
             if (table.get(i).containsKey(varName)) {
                 return table.get(i).get(varName).getType();

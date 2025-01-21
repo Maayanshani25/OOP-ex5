@@ -45,6 +45,7 @@ public class Constants {
             SYMBOL_TABLE_EXCEPTION_GENERAL_ERROR_MESSAGE = "SymbolTable Error: ",
             SYMBOL_TABLE_VAR_ERROR_MESSAGE = "invalid var.",
             SYMBOL_TABLE_SCOPE_ERROR_MESSAGE = "invalid Scope.",
+            SYMBOL_TABLE_ASSIGN_ERROR_MESSAGE = "invalid assign.",
 
             SCOPE_MANAGER_EXCEPTION_GENERAL_ERROR_MESSAGE = "ScopeManager Error: ",
             INVALID_EXIT_SCOPE_MESSAGE = "invalid exit of scope.",
@@ -52,7 +53,8 @@ public class Constants {
 
             PARSER_EXCEPTION_GENERAL_ERROR_MESSAGE = "Parser Error: ",
             // TODO MAAYAN: the name is not clear enough
-            PARSER_EXCEPTION_MESSAGE = "Missing variable name in declaration.",
+            PARSER_NO_VARIABLE_NAME_MESSAGE = "Missing variable name in declaration.",
+            PARSER_WRONG_LINE_FORMAT = "Invalid variable declaration: ",
             LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE = "Loop or condition syntax error.";
 
     public static final String VARIABLE_NAME_REGEX = "([a-zA-Z]|_[a-zA-Z0-9])[a-zA-Z0-9_]*";

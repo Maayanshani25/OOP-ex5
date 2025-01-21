@@ -4,10 +4,8 @@ import ex5.FileReader;
 import ex5.Validator;
 import ex5.scope_managing.ScopeManager;
 import ex5.scope_managing.SymbolTable;
-import ex5.tests.SymbolTableTest;
-import ex5.tests.VariablesParserTest;
+import ex5.tests.DeclarationParserTest;
 
-import java.io.IOException;
 import java.util.List;
 
 public class Sjavac {
@@ -70,7 +68,7 @@ public class Sjavac {
 
         // Call runTests for each test class
 //        SymbolTableTest.runTests();
-        VariablesParserTest.runTests();
+        DeclarationParserTest.runTests();
 
         System.out.println("All tests completed.");
     }
