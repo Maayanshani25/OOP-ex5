@@ -59,6 +59,8 @@ public class Constants {
             FINAL_VARIABLE_ASSIGNMENT_ERROR = "Final variable '%s' must have an assigned value.",
             LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE = "Loop or condition syntax error.";
 
+
+
     /** REGEX patterns */
     public static final String VARIABLE_NAME_REGEX = "([a-zA-Z]|_[a-zA-Z0-9])[a-zA-Z0-9_]*";
     public static final String TYPE_REGEX = "^(final\\s+)?(int|double|String|char|boolean)\\b";
