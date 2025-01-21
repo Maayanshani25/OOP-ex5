@@ -81,7 +81,7 @@ public class WhileParserTest {
             }
 
             // Test 10: Valid nested AND/OR condition with both variables and literals
-            String validNestedCondition = "if (a && (b || true)) {";
+            String validNestedCondition = "if (a && b || true && a || a || b && false) {";
             System.out.println("Test 10: " + testWhileParser(validNestedCondition, whileParser));
 
             // Test 11: Invalid boolean comparison (a == b)

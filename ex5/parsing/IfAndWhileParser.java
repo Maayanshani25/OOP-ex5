@@ -60,51 +60,51 @@ public class IfAndWhileParser implements Parser {
 
         // Check valid condition:
         String condition = ifMatcher.group(1);
-        try {
-            parseFullCondition(condition);
-        } catch (ParserException e) {
-            throw new ParserException(e.getMessage());
+        if (!parseFullCondition(condition)) {
+            throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
         }
 
     }
 
-    private void parseFullCondition(String condition) throws ParserException, SymbolTableException {
+    private boolean parseFullCondition(String condition) throws ParserException, SymbolTableException {
         // Check recursive OR\AND condition:
         Pattern orPattern = Pattern.compile(OR_CONDITION_REGEX);
         Matcher orMatcher = orPattern.matcher(condition);
 
-//        Pattern andPattern = Pattern.compile(AND_CONDITION_REGEX);
-//        Matcher andMatcher = andPattern.matcher(condition);
-//        if (recursiveCondition(orMatcher) || recursiveCondition(andMatcher)) {
-//                return;
-//        }
-
-        while (orMatcher.find()) {
-            String leftCondition = orMatcher.group(1).trim();
-            String rightCondition = orMatcher.group(2).trim();
-            if (!parseSingleCondition(leftCondition) || !parseSingleCondition(rightCondition)) {
-                throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
-            }
-            return;
-        }
-
-        // Check recursive AND condition:
         Pattern andPattern = Pattern.compile(AND_CONDITION_REGEX);
         Matcher andMatcher = andPattern.matcher(condition);
-
-
-        while (andMatcher.find()) {
-            String leftCondition = andMatcher.group(1).trim();
-            String rightCondition = andMatcher.group(2).trim();
-            if (!parseSingleCondition(leftCondition) || !parseSingleCondition(rightCondition)) {
-                throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
-            }
-            return;
+        if (recursiveCondition(orMatcher) || recursiveCondition(andMatcher)) {
+                return true;
         }
+
+        // TODO: delete
+//        while (orMatcher.find()) {
+//            String leftCondition = orMatcher.group(1).trim();
+//            String rightCondition = orMatcher.group(2).trim();
+//            if (!parseFullCondition(leftCondition) || !parseFullCondition(rightCondition)) {
+//                throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
+//            }
+//            return true;
+//        }
+//
+//        // Check recursive AND condition:
+//        Pattern andPattern = Pattern.compile(AND_CONDITION_REGEX);
+//        Matcher andMatcher = andPattern.matcher(condition);
+//
+//        while (andMatcher.find()) {
+//            String leftCondition = andMatcher.group(1).trim();
+//            String rightCondition = andMatcher.group(2).trim();
+//            if (!parseFullCondition(leftCondition) || !parseFullCondition(rightCondition)) {
+//                throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
+//            }
+//            return true;
+//        }
 
         if (!parseSingleCondition(condition)) {
-            throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
+            return false;
         }
+
+        return true;
     }
 
     private boolean recursiveCondition(Matcher matcher) throws ParserException, SymbolTableException {
@@ -115,7 +115,7 @@ public class IfAndWhileParser implements Parser {
             String leftCondition = matcher.group(1).trim();
             String rightCondition = matcher.group(2).trim();
 
-            if (!parseSingleCondition(leftCondition) || !parseSingleCondition(rightCondition)) {
+            if (!parseFullCondition(leftCondition) || !parseFullCondition(rightCondition)) {
                 throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
             }
         }
