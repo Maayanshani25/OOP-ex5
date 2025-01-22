@@ -59,6 +59,7 @@ public class Constants {
             FINAL_VARIABLE_ASSIGNMENT_ERROR = "Final variable '%s' must have an assigned value.",
             METHOD_GENERAL_SYNTAX_ERROR = "Method syntax is invalid.",
             METHOD_DECLARE_SYNTAX_ERROR = "Method declaration syntax is invalid.",
+            INVALID_METHOD_ENDING_ERROR = "Method ends without return;.",
             INVALID_METHOD_NAME_ERROR = "Method declaration syntax is invalid.",
             METHOD_DECLARE_IN_METHOD_SCOPE_ERROR = "Method can not be declare in another method scope.",
             METHOD_NAME_ALREADY_EXIST_ERROR = "Two methods with the same name are illegal",
@@ -96,6 +97,7 @@ public class Constants {
             TRUE = "true",
             FALSE = "false",
             CHAR = "char",
+            RETURN = "return",
             FINAL = "final";
 
 }

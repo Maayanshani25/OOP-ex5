@@ -71,8 +71,9 @@ public class MethodParser implements Parser {
 
         // Checks valid regex
         if (matcher.matches()) {
-            String methodName = matcher.group(1); // TODO: check
-            String parametersString = matcher.group(2); // TODO: check
+            String methodName = matcher.group(1);
+            // TODO: can get 0 parameters?
+            String parametersString = matcher.group(2);
 
             // Check if not in other method scope
             if (scopeManager.getMethodsCounter() > 0) {
@@ -134,6 +135,7 @@ public class MethodParser implements Parser {
 
         if (matcher.matches()) {
             String methodName = matcher.group(1);
+            // TODO: can get 0 parameters?
             String parametersString = matcher.group(2);
 
             // Check is in another method scope:
