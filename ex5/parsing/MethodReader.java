@@ -12,13 +12,6 @@ import static ex5.util.Constants.*;
 
 
 public class MethodReader {
-    public static final String CLOSE_BRACKET_REGEX = "\\}";
-    public static final String OPEN_BRACKET_REGEX = "\\{";
-    public static final String RETURN_LINE = "return;";
-    public static final String METHOD_NAME_REGEX = "[a-zA-Z][a-zA-Z0-9_]*";
-    public static final String METHOD_DECLARE_REGEX =
-            "void\\s+(" + METHOD_NAME_REGEX + ")\\s*\\(([^)]*)\\)\\s*\\{";
-
 
     public static Map<String, ArrayList<Constants.VariableType>> readMethods(List<String> lines)
             throws ParserException {

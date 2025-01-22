@@ -16,13 +16,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MethodParser implements Parser {
-    // TODO: move to Constants
-    public static final String METHOD_NAME_REGEX = "[a-zA-Z][a-zA-Z0-9_]*";
-    public static final String METHOD_CALL_REGEX = "(" + METHOD_NAME_REGEX + ")\\s*\\(([^)]*)\\)\\s*;";
-    public static final String METHOD_DECLARE_REGEX =
-            "void\\s+(" + METHOD_NAME_REGEX + ")\\s*\\(([^)]*)\\)\\s*\\{";
-    public static final String BOOLEAN_CONSTANT_REGEX = "(true|false)";
-
 
     private final SymbolTable symbolTable;
     private final ScopeManager scopeManager;
@@ -58,21 +51,9 @@ public class MethodParser implements Parser {
     }
 
     private void parseMethodDeclaration(Matcher matcher, String line) throws ParserException, SymbolTableException {
-        // TODO: conditions to check:
-        //  is "void method_name (type parameter, type parameter...) {"
-        //  is not in other method
-        //  method_name isnt already exists (here or in second pre-process?)
-        //  parameters name arent already exist
-        //  ends with "return;" and then "}"
-
-        // TODO: if legal, need to add:
-        //  new scope
-        //  parameters to scope vars
-
         // Checks valid regex
         if (matcher.matches()) {
             String methodName = matcher.group(1);
-            // TODO: can get 0 parameters?
             String parametersString = matcher.group(2);
 
             // Check if not in other method scope
@@ -104,8 +85,7 @@ public class MethodParser implements Parser {
                 }
             }
 
-            // Check that ends with "return;" and "{}
-            // TODO
+            // Check that ends with "return;" and "{} - alredy in MethodReader
 
             // if passes all test, add vars and open new scope
             scopeManager.enterNewScope(ScopeKind.METHOD);
@@ -125,17 +105,8 @@ public class MethodParser implements Parser {
     }
 
     private void parseMethodCall(Matcher matcher, String line) throws ParserException, SymbolTableException {
-        // TODO: conditions to check:
-        //  is "method_name (var, var...);"
-        //  is in other method
-        //  method_name exists
-        //  num of vars fit to the requiered
-        //  vars exist/constants
-        //  var types fit to the types requiered (bool can get int/double, double can get int)
-
         if (matcher.matches()) {
             String methodName = matcher.group(1);
-            // TODO: can get 0 parameters?
             String parametersString = matcher.group(2);
 
             // Check is in another method scope:
@@ -151,31 +122,33 @@ public class MethodParser implements Parser {
             // Check parameters have valid name and requested type, and exist:
             String[] parameters = parametersString.split("\\s*,\\s*");
             // Check num of parameters ais valid:
-            if (parameters.length != methods.get(methodName).size()) {
-                throw new ParserException(METHOD_INVALID_PARAMETERS_ERROR);
-            }
-            for (int i = 0; i < parameters.length; i++) {
-                String parameterName = parameters[i];
-                VariableType expectedType = methods.get(methodName).get(i);
+            if (!(parametersString.isEmpty() && methods.get(methodName).isEmpty())) {
+                if (parameters.length != methods.get(methodName).size()) {
+                    throw new ParserException(METHOD_INVALID_PARAMETERS_ERROR);
+                }
+                for (int i = 0; i < parameters.length; i++) {
+                    String parameterName = parameters[i];
+                    VariableType expectedType = methods.get(methodName).get(i);
 
-                // Check if constant
-                VariableType constantType = ConstantParameter(parameterName);
-                if (constantType != null) {
-                    if (!isTypeCompatible(constantType, expectedType)) {
+                    // Check if constant
+                    VariableType constantType = ConstantParameter(parameterName);
+                    if (constantType != null) {
+                        if (!isTypeCompatible(constantType, expectedType)) {
+                            throw new ParserException(METHOD_INVALID_PARAMETERS_ERROR);
+                        }
+                        continue;
+                    }
+
+                    // Check valid name and if exists:
+                    // TODO: must be declared or assigned? not in the forum, needs to check school solution
+                    if (!symbolTable.isVariableDeclared(parameterName)) {
                         throw new ParserException(METHOD_INVALID_PARAMETERS_ERROR);
                     }
-                    continue;
-                }
-
-                // Check valid name and if exists:
-                // TODO: must be declared or assigned?
-                if (!symbolTable.isVariableDeclared(parameterName)) {
-                    throw new ParserException(METHOD_INVALID_PARAMETERS_ERROR);
-                }
-                // Check valid type:
-                VariableType type = symbolTable.getVarType(parameterName);
-                if (!isTypeCompatible(type, expectedType)) {
-                    throw new ParserException(METHOD_INVALID_PARAMETERS_ERROR);
+                    // Check valid type:
+                    VariableType type = symbolTable.getVarType(parameterName);
+                    if (!isTypeCompatible(type, expectedType)) {
+                        throw new ParserException(METHOD_INVALID_PARAMETERS_ERROR);
+                    }
                 }
             }
 
@@ -201,10 +174,12 @@ public class MethodParser implements Parser {
             String parametersString = declareMatcher.group(2); // TODO: check
             String[] parameters = parametersString.split(",");
             ArrayList<VariableType> parameterTypes = new ArrayList<>();
-            for (String parameter : parameters) {
-                Variable variable = parseParameter(parameter);
-                if (variable != null) {
-                    parameterTypes.add(variable.getType());
+            if (!parametersString.isEmpty()) {
+                for (String parameter : parameters) {
+                    Variable variable = parseParameter(parameter);
+                    if (variable != null) {
+                        parameterTypes.add(variable.getType());
+                    }
                 }
             }
             methods.put(methodName, parameterTypes);

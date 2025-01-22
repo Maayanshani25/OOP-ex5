@@ -87,6 +87,25 @@ public class MethodParserTest {
         Map<String, ArrayList<VariableType>> methods = new HashMap<>();
         MethodParser parser = new MethodParser(symbolTable, scopeManager, methods);
 
+        // Add method without parameters to map for call testing
+        ArrayList<VariableType> emptyParamTypes = new ArrayList<>();
+        methods.put("testEmptyMethod", emptyParamTypes);
+
+
+        // Test 5: empty parameters list
+        try {
+            parser.parse("testEmptyMethod(123, true);");
+            throw new AssertionError("Test 5 Failed: Invalid num of parameters not detected");
+        } catch (ParserException e) {
+            System.out.println("Test 5 Passed: Invalid num of parameters detected");
+        }
+
+        // Test 5.5: empty parameters list
+        parser.parse("testEmptyMethod();");
+        System.out.println("Test 5.5 Passed: Valid empty method call");
+
+
+
         // Add method to method map for call testing
         ArrayList<VariableType> paramTypes = new ArrayList<>();
         paramTypes.add(VariableType.INT);
@@ -121,5 +140,7 @@ public class MethodParserTest {
         } catch (ParserException e) {
             System.out.println("Test 9 Passed: Invalid parameter type detected");
         }
+
+
     }
 }

@@ -9,7 +9,6 @@ import java.util.EmptyStackException;
 
 public class ScopeManager {
     private final Deque<Constants.ScopeKind> scopeStack;
-    // TODO MAAYAN: call it invalid if is bigger than one is the MethodParser part, not ScopeManager part
     private int methodsCounter;
 
     public ScopeManager() {

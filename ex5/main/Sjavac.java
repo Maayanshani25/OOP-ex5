@@ -38,7 +38,7 @@ public class Sjavac {
         }
         // TODO: check how to catch exceptions
         catch (ParserException e) {
-            System.out.println(e.getMessage());
+//            System.err(e.getMessage());
         }
 
         // TODO: wrong implement, needed to be changed after implementing Validator

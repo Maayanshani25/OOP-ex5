@@ -76,7 +76,7 @@ public class MethodReaderTest {
     private static void testNestedBrackets() {
         try {
             List<String> lines = new ArrayList<>();
-            lines.add("void nestedBracketsMethod(int a) {");
+            lines.add("void nestedBracketsMethod() {");
             lines.add("    if (true) {");
             lines.add("        while (false) {");
             lines.add("            // some logic");
