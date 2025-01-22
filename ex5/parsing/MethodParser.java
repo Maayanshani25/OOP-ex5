@@ -5,6 +5,8 @@ import ex5.Variable;
 import ex5.scope_managing.ScopeManager;
 import ex5.scope_managing.SymbolTable;
 import ex5.scope_managing.SymbolTableException;
+import ex5.util.Constants;
+
 import static ex5.util.Constants.*;
 
 
@@ -14,17 +16,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MethodParser implements Parser {
+    // TODO: move to Constants
     public static final String METHOD_NAME_REGEX = "[a-zA-Z][a-zA-Z0-9_]*";
     public static final String METHOD_CALL_REGEX = "(" + METHOD_NAME_REGEX + ")\\s*\\(([^)]*)\\)\\s*;";
-    public static final String METHOD_DECLARE_REGEX = "void\\s+(" + METHOD_NAME_REGEX + ")\\s*\\(([^)]*)\\)\\s*\\{";// TODO
+    public static final String METHOD_DECLARE_REGEX =
+            "void\\s+(" + METHOD_NAME_REGEX + ")\\s*\\(([^)]*)\\)\\s*\\{";
     public static final String BOOLEAN_CONSTANT_REGEX = "(true|false)";
 
 
     private final SymbolTable symbolTable;
     private final ScopeManager scopeManager;
-    // TODO: un-comment after the tests and remove setMethodsMap
-    //    private final Map<String, ArrayList<VariableType>> methods;
-    private Map<String, ArrayList<VariableType>> methods;
+    private final Map<String, ArrayList<VariableType>> methods;
 
     public MethodParser(SymbolTable symbolTable, ScopeManager scopeManager,
                         Map<String, ArrayList<VariableType>> methods) {
@@ -35,7 +37,7 @@ public class MethodParser implements Parser {
 
     @Override
     public void parse(String line) throws ParserException, SymbolTableException {
-        String currentLine = line.trim(); // Trim leading and trailing whitespace
+        String currentLine = line.trim();
 
         Pattern callPattern = Pattern.compile(METHOD_CALL_REGEX);
         Matcher callMatcher = callPattern.matcher(currentLine);
@@ -53,8 +55,6 @@ public class MethodParser implements Parser {
         else {
             throw new ParserException(METHOD_GENERAL_SYNTAX_ERROR);
         }
-
-
     }
 
     private void parseMethodDeclaration(Matcher matcher, String line) throws ParserException, SymbolTableException {
@@ -183,7 +183,8 @@ public class MethodParser implements Parser {
         }
     }
 
-    public void addToMethodMap(String line) throws ParserException {
+    public static void addToMethodMap(String line, Map<String, ArrayList<Constants.VariableType>> methods)
+            throws ParserException {
         String currentLine = line.trim(); // Trim leading and trailing whitespace
         Pattern declarePattern = Pattern.compile(METHOD_DECLARE_REGEX);
         Matcher declareMatcher = declarePattern.matcher(currentLine);
@@ -215,7 +216,7 @@ public class MethodParser implements Parser {
         return false;
     }
 
-    private VariableType parseType(String parameterType) throws ParserException {
+    private static VariableType parseType(String parameterType) throws ParserException {
         switch (parameterType) {
             case INT:
                 return VariableType.INT;
@@ -232,7 +233,7 @@ public class MethodParser implements Parser {
         }
     }
 
-    private boolean isValidName(String name) {
+    private static boolean isValidName(String name) {
         Pattern namePattern = Pattern.compile(VARIABLE_NAME_REGEX);
         Matcher nameMatcher = namePattern.matcher(name);
         if (!nameMatcher.matches()) {
@@ -241,7 +242,7 @@ public class MethodParser implements Parser {
         return true;
     }
 
-    private Variable parseParameter(String parameter) throws ParserException {
+    private static Variable parseParameter(String parameter) throws ParserException {
         String[] parameterStrings = parameter.trim().split("\\s+");
         // If 3 strings: Final, type, name
         if (parameterStrings.length == 3) {
@@ -266,7 +267,7 @@ public class MethodParser implements Parser {
         return null;
     }
 
-    private VariableType ConstantParameter(String parameter) {
+    private static VariableType ConstantParameter(String parameter) {
         Pattern intPattern = Pattern.compile(INT_VALUE_REGEX);
         Matcher intMatcher = intPattern.matcher(parameter);
         Pattern doublePattern = Pattern.compile(DOUBLE_VALUE_REGEX);
@@ -289,7 +290,4 @@ public class MethodParser implements Parser {
 
     }
 
-    public void setMethodsMap(Map<String, ArrayList<VariableType>> methods) {
-        this.methods = methods;
-    }
 }

@@ -38,12 +38,12 @@ public class MethodParserTest {
         Map<String, ArrayList<VariableType>> methods = new HashMap<>();
 
         // Test 1: Valid method declaration
-        parser.addToMethodMap("void myMethod(int param1, double param2) {");
+        parser.addToMethodMap("void myMethod(int param1, double param2) {", methods);
         System.out.println("Test 1 Passed: Valid method declaration");
 
         // Test 2: Duplicate method name
         try {
-            parser.addToMethodMap("void myMethod(int param1, double param2) {");
+            parser.addToMethodMap("void myMethod(int param1, double param2) {", methods);
             throw new AssertionError("Test 2 Failed: Duplicate method name not detected");
         } catch (ParserException e) {
             System.out.println("Test 2 Passed: Duplicate method name detected");
@@ -65,7 +65,7 @@ public class MethodParserTest {
 
         // Test 4: Invalid parameter names
         try {
-            parser.addToMethodMap("void badParams(int param1, double 123bad) {");
+            parser.addToMethodMap("void badParams(int param1, double 123bad) {", methods);
             throw new AssertionError("Test 4 Failed: Invalid parameter names not detected");
         } catch (ParserException e) {
             System.out.println("Test 4 Passed: Invalid parameter names detected");

@@ -2,14 +2,21 @@ package ex5.main;
 
 import ex5.FileReader;
 import ex5.Validator;
+import ex5.parsing.ParserException;
+import ex5.parsing.MethodReader;
 import ex5.scope_managing.ScopeManager;
 import ex5.scope_managing.SymbolTable;
 import ex5.tests.DeclarationParserTest;
+import ex5.util.Constants;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Sjavac {
     private final List<String> preprocessedLines;
+    private Map<String, ArrayList<Constants.VariableType>> methodsMap;
     private final SymbolTable symbolTable;
     // TODO: needed? or Validator methods are static?
     private Validator validator;
@@ -19,14 +26,22 @@ public class Sjavac {
         // Read and pre-process the file:
         List<String> allLines = FileReader.readLines(filePath);
         preprocessedLines = FileReader.preProcessLines(allLines);
-
+        methodsMap = new HashMap<>();
         symbolTable = new SymbolTable();
         validator = new Validator(symbolTable);
         scopeManager = new ScopeManager();
     }
 
     public boolean run() {
-        // TODO: i think this is wrong implement
+        try {
+            methodsMap = MethodReader.readMethods(preprocessedLines);
+        }
+        // TODO: check how to catch exceptions
+        catch (ParserException e) {
+            System.out.println(e.getMessage());
+        }
+
+        // TODO: wrong implement, needed to be changed after implementing Validator
         // For every line, check if valid
         for (String line : preprocessedLines) {
             if (!Validator.isValidLine(line)) {
