@@ -84,7 +84,7 @@ public class Sjavac {
 
         // Call runTests for each test class
 //        SymbolTableTest.runTests();
-//        DeclarationParserTest.runTests();
+        DeclarationParserTest.runTests();
         AssignmentParserTest.runTests();
 
         System.out.println("All tests completed.");

@@ -8,14 +8,19 @@ import java.util.regex.Pattern;
 
 import static ex5.util.Constants.*;
 
-
+/**
+ * The DeclarationParser class is responsible for parsing variable declarations in the provided code.
+ * It ensures variables are declared with valid syntax, types are compatible, and proper assignments
+ * are made, adhering to rules for `final` and non-final variables.
+ */
 public class DeclarationParser implements Parser {
 
     private final SymbolTable symbolTable;
     private String currentLine;
 
     /**
-     * Constructor for VariablesParser.
+     * Constructor for DeclarationParser.
+     *
      * @param symbolTable The SymbolTable instance used for managing variable scopes.
      */
     public DeclarationParser(SymbolTable symbolTable) {
@@ -23,16 +28,20 @@ public class DeclarationParser implements Parser {
     }
 
     /**
-     * Parses a line of variable declarations and adds valid variables to the symbol table.
-     * @param line The line of code to parse.
-     * @throws ParserException If the syntax or semantics of the line are invalid.
+     * Parses a single line of variable declarations and adds valid variables to the symbol table.
+     * It supports declarations of types `int`, `double`, `String`, `boolean`, and `char`, as well as
+     * the `final` keyword for immutable variables.
+     *
+     * @param line The line of code to parse and validate.
+     * @throws ParserException      If the syntax or semantics of the line are invalid.
+     * @throws SymbolTableException If there are issues with symbol table operations
+     *                              (e.g., adding duplicate variables).
      */
-
     @Override
     public void parse(String line) throws ParserException, SymbolTableException {
         currentLine = line.trim(); // Trim leading and trailing whitespace
 
-        // Compile the regex
+        // Compile the regex to match type and optional 'final'
         Pattern pattern = Pattern.compile(TYPE_REGEX);
         Matcher matcher = pattern.matcher(currentLine);
 
@@ -66,7 +75,16 @@ public class DeclarationParser implements Parser {
         }
     }
 
-
+    /**
+     * Parses and validates the variables of a specific type within the given declaration line.
+     *
+     * @param typeValueRegex A regex pattern matching valid values for the variable type.
+     * @param variableType   The type of the variable being declared.
+     * @param type           The string representation of the type (e.g., "int", "double").
+     * @param isFinal        Whether the variable is declared as `final`.
+     * @throws ParserException      If the declaration line is invalid or contains semantic errors.
+     * @throws SymbolTableException If there are issues with symbol table operations.
+     */
     private void parseType(String typeValueRegex, VariableType variableType, String type, boolean isFinal)
             throws ParserException, SymbolTableException {
         final String singleDeclaration = "(" + VARIABLE_NAME_REGEX + ")(\\s*=\\s*(" + typeValueRegex + "))?";
@@ -99,10 +117,20 @@ public class DeclarationParser implements Parser {
                 }
             }
         } else {
-            throw new ParserException(PARSER_WRONG_LINE_FORMAT+ currentLine);
+            throw new ParserException(PARSER_WRONG_LINE_FORMAT + currentLine);
         }
     }
 
+    /**
+     * Determines the assignment status of a variable declaration based on whether the variable
+     * is declared as `final` and whether it has an assigned value.
+     *
+     * @param isFinal       Whether the variable is declared as `final`.
+     * @param singleMatcher A matcher that contains the current declaration being validated.
+     * @param variableName  The name of the variable being declared.
+     * @return The assignment status (ASSIGNED or DECLARED).
+     * @throws ParserException If a `final` variable is declared without an assigned value.
+     */
     private static AssignmentStatus getAssignmentStatus(boolean isFinal, Matcher singleMatcher, String variableName) throws ParserException {
         String value = singleMatcher.group(3); // Group 3 contains just the value
         boolean hasValue = value != null && !value.trim().isEmpty();
@@ -112,9 +140,6 @@ public class DeclarationParser implements Parser {
             throw new ParserException(String.format(FINAL_VARIABLE_ASSIGNMENT_ERROR, variableName));
         }
 
-        AssignmentStatus assignmentStatus = hasValue ? AssignmentStatus.ASSIGNED : AssignmentStatus.DECLARED;
-        return assignmentStatus;
+        return hasValue ? AssignmentStatus.ASSIGNED : AssignmentStatus.DECLARED;
     }
-
-
 }

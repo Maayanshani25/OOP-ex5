@@ -18,12 +18,18 @@ import static ex5.util.Constants.*;
 /**
  * todo: maybe add another counter for the method number. to make sure we assign it correctly
  */
+
+/**
+ * The AssignmentParser class is responsible for parsing and validating assignment statements
+ * in the given code. It ensures that the variables being assigned values are declared, the
+ * assigned values match the expected types, and that the assignments follow the correct format.
+ */
 public class AssignmentParser implements Parser {
 
     private final SymbolTable symbolTable;
 
     /**
-     * Constructor for VariablesParser.
+     * Constructor for AssignmentParser.
      *
      * @param symbolTable The SymbolTable instance used for managing variable scopes.
      */
@@ -31,6 +37,19 @@ public class AssignmentParser implements Parser {
         this.symbolTable = symbolTable;
     }
 
+    /**
+     * Parses a single line of assignment(s). The line can include one or more assignments separated
+     * by commas. Each assignment is validated for:
+     * - Correct variable declaration.
+     * - Correct type matching between the variable and its assigned value.
+     * - Proper assignment syntax.
+     *
+     * @param line The assignment line to parse and validate.
+     * @throws ParserException        If the assignment line contains errors (e.g., type mismatch,
+     *                                invalid variable, or syntax errors).
+     * @throws SymbolTableException   If there are issues with symbol table operations (e.g.,
+     *                                accessing undeclared variables).
+     */
     @Override
     public void parse(String line) throws ParserException, SymbolTableException {
         final String singleAssignment = "(" + VARIABLE_NAME_REGEX + ")\\s*=\\s*("
@@ -85,10 +104,23 @@ public class AssignmentParser implements Parser {
         }
     }
 
+    /**
+     * Checks if a given value matches the format of a variable name.
+     *
+     * @param value The value to check.
+     * @return True if the value is a valid variable name, false otherwise.
+     */
     private boolean isValueVariableName(String value) {
         return value.matches(VARIABLE_NAME_REGEX);
     }
 
+    /**
+     * Validates that a given variable name is declared and that its type matches the expected type.
+     *
+     * @param variableName The variable name to validate.
+     * @param type         The expected type for the variable.
+     * @throws ParserException If the variable is not declared, not assigned, or if the type mismatches.
+     */
     private void validateVariableNameForType(String variableName, VariableType type) throws ParserException {
         // If value is a variable, check if it's declared and assigned
         if (!symbolTable.isVariableDeclared(variableName)) {
@@ -109,20 +141,27 @@ public class AssignmentParser implements Parser {
         }
     }
 
-        private boolean isValueValidForType (VariableType variableType, String value){
-            switch (variableType) {
-                case INT:
-                    return value.matches(INT_VALUE_REGEX);
-                case DOUBLE:
-                    return value.matches(DOUBLE_VALUE_REGEX);
-                case STRING:
-                    return value.matches(STRING_VALUE_REGEX);
-                case BOOLEAN:
-                    return value.matches(BOOLEAN_VALUE_REGEX);
-                case CHAR:
-                    return value.matches(CHAR_VALUE_REGEX);
-                default:
-                    return false;
+    /**
+     * Checks if a given value is valid for a specified variable type.
+     *
+     * @param variableType The expected variable type.
+     * @param value        The value to validate.
+     * @return True if the value matches the expected type, false otherwise.
+     */
+    private boolean isValueValidForType(VariableType variableType, String value) {
+        switch (variableType) {
+            case INT:
+                return value.matches(INT_VALUE_REGEX);
+            case DOUBLE:
+                return value.matches(DOUBLE_VALUE_REGEX);
+            case STRING:
+                return value.matches(STRING_VALUE_REGEX);
+            case BOOLEAN:
+                return value.matches(BOOLEAN_VALUE_REGEX);
+            case CHAR:
+                return value.matches(CHAR_VALUE_REGEX);
+            default:
+                return false;
         }
     }
 }

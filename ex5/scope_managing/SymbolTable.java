@@ -47,6 +47,14 @@ public class SymbolTable {
         }
     }
 
+    /**
+     * Adds a variable to the current scope.
+     *
+     * @param varName The name of the variable.
+     * @param var     The Variable object to add.
+     * @throws SymbolTableException If no scopes exist or if the variable already exists in the current scope.
+     */
+    // todo: rotem what is this func?
     public void addVarToScope(String varName, Variable var) throws SymbolTableException {
         if (!table.isEmpty()) {
             throw new SymbolTableException(SYMBOL_TABLE_SCOPE_ERROR_MESSAGE);
@@ -59,6 +67,15 @@ public class SymbolTable {
         currentScope.put(varName, var);
     }
 
+    /**
+     * Adds a variable to the current scope with specific attributes.
+     *
+     * @param varName  The name of the variable.
+     * @param type     The type of the variable.
+     * @param status   The assignment status of the variable.
+     * @param isFinal  Whether the variable is declared as final.
+     * @throws SymbolTableException If no scopes exist or if the variable already exists in the current scope.
+     */
     public void addVarToScope(String varName,
                               VariableType type,
                               AssignmentStatus status,
@@ -77,7 +94,14 @@ public class SymbolTable {
         currentScope.put(varName, var);
     }
 
-    // TODO MAAYAN: check if this is what you meant
+    /**
+     * Assigns a value to a variable in the nearest scope where it is declared.
+     * Ensures that final variables cannot be reassigned and that the assigned value matches the variable's type.
+     *
+     * @param varName      The name of the variable.
+     * @param variableType The type of the value being assigned.
+     * @throws SymbolTableException If the variable is not declared, if it is final, or if the type does not match.
+     */
     public void assignVar(String varName, VariableType variableType) throws SymbolTableException {
         // todo: implement.
         //      check if it's inside the correct method
@@ -94,7 +118,6 @@ public class SymbolTable {
                 }
 
                 // Check if the type matches
-                // todo: maybe we dont need this because we check in the parser
                 if (curVar.getType() != variableType) {
                     throw new SymbolTableException(
                             String.format(TYPE_MISMATCH_ASSIGN_ERROR, varName, curVar.getType(), variableType)
@@ -124,6 +147,12 @@ public class SymbolTable {
         return false;
     }
 
+    /**
+     * Retrieves the type of a variable from the nearest scope where it is declared.
+     *
+     * @param varName The variable name.
+     * @return The type of the variable, or null if the variable is not found.
+     */
     public boolean isVariableAssigned(String varName) {
         for (int i = table.size() - 1; i >= 0; i--) {
             if (table.get(i).containsKey(varName)) {
