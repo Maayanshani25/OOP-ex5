@@ -10,16 +10,15 @@ import java.util.regex.Pattern;
 
 public class FileReader {
 
-    public static List<String> readLines(String filePath) {
+    public static List<String> readLines(String filePath) throws IOException{
         List<String> lines = new ArrayList<>();
         try (BufferedReader bufferedReader = new BufferedReader(new java.io.FileReader(filePath))) {
             String currentLine;
             while ((currentLine = bufferedReader.readLine()) != null) {
                 lines.add(currentLine);
             }
-        // TODO: make sure needed to be cached (they catch it in TA11)
         } catch (IOException e) {
-            e.printStackTrace();
+            throw e;
         }
 
         return lines;

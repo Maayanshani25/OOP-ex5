@@ -5,12 +5,14 @@ import ex5.Validator;
 import ex5.parsing.ParserException;
 import ex5.parsing.MethodReader;
 import ex5.scope_managing.ScopeManager;
+import ex5.scope_managing.ScopeManagerException;
 import ex5.scope_managing.SymbolTable;
 import ex5.scope_managing.SymbolTableException;
 import ex5.tests.AssignmentParserTest;
 import ex5.tests.DeclarationParserTest;
 import ex5.util.Constants;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,81 +22,79 @@ public class Sjavac {
     private final List<String> preprocessedLines;
     private Map<String, ArrayList<Constants.VariableType>> methodsMap;
     private final SymbolTable symbolTable;
-    // TODO: needed? or Validator methods are static?
     private Validator validator;
     private ScopeManager scopeManager;
 
-    public Sjavac(String filePath) {
+    // TODO: to make sure constructor can throw IOError
+    public Sjavac(String filePath) throws IOException {
         // Read and pre-process the file:
         List<String> allLines = FileReader.readLines(filePath);
         preprocessedLines = FileReader.preProcessLines(allLines);
         methodsMap = new HashMap<>();
         symbolTable = new SymbolTable();
         scopeManager = new ScopeManager();
-        validator = new Validator(symbolTable, scopeManager);
+
     }
 
-    public boolean run() {
+    public boolean run() throws IOException{
         try {
             methodsMap = MethodReader.readMethods(preprocessedLines);
-        }
-        // TODO: check how to catch exceptions
-        catch (ParserException e) {
-//            System.err(e.getMessage());
-        }
+            validator = new Validator(symbolTable, scopeManager, methodsMap);
 
-        // TODO: wrong implement, needed to be changed after implementing Validator
-        // For every line, check if valid
-        for (String line : preprocessedLines) {
-            try {
+            // For every line, check if valid
+            for (String line : preprocessedLines) {
                 if (!validator.isValidLine(line)) { // Use the validator instance
                     return false;
                 }
-            } catch (ParserException | SymbolTableException e) {
-                System.err.println(e.getMessage()); // Log the exception (optional)
-                return false; // Return false if any exception occurs
+                symbolTable.updateVarsStatus();
             }
+        } catch (ParserException | SymbolTableException | ScopeManagerException e) {
+            System.err.println(e.getMessage()); // Log the exception (optional)
+            return false; // Return false if any exception occurs
         }
 
         // Check there are no un-closed scopes:
         if (!scopeManager.isScopeDequeEmpty()) {
             return false;
         }
-
         return true;
     }
 
-//    // TODO: make sure handling IOExceptions correctly
-//    public static void main(String[] args) throws IOException {
-//        // TODO: if the args num is invalid, filename is wrong, or file is not sJava - throw IOException
-//        //  (for now, being catch in the FileReader)
-//        if (args.length != 1) {
-//            throw new IOException();
-//        }
-//        String source_file_name = args[0];
-//        Sjavac sjavac = new Sjavac(source_file_name);
-//
-//
-////        // TODO: if the code is legal:
-////        System.out.println(0);
-////        // TODO: if the code is illegal:
-////        System.out.println(1);
-////        System.err(Constants.ILLEGAL_CODE_MESSAGE);
-////        // TODO: in case of IO errors:
-////        System.out.println(2);
-////        System.err(Constants.IO_ERROR_MESSAGE);
-//    }
+    // TODO: make sure handling IOExceptions correctly
+    public static void main(String[] args) throws IOException {
+        // TODO: if the args num is invalid, filename is wrong, or file is not sJava - throw IOException
+        //  (for now, being catch in the FileReader)
+
+        try {
+            if (args.length != 1) {
+                throw new IOException();
+            }
+
+            String source_file_name = args[0];
+            Sjavac sjavac = new Sjavac(source_file_name);
+            if (sjavac.run()) {
+                // the file is good
+                System.out.println(0);
+            } else {
+                // the format is not good
+                System.out.println(1);
+            }
+        } catch (IOException e) {
+            // IO error
+            System.out.println(2);
+        }
+    }
 
     // main function for tests
-    public static void main(String[] args) {
-        System.out.println("Running all tests...\n");
-
-        // Call runTests for each test class
-//        SymbolTableTest.runTests();
-        DeclarationParserTest.runTests();
-        AssignmentParserTest.runTests();
-
-        System.out.println("All tests completed.");
-    }
+//    public static void main(String[] args) {
+//        System.out.println("Running all tests...\n");
+//
+//        // Call runTests for each test class
+////        SymbolTableTest.runTests();
+//        DeclarationParserTest.runTests();
+//        AssignmentParserTest.runTests();
+//
+//        System.out.println("All tests completed.");
+//    }
 
 }

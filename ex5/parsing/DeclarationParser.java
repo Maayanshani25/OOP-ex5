@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
 
 import static ex5.util.Constants.*;
 
+// TODO: Make sure we not assign to NOT ASSIGNED VALUES
+
 /**
  * The DeclarationParser class is responsible for parsing variable declarations in the provided code.
  * It ensures variables are declared with valid syntax, types are compatible, and proper assignments
@@ -131,7 +133,10 @@ public class DeclarationParser implements Parser {
      * @return The assignment status (ASSIGNED or DECLARED).
      * @throws ParserException If a `final` variable is declared without an assigned value.
      */
-    private static AssignmentStatus getAssignmentStatus(boolean isFinal, Matcher singleMatcher, String variableName) throws ParserException {
+    private static AssignmentStatus getAssignmentStatus(boolean isFinal,
+                                                        Matcher singleMatcher,
+                                                        String variableName)
+            throws ParserException {
         String value = singleMatcher.group(3); // Group 3 contains just the value
         boolean hasValue = value != null && !value.trim().isEmpty();
 

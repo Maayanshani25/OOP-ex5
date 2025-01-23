@@ -162,6 +162,17 @@ public class SymbolTable {
         return false;
     }
 
+    public void updateVarsStatus() {
+        for (Variable var : table.get(table.size() - 1).values()) {
+            if (var.getStatus() == AssignmentStatus.DECLARED) {
+                var.setStatus(AssignmentStatus.DECLARED_LAST_ROW);
+            }
+            if (var.getStatus() == AssignmentStatus.DECLARED_LAST_ROW) {
+                var.setStatus(AssignmentStatus.CANT_BE_ASSIGNED);
+            }
+        }
+    }
+
     /**
      * Retrieves the type of variable from the nearest scope.
      *

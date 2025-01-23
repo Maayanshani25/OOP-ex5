@@ -20,8 +20,6 @@ package ex5.util;
  * }
  * </pre>
  */
-
-
 public class Constants {
     /** <h2> Enums </h2> */
     public enum ScopeKind {
@@ -33,7 +31,7 @@ public class Constants {
     }
 
     public enum AssignmentStatus {
-        ASSIGNED, DECLARED, DECLARED_LAST_ROW
+        ASSIGNED, DECLARED, DECLARED_LAST_ROW, CANT_BE_ASSIGNED
     }
 
     /** <h2> String constants </h2>*/
@@ -57,6 +55,7 @@ public class Constants {
             // Parser error messages:
             PARSER_EXCEPTION_GENERAL_ERROR_MESSAGE = "Parser Error: ",
             INVALID_ENDLINE_ERROR_MESSAGE = "Line must end with '{', '}', or ';'. The line: ",
+            UNRECOGNIZED_INVALIE_LINE_MESSAGE = "Unrecognized or invalid line: ",
 
             // If and while parser error messages:
             OUT_OF_METHOD_SCOPE_ERROR_MESSAGE = "loop or condition out of method scope.",
@@ -91,11 +90,13 @@ public class Constants {
             METHOD_NAME_DOESNT_EXIST = "Method name does not exists.";
 
 
-
-    /** REGEX patterns */
+    /** <h2> REGEX patterns </h2> */
     public static final String LINE_END_REGEX = ".*[{};]$";
     public static final String VARIABLE_NAME_REGEX =
             "(?!true$)(?!false$)([a-zA-Z]|_[a-zA-Z0-9])[a-zA-Z0-9_]*";
+    public static final String KEYWORDS_REGEX =
+            "^(int|double|String|boolean|char|final|void|if|while|return|" + VARIABLE_NAME_REGEX + "|})";
+    public static final String DECLARATION_REGEX = "int|double|String|boolean|char|final";
     public static final String TYPE_REGEX = "^(final\\s+)?(int|double|String|char|boolean)\\b";
     public static final String INT_VALUE_REGEX = "[-+]?\\d+";
     public static final String DOUBLE_VALUE_REGEX = "[-+]?(\\d*\\.\\d+|\\d+\\.\\d*|\\d+)";
@@ -113,9 +114,7 @@ public class Constants {
             "void\\s+(" + METHOD_NAME_REGEX + ")\\s*\\(([^)]*)\\)\\s*\\{";
     public static final String METHOD_CALL_REGEX = "(" + METHOD_NAME_REGEX + ")\\s*\\(([^)]*)\\)\\s*;";
 
-
-
-    // saved words:
+    /** <h2> saved words </h2> */
     public static final String
             METHOD = "Method",
             IF = "if",

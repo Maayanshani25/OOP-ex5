@@ -16,7 +16,7 @@ import static ex5.util.Constants.*;
  */
 
 /**
- * todo: maybe add another counter for the method number. to make sure we assign it correctly
+ * todo: make sure it's not CANT_BE_ASSIGNED
  */
 
 /**

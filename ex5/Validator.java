@@ -23,14 +23,17 @@ public class Validator {
     private final IfAndWhileParser ifAndWhileParser;
     private final MethodParser methodParser;
     private final ScopeManager scopeManager;
+    private final Variable lastVarDeclared;
 
-    public Validator(SymbolTable symbolTable, ScopeManager scopeManager) {
+    public Validator(SymbolTable symbolTable,
+                     ScopeManager scopeManager,
+                     Map<String, ArrayList<VariableType>> methods) {
         this.scopeManager = scopeManager;
         this.assignmentsParser = new AssignmentParser(symbolTable);
         this.declarationParser = new DeclarationParser(symbolTable);
         this.ifAndWhileParser = new IfAndWhileParser(symbolTable, scopeManager);
-        Map<String, ArrayList<VariableType>> methods = new HashMap<>();
         this.methodParser = new MethodParser(symbolTable, scopeManager, methods);
+
     }
 
 
@@ -51,9 +54,7 @@ public class Validator {
         }
 
         // Check for valid keywords or variable names
-        Pattern keywordPattern = Pattern.compile(
-                "^(int|double|String|boolean|char|final|void|if|while|return|" + VARIABLE_NAME_REGEX + "|})"
-        );
+        Pattern keywordPattern = Pattern.compile(KEYWORDS_REGEX);
         Matcher keywordMatcher = keywordPattern.matcher(trimmedLine);
 
         if (keywordMatcher.find()) {
@@ -83,18 +84,18 @@ public class Validator {
             }
 
             // Handle variable declaration syntax
-            if (keyword.matches("int|double|String|boolean|char|final")) {
+            if (keyword.matches(DECLARATION_REGEX)) {
                 declarationParser.parse(trimmedLine);
+                // TODO: if declare without assign, check if being assigned in the next line (can use a
+                //  flag, initilize as false, if declare without assign)
                 return true;
             }
-
 
             // what about assignment? is this good?
             if (keyword.matches(VARIABLE_NAME_REGEX)) {
                 assignmentsParser.parse(trimmedLine);
                 return true;
             }
-
 
             // Handle return statement
             if (keyword.equals(RETURN)) {
@@ -110,6 +111,6 @@ public class Validator {
             }
         }
         // If no valid keyword or pattern matched, throw an exception
-        throw new ParserException("Unrecognized or invalid line: " + trimmedLine);
+        throw new ParserException(UNRECOGNIZED_INVALIE_LINE_MESSAGE + trimmedLine);
     }
 }
