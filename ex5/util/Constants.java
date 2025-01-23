@@ -56,10 +56,14 @@ public class Constants {
 
             // Parser error messages:
             PARSER_EXCEPTION_GENERAL_ERROR_MESSAGE = "Parser Error: ",
+            INVALID_ENDLINE_ERROR_MESSAGE = "Line must end with '{', '}', or ';'. The line: ",
 
             // If and while parser error messages:
             OUT_OF_METHOD_SCOPE_ERROR_MESSAGE = "loop or condition out of method scope.",
             LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE = "Loop or condition syntax error.",
+
+            // return error messages:
+            INVALID_RETURN_STATEMENT_SYNTAX = "Invalid return statement syntax.",
 
             // Declaration parser error messages:
             WRONG_DECLARATION_FORMAT = "Line does not start with a valid keyword.",
@@ -89,6 +93,7 @@ public class Constants {
 
 
     /** REGEX patterns */
+    public static final String LINE_END_REGEX = ".*[{};]$";
     public static final String VARIABLE_NAME_REGEX =
             "(?!true$)(?!false$)([a-zA-Z]|_[a-zA-Z0-9])[a-zA-Z0-9_]*";
     public static final String TYPE_REGEX = "^(final\\s+)?(int|double|String|char|boolean)\\b";
@@ -115,6 +120,7 @@ public class Constants {
             METHOD = "Method",
             IF = "if",
             WHILE = "while",
+            VOID = "void",
             INT = "int",
             DOUBLE = "double",
             STRING = "String",
@@ -123,6 +129,7 @@ public class Constants {
             FALSE = "false",
             CHAR = "char",
             RETURN = "return",
-            FINAL = "final";
+            FINAL = "final",
+            END_OF_SCOPE = "}";
 
 }

@@ -6,6 +6,7 @@ import ex5.parsing.ParserException;
 import ex5.parsing.MethodReader;
 import ex5.scope_managing.ScopeManager;
 import ex5.scope_managing.SymbolTable;
+import ex5.scope_managing.SymbolTableException;
 import ex5.tests.AssignmentParserTest;
 import ex5.tests.DeclarationParserTest;
 import ex5.util.Constants;
@@ -29,8 +30,8 @@ public class Sjavac {
         preprocessedLines = FileReader.preProcessLines(allLines);
         methodsMap = new HashMap<>();
         symbolTable = new SymbolTable();
-        validator = new Validator(symbolTable);
         scopeManager = new ScopeManager();
+        validator = new Validator(symbolTable, scopeManager);
     }
 
     public boolean run() {
@@ -45,10 +46,16 @@ public class Sjavac {
         // TODO: wrong implement, needed to be changed after implementing Validator
         // For every line, check if valid
         for (String line : preprocessedLines) {
-            if (!Validator.isValidLine(line)) {
-                return false;
+            try {
+                if (!validator.isValidLine(line)) { // Use the validator instance
+                    return false;
+                }
+            } catch (ParserException | SymbolTableException e) {
+                System.err.println(e.getMessage()); // Log the exception (optional)
+                return false; // Return false if any exception occurs
             }
         }
+
         // Check there are no un-closed scopes:
         if (!scopeManager.isScopeDequeEmpty()) {
             return false;

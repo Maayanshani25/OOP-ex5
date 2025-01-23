@@ -1,39 +1,115 @@
 package ex5;
 
+import ex5.parsing.*;
+import ex5.scope_managing.ScopeManager;
+import ex5.scope_managing.ScopeManagerException;
 import ex5.scope_managing.SymbolTable;
+import ex5.scope_managing.SymbolTableException;
+import static ex5.util.Constants.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * The Validator class is responsible for validating lines of code and directing them to the appropriate parsers.
+ */
 public class Validator {
-    public Validator(SymbolTable symbolTable) {
 
+    private final AssignmentParser assignmentsParser;
+    private final DeclarationParser declarationParser;
+    private final IfAndWhileParser ifAndWhileParser;
+    private final MethodParser methodParser;
+    private final ScopeManager scopeManager;
+
+    public Validator(SymbolTable symbolTable, ScopeManager scopeManager) {
+        this.scopeManager = scopeManager;
+        this.assignmentsParser = new AssignmentParser(symbolTable);
+        this.declarationParser = new DeclarationParser(symbolTable);
+        this.ifAndWhileParser = new IfAndWhileParser(symbolTable, scopeManager);
+        Map<String, ArrayList<VariableType>> methods = new HashMap<>();
+        this.methodParser = new MethodParser(symbolTable, scopeManager, methods);
     }
 
 
-    // TODO: from the instructions - should use the relevant Exceptions and not just true or false
-    public static boolean isValidLine(String line) {
-        // TODO: write this method
-        //    - check if ends with {,},; else trow error (if is "()*//" but end with the legal chars, the parser responsibility
-        //    - check if is a keyword regex like
-        //     (int|double|String|boolean|char|final|void|if|while|return)
+    /**
+     * Validates a line of code and delegates to the appropriate parser.
+     *
+     * @param line The line of code to validate.
+     * @return True if the line is valid, false otherwise.
+     * @throws ParserException      If the syntax or semantics of the line are invalid.
+     * @throws SymbolTableException If there are issues with the symbol table (e.g., scope management).
+     */
+    public boolean isValidLine(String line) throws ParserException, SymbolTableException, ScopeManagerException {
+        String trimmedLine = line.trim();
 
-        // TODO: check if ends with {,},; else trow error
-        // if is Method syntax - call MethodParser, and use ScopeManager.getMethodsCounter()
-        // when it's method tou should first open a new scope and then add the variables to the symbol
-        // table in the new scope. p6 line 3
+        // Check if the line ends with valid characters
+        if (!trimmedLine.matches(LINE_END_REGEX)) {
+            throw new ParserException(INVALID_ENDLINE_ERROR_MESSAGE + trimmedLine);
+        }
 
-        // if is "while" syntax - call WhileParser
+        // Check for valid keywords or variable names
+        Pattern keywordPattern = Pattern.compile(
+                "^(int|double|String|boolean|char|final|void|if|while|return|" + VARIABLE_NAME_REGEX + "|})"
+        );
+        Matcher keywordMatcher = keywordPattern.matcher(trimmedLine);
 
-        // if is "if" syntax - call IfParser
+        if (keywordMatcher.find()) {
+            String keyword = keywordMatcher.group();
 
-        // if is declaration syntax - call declareParser
-        // if the declaration didnt assign the value the next line have to be his assignment
+            // Handle method syntax
+            if (keyword.equals(VOID)) {
+                scopeManager.enterNewScope(ScopeKind.METHOD); // Open a new method scope
+                methodParser.parse(trimmedLine);
+                return true;
+            }
 
-        // if is assignment syntax - call AssignmentParser
+            // Handle "while" syntax
+            if (keyword.equals(WHILE)) {
+                ifAndWhileParser.parse(trimmedLine);
+                // todo: open a new scope?
+                scopeManager.enterNewScope(ScopeKind.WHILE);
+                return true;
+            }
+
+            // Handle "if" syntax
+            if (keyword.equals(IF)) {
+                ifAndWhileParser.parse(trimmedLine);
+                // todo: open a new scope?
+                scopeManager.enterNewScope(ScopeKind.IF);
+                return true;
+            }
+
+            // Handle variable declaration syntax
+            if (keyword.matches("int|double|String|boolean|char|final")) {
+                declarationParser.parse(trimmedLine);
+                return true;
+            }
 
 
-        // return ? what should be
+            // what about assignment? is this good?
+            if (keyword.matches(VARIABLE_NAME_REGEX)) {
+                assignmentsParser.parse(trimmedLine);
+                return true;
+            }
 
-        // if is "}" - call ScopeManager.exitScope()
 
-        return false;
+            // Handle return statement
+            if (keyword.equals(RETURN)) {
+                if (!trimmedLine.equals(RETURN_LINE)) {
+                    throw new ParserException(INVALID_RETURN_STATEMENT_SYNTAX);
+                }
+                return true;
+            }
+
+            if (keyword.equals(END_OF_SCOPE)) {
+                scopeManager.exitScope();
+                return true;
+            }
+        }
+        // If no valid keyword or pattern matched, throw an exception
+        throw new ParserException("Unrecognized or invalid line: " + trimmedLine);
     }
 }
