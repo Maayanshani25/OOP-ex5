@@ -23,7 +23,6 @@ public class Validator {
     private final IfAndWhileParser ifAndWhileParser;
     private final MethodParser methodParser;
     private final ScopeManager scopeManager;
-    private final Variable lastVarDeclared;
 
     public Validator(SymbolTable symbolTable,
                      ScopeManager scopeManager,
