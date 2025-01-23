@@ -89,7 +89,8 @@ public class Constants {
 
 
     /** REGEX patterns */
-    public static final String VARIABLE_NAME_REGEX = "([a-zA-Z]|_[a-zA-Z0-9])[a-zA-Z0-9_]*";
+    public static final String VARIABLE_NAME_REGEX =
+            "(?!true$)(?!false$)([a-zA-Z]|_[a-zA-Z0-9])[a-zA-Z0-9_]*";
     public static final String TYPE_REGEX = "^(final\\s+)?(int|double|String|char|boolean)\\b";
     public static final String INT_VALUE_REGEX = "[-+]?\\d+";
     public static final String DOUBLE_VALUE_REGEX = "[-+]?(\\d*\\.\\d+|\\d+\\.\\d*|\\d+)";

@@ -21,7 +21,6 @@ import static ex5.util.Constants.*;
 public class AssignmentParser implements Parser {
 
     private final SymbolTable symbolTable;
-    private String currentLine;
 
     /**
      * Constructor for VariablesParser.
@@ -37,48 +36,53 @@ public class AssignmentParser implements Parser {
         final String singleAssignment = "(" + VARIABLE_NAME_REGEX + ")\\s*=\\s*("
                 + INT_VALUE_REGEX + "|" + DOUBLE_VALUE_REGEX + "|" + STRING_VALUE_REGEX + "|"
                 + BOOLEAN_VALUE_REGEX + "|" + CHAR_VALUE_REGEX + "|" + VARIABLE_NAME_REGEX + ")";
-        final String multipleAssignment = singleAssignment + "(\\s*,\\s*" + singleAssignment + ")*";
-        final String correctLineRegex = "^" + multipleAssignment + "\\s*;$";
+        final String multipleAssignments = singleAssignment + "(\\s*,\\s*" + singleAssignment + ")*";
+        final String correctLineRegex = "^" + multipleAssignments + "\\s*;$";
 
         Pattern pattern = Pattern.compile(correctLineRegex);
-        Matcher matcher = pattern.matcher(line);
-
+        Matcher matcher = pattern.matcher(line.trim());
         if (matcher.matches()) {
-            // Loop through all assignments
-            Pattern singlePattern = Pattern.compile(singleAssignment);
-            Matcher singleMatcher = singlePattern.matcher(line.trim());
+            // Remove trailing semicolon
+            String assignmentsPart = line.trim().substring(0, line.trim().length() - 1).trim();
 
-            while (singleMatcher.find()) {
-                String variableName = singleMatcher.group(1); // Variable name
-                String value = singleMatcher.group(2);       // Assigned value
+            // Split assignments by commas
+            String[] assignments = assignmentsPart.split(COMMA_SEPARATION_REGEX);
 
-                // Check if the variable is declared
-                if (!symbolTable.isVariableDeclared(variableName)) {
-                    throw new ParserException(String.format(VARIABLE_NOT_DECLARED_ERROR, variableName));
+            for (String assignment : assignments) {
+                assignment = assignment.trim();
+                Pattern singlePattern = Pattern.compile(singleAssignment);
+                Matcher singleMatcher = singlePattern.matcher(assignment);
+
+                if (singleMatcher.matches()) {
+                    String variableName = singleMatcher.group(1); // Extract variable name
+                    String value = singleMatcher.group(3);       // Extract assigned value
+
+
+                    // Check if the variable is declared
+                    if (!symbolTable.isVariableDeclared(variableName)) {
+                        throw new ParserException(String.format(VARIABLE_NOT_DECLARED_ERROR, variableName));
+                    }
+
+                    // Validate the variable type
+                    VariableType variableType = symbolTable.getVarType(variableName);
+
+                    // Handle if the value is another variable name
+                    if (isValueVariableName(value)) {
+                        validateVariableNameForType(value, variableType);
+                    } else if (!isValueValidForType(variableType, value)) {
+                        throw new ParserException(String.format(
+                                INVALID_VALUE_ERROR, value, variableName, variableType));
+                    }
+
+                    // Mark the variable as assigned in the symbol table
+                    symbolTable.assignVar(variableName, variableType);
+                } else {
+                    throw new ParserException(String.format(WRONG_ASSIGNMENT_FORMAT, assignment));
                 }
-
-                // Validate the variable type
-                VariableType variableType = symbolTable.getVarType(variableName);
-
-                // If value is a variable name, validate it
-                if (isValueVariableName(value)) {
-                    validateVariableNameForType(value, variableType);
-                    continue; // Continue to the next assignment
-                }
-
-                // Validate the value itself
-                if (!isValueValidForType(variableType, value)) {
-                    throw new ParserException(String.format(
-                            INVALID_VALUE_ERROR, value, variableName, variableType));
-                }
-
-                // Mark the variable as assigned in the symbol table
-                symbolTable.assignVar(variableName, variableType);
             }
         } else {
             throw new ParserException(String.format(WRONG_ASSIGNMENT_FORMAT, line));
         }
-
     }
 
     private boolean isValueVariableName(String value) {
@@ -92,10 +96,16 @@ public class AssignmentParser implements Parser {
         }
         // Ensure the source variable is assigned
         VariableType variableNameType = symbolTable.getVarType(variableName);
-        if (variableNameType != type) {
+
+        // Allow valid type conversions or exact matches
+        boolean isValidConversion = (variableNameType == type) ||
+                (type == VariableType.DOUBLE && variableNameType == VariableType.INT) ||
+                (type == VariableType.BOOLEAN &&
+                        (variableNameType == VariableType.DOUBLE || variableNameType == VariableType.INT));
+
+        if (!isValidConversion) {
             throw new ParserException(String.format(
                     TYPE_MISMATCH_ASSIGN_ERROR, variableName, type, variableNameType));
-
         }
     }
 
