@@ -29,7 +29,7 @@ public class Variable {
         return status;
     }
 
-    public Boolean getIsFinal() {
+    public Boolean isFinal() {
         return this.isFinal;
     }
 

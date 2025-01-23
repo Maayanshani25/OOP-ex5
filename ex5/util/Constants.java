@@ -46,7 +46,9 @@ public class Constants {
             SYMBOL_TABLE_EXCEPTION_GENERAL_ERROR_MESSAGE = "SymbolTable Error: ",
             SYMBOL_TABLE_VAR_ERROR_MESSAGE = "invalid var.",
             SYMBOL_TABLE_SCOPE_ERROR_MESSAGE = "invalid Scope.",
-            SYMBOL_TABLE_ASSIGN_ERROR_MESSAGE = "invalid assign.",
+            FINAL_VARIABLE_ASSIGN_ERROR = "Cannot assign a value to final variable '%s'.",
+            TYPE_MISMATCH_ASSIGN_ERROR = "Type mismatch: Variable '%s' is of type '%s', cannot assign a " +
+                    "value of type '%s'.",
 
             // Scope error messages:
             SCOPE_MANAGER_EXCEPTION_GENERAL_ERROR_MESSAGE = "ScopeManager Error: ",
@@ -59,12 +61,17 @@ public class Constants {
             OUT_OF_METHOD_SCOPE_ERROR_MESSAGE = "loop or condition out of method scope.",
             LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE = "Loop or condition syntax error.",
 
-            // Variables parser error messages:
+            // Declaration parser error messages:
             WRONG_DECLARATION_FORMAT = "Line does not start with a valid keyword.",
             INVALID_VARIABLE_DECLARATION = "Invalid variable declaration format: ",
             PARSER_WRONG_LINE_FORMAT = "Invalid variable declaration: ",
             INVALID_TYPE_ERROR = "Invalid type keyword: ",
             FINAL_VARIABLE_ASSIGNMENT_ERROR = "Final variable '%s' must have an assigned value.",
+
+            // Assignment parser error messages
+            WRONG_ASSIGNMENT_FORMAT = "Invalid assignment line: ",
+            VARIABLE_NOT_DECLARED_ERROR = "Variable '%s' is not declared.",
+            INVALID_VALUE_ERROR = "Invalid value '%s' for variable '%s' with type '%s'.",
 
             // Method parser and Method reader error messages:
             METHOD_GENERAL_SYNTAX_ERROR = "Method syntax is invalid.",

@@ -80,21 +80,33 @@ public class SymbolTable {
     // TODO MAAYAN: check if this is what you meant
     public void assignVar(String varName, VariableType variableType) throws SymbolTableException {
         // todo: implement.
-        //   check if it's not final.
-        //   check if the type is correct.
-        //   change status to assign
+        //      check if it's inside the correct method
+
         for (int i = table.size() - 1; i >= 0; i--) {
             if (table.get(i).containsKey(varName)) {
                 Variable curVar = table.get(i).get(varName);
-                if (curVar.getIsFinal() || curVar.getType() != variableType) {
-                    throw new SymbolTableException(SYMBOL_TABLE_ASSIGN_ERROR_MESSAGE);
+
+                // Check if the variable is final
+                if (curVar.isFinal()) {
+                    throw new SymbolTableException(
+                            String.format(FINAL_VARIABLE_ASSIGN_ERROR, varName)
+                    );
+                }
+
+                // Check if the type matches
+                // todo: maybe we dont need this because we check in the parser
+                if (curVar.getType() != variableType) {
+                    throw new SymbolTableException(
+                            String.format(TYPE_MISMATCH_ASSIGN_ERROR, varName, curVar.getType(), variableType)
+                    );
                 }
                 curVar.setStatus(AssignmentStatus.ASSIGNED);
                 table.get(i).put(varName, curVar);
+                return;
             }
         }
-
-
+        // If not found, throw error
+        throw new SymbolTableException(String.format(VARIABLE_NOT_DECLARED_ERROR, varName));
     }
 
     /**

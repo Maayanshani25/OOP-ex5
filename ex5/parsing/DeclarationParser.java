@@ -14,7 +14,6 @@ public class DeclarationParser implements Parser {
     private final SymbolTable symbolTable;
     private String currentLine;
 
-
     /**
      * Constructor for VariablesParser.
      * @param symbolTable The SymbolTable instance used for managing variable scopes.

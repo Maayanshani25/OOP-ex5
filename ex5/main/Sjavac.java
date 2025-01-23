@@ -6,6 +6,7 @@ import ex5.parsing.ParserException;
 import ex5.parsing.MethodReader;
 import ex5.scope_managing.ScopeManager;
 import ex5.scope_managing.SymbolTable;
+import ex5.tests.AssignmentParserTest;
 import ex5.tests.DeclarationParserTest;
 import ex5.util.Constants;
 
@@ -83,7 +84,8 @@ public class Sjavac {
 
         // Call runTests for each test class
 //        SymbolTableTest.runTests();
-        DeclarationParserTest.runTests();
+//        DeclarationParserTest.runTests();
+        AssignmentParserTest.runTests();
 
         System.out.println("All tests completed.");
     }
