@@ -2,14 +2,12 @@ package ex5.main;
 
 import ex5.FileReader;
 import ex5.Validator;
-import ex5.parsing.ParserException;
 import ex5.parsing.MethodReader;
+import ex5.parsing.ParserException;
 import ex5.scope_managing.ScopeManager;
 import ex5.scope_managing.ScopeManagerException;
 import ex5.scope_managing.SymbolTable;
 import ex5.scope_managing.SymbolTableException;
-import ex5.tests.AssignmentParserTest;
-import ex5.tests.DeclarationParserTest;
 import ex5.util.Constants;
 
 import java.io.IOException;
@@ -36,7 +34,7 @@ public class Sjavac {
 
     }
 
-    public boolean run() throws IOException{
+    public boolean run() throws IOException {
         try {
             methodsMap = MethodReader.readMethods(preprocessedLines);
             validator = new Validator(symbolTable, scopeManager, methodsMap);

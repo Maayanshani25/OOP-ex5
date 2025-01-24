@@ -18,7 +18,7 @@ public class ScopeManager {
     }
 
     // being called from the parsers:
-    public void enterNewScope(Constants.ScopeKind scopeKind){
+    public void enterNewScope(Constants.ScopeKind scopeKind) {
         scopeStack.push(scopeKind);
         if (scopeKind == Constants.ScopeKind.METHOD) {
             methodsCounter++;
@@ -29,7 +29,7 @@ public class ScopeManager {
     public void exitScope() throws ScopeManagerException {
         try {
             Constants.ScopeKind lastScopeKind = scopeStack.pop();
-            if (lastScopeKind == Constants.ScopeKind.METHOD){
+            if (lastScopeKind == Constants.ScopeKind.METHOD) {
                 methodsCounter--;
             }
         } catch (EmptyStackException e) {

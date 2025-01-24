@@ -28,6 +28,7 @@ public class IfAndWhileParser implements Parser {
 
     /**
      * Constructor for VariablesParser.
+     *
      * @param symbolTable The SymbolTable instance used for managing variable scopes.
      */
     public IfAndWhileParser(SymbolTable symbolTable, ScopeManager scopeManager) {
@@ -72,7 +73,7 @@ public class IfAndWhileParser implements Parser {
         Pattern andPattern = Pattern.compile(AND_CONDITION_REGEX);
         Matcher andMatcher = andPattern.matcher(condition);
         if (recursiveCondition(orMatcher) || recursiveCondition(andMatcher)) {
-                return true;
+            return true;
         }
 
         // TODO: delete

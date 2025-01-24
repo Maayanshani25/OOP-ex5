@@ -5,13 +5,13 @@ import ex5.scope_managing.ScopeManager;
 import ex5.scope_managing.ScopeManagerException;
 import ex5.scope_managing.SymbolTable;
 import ex5.scope_managing.SymbolTableException;
-import static ex5.util.Constants.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static ex5.util.Constants.*;
 
 /**
  * The Validator class is responsible for validating lines of code and directing them to the appropriate parsers.

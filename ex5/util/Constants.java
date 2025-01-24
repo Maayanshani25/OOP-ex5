@@ -21,7 +21,9 @@ package ex5.util;
  * </pre>
  */
 public class Constants {
-    /** <h2> Enums </h2> */
+    /**
+     * <h2> Enums </h2>
+     */
     public enum ScopeKind {
         METHOD, IF, WHILE
     }
@@ -34,53 +36,55 @@ public class Constants {
         ASSIGNED, DECLARED, DECLARED_LAST_ROW, CANT_BE_ASSIGNED
     }
 
-    /** <h2> String constants </h2>*/
+    /**
+     * <h2> String constants </h2>
+     */
     // Messeges:
     public static final String
             ILLEGAL_CODE_MESSAGE = "",
             IO_ERROR_MESSAGE = "",
 
-            // SymbolTable error messages:
-            SYMBOL_TABLE_EXCEPTION_GENERAL_ERROR_MESSAGE = "SymbolTable Error: ",
+    // SymbolTable error messages:
+    SYMBOL_TABLE_EXCEPTION_GENERAL_ERROR_MESSAGE = "SymbolTable Error: ",
             SYMBOL_TABLE_VAR_ERROR_MESSAGE = "invalid var.",
             SYMBOL_TABLE_SCOPE_ERROR_MESSAGE = "invalid Scope.",
             FINAL_VARIABLE_ASSIGN_ERROR = "Cannot assign a value to final variable '%s'.",
             TYPE_MISMATCH_ASSIGN_ERROR = "Type mismatch: Variable '%s' is of type '%s', cannot assign a " +
                     "value of type '%s'.",
 
-            // Scope error messages:
-            SCOPE_MANAGER_EXCEPTION_GENERAL_ERROR_MESSAGE = "ScopeManager Error: ",
+    // Scope error messages:
+    SCOPE_MANAGER_EXCEPTION_GENERAL_ERROR_MESSAGE = "ScopeManager Error: ",
             INVALID_EXIT_SCOPE_MESSAGE = "invalid exit of scope.",
 
-            // Parser error messages:
-            PARSER_EXCEPTION_GENERAL_ERROR_MESSAGE = "Parser Error: ",
+    // Parser error messages:
+    PARSER_EXCEPTION_GENERAL_ERROR_MESSAGE = "Parser Error: ",
             INVALID_ENDLINE_ERROR_MESSAGE = "Line must end with '{', '}', or ';'. The line: ",
             UNRECOGNIZED_INVALIE_LINE_MESSAGE = "Unrecognized or invalid line: ",
 
-            // If and while parser error messages:
-            OUT_OF_METHOD_SCOPE_ERROR_MESSAGE = "loop or condition out of method scope.",
+    // If and while parser error messages:
+    OUT_OF_METHOD_SCOPE_ERROR_MESSAGE = "loop or condition out of method scope.",
             LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE = "Loop or condition syntax error.",
 
-            // return error messages:
-            INVALID_RETURN_STATEMENT_SYNTAX = "Invalid return statement syntax.",
+    // return error messages:
+    INVALID_RETURN_STATEMENT_SYNTAX = "Invalid return statement syntax.",
 
-            // Declaration parser error messages:
-            WRONG_DECLARATION_FORMAT = "Line does not start with a valid keyword.",
+    // Declaration parser error messages:
+    WRONG_DECLARATION_FORMAT = "Line does not start with a valid keyword.",
             INVALID_VARIABLE_DECLARATION = "Invalid variable declaration format: ",
             PARSER_WRONG_LINE_FORMAT = "Invalid variable declaration: ",
             INVALID_TYPE_ERROR = "Invalid type keyword: ",
             FINAL_VARIABLE_ASSIGNMENT_ERROR = "Final variable '%s' must have an assigned value.",
 
-            // Assignment parser error messages
-            WRONG_ASSIGNMENT_FORMAT = "Invalid assignment line: ",
+    // Assignment parser error messages
+    WRONG_ASSIGNMENT_FORMAT = "Invalid assignment line: ",
             VARIABLE_NOT_DECLARED_ERROR = "Variable '%s' is not declared.",
             INVALID_VALUE_ERROR = "Invalid value '%s' for variable '%s' with type '%s'.",
             CANNOT_BE_ASSIGNED_ERROR = "Variable '%s' can only be assigned on the declaration line or " +
-                                        "the following line.",
+                    "the following line.",
 
 
     // Method parser and Method reader error messages:
-            METHOD_GENERAL_SYNTAX_ERROR = "Method syntax is invalid.",
+    METHOD_GENERAL_SYNTAX_ERROR = "Method syntax is invalid.",
             METHOD_DECLARE_SYNTAX_ERROR = "Method declaration syntax is invalid.",
             INVALID_METHOD_ENDING_ERROR = "Method ends without return;.",
             INVALID_METHOD_NAME_ERROR = "Method declaration syntax is invalid.",
@@ -93,7 +97,9 @@ public class Constants {
             METHOD_NAME_DOESNT_EXIST = "Method name does not exists.";
 
 
-    /** <h2> REGEX patterns </h2> */
+    /**
+     * <h2> REGEX patterns </h2>
+     */
     public static final String LINE_END_REGEX = ".*[{};]$";
     public static final String VARIABLE_NAME_REGEX =
             "(?!true$)(?!false$)([a-zA-Z]|_[a-zA-Z0-9])[a-zA-Z0-9_]*";
@@ -117,7 +123,9 @@ public class Constants {
             "void\\s+(" + METHOD_NAME_REGEX + ")\\s*\\(([^)]*)\\)\\s*\\{";
     public static final String METHOD_CALL_REGEX = "(" + METHOD_NAME_REGEX + ")\\s*\\(([^)]*)\\)\\s*;";
 
-    /** <h2> saved words </h2> */
+    /**
+     * <h2> saved words </h2>
+     */
     public static final String
             METHOD = "Method",
             IF = "if",

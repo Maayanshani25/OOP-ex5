@@ -399,7 +399,7 @@ public class DeclarationParserTest {
     }
 
 
-        static void testVariableNames() {
+    static void testVariableNames() {
         // Define valid and invalid variable names
         String[] validNames = {"g2", "b_3", "_a", "_0", "a_"};
         String[] invalidNames = {"2g", "_", "2__", "54_a", "__", "___b"};

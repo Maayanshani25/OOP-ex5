@@ -5,7 +5,6 @@ import ex5.parsing.IfAndWhileParser;
 import ex5.scope_managing.ScopeManager;
 import ex5.scope_managing.SymbolTable;
 import ex5.scope_managing.SymbolTableException;
-import ex5.Variable;
 import ex5.util.Constants;
 import ex5.util.Constants.AssignmentStatus;
 import ex5.util.Constants.VariableType;

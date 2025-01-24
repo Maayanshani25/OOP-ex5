@@ -1,12 +1,13 @@
 package ex5.scope_managing;
 
 import ex5.Variable;
-import static ex5.util.Constants.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static ex5.util.Constants.*;
 
 /**
  * A SymbolTable manages variables and their types across multiple nested scopes.
@@ -69,10 +70,10 @@ public class SymbolTable {
      * Adds a variable to the current scope with specific attributes.
      * Variables with the status `CANT_BE_ASSIGNED` or invalid types cannot be added.
      *
-     * @param varName  The name of the variable.
-     * @param type     The type of the variable.
-     * @param status   The assignment status of the variable (`DECLARED`, `ASSIGNED`, etc.).
-     * @param isFinal  Whether the variable is declared as final.
+     * @param varName The name of the variable.
+     * @param type    The type of the variable.
+     * @param status  The assignment status of the variable (`DECLARED`, `ASSIGNED`, etc.).
+     * @param isFinal Whether the variable is declared as final.
      * @throws SymbolTableException If no scopes exist or if the variable already exists in the current scope.
      */
     public void addVarToScope(String varName,
@@ -164,7 +165,7 @@ public class SymbolTable {
     public boolean isVariableAssigned(String varName) {
         for (int i = table.size() - 1; i >= 0; i--) {
             if (table.get(i).containsKey(varName)) {
-                return (table.get(i).get(varName).getStatus()==AssignmentStatus.ASSIGNED);
+                return (table.get(i).get(varName).getStatus() == AssignmentStatus.ASSIGNED);
             }
         }
         return false;

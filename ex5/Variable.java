@@ -2,7 +2,8 @@ package ex5;
 
 // TODO: think about the relevant package
 
-import static ex5.util.Constants.*;
+import static ex5.util.Constants.AssignmentStatus;
+import static ex5.util.Constants.VariableType;
 
 public class Variable {
     private final String name;

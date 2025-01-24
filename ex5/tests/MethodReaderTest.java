@@ -1,12 +1,10 @@
 package ex5.tests;
 
 import ex5.parsing.MethodReader;
-import ex5.parsing.MethodParser;
 import ex5.parsing.ParserException;
 import ex5.util.Constants;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

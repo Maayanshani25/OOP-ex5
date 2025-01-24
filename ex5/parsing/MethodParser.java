@@ -1,19 +1,17 @@
 package ex5.parsing;
 
-import ex5.Validator;
 import ex5.Variable;
 import ex5.scope_managing.ScopeManager;
 import ex5.scope_managing.SymbolTable;
 import ex5.scope_managing.SymbolTableException;
 import ex5.util.Constants;
 
-import static ex5.util.Constants.*;
-
-
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static ex5.util.Constants.*;
 
 public class MethodParser implements Parser {
 
@@ -44,8 +42,7 @@ public class MethodParser implements Parser {
         // If is a declaration regex:
         else if (declareMatcher.matches()) {
             parseMethodDeclaration(declareMatcher, line);
-        }
-        else {
+        } else {
             throw new ParserException(METHOD_GENERAL_SYNTAX_ERROR);
         }
     }
@@ -96,9 +93,7 @@ public class MethodParser implements Parser {
                     symbolTable.addVarToScope(parameterName, variable);
                 }
             }
-        }
-
-        else {
+        } else {
             throw new ParserException(METHOD_DECLARE_SYNTAX_ERROR);
         }
 
@@ -152,8 +147,7 @@ public class MethodParser implements Parser {
                 }
             }
 
-        }
-        else {
+        } else {
             throw new ParserException(METHOD_CALL_SYNTAX_ERROR);
         }
     }
@@ -167,7 +161,7 @@ public class MethodParser implements Parser {
         if (declareMatcher.matches()) {
             String methodName = declareMatcher.group(1); // TODO: check
             //  Check method_name isn't already exists
-            if (methods.get(methodName)!=null) {
+            if (methods.get(methodName) != null) {
                 throw new ParserException(METHOD_NAME_ALREADY_EXIST_ERROR);
             }
             // Check valid parameters and create type list for the method
@@ -189,7 +183,8 @@ public class MethodParser implements Parser {
     private boolean isTypeCompatible(VariableType actual, VariableType expected) {
         if (actual == expected) return true;
         if (expected == VariableType.DOUBLE && actual == VariableType.INT) return true;
-        if (expected == VariableType.BOOLEAN && (actual == VariableType.INT || actual == VariableType.DOUBLE)) return true;
+        if (expected == VariableType.BOOLEAN && (actual == VariableType.INT || actual == VariableType.DOUBLE))
+            return true;
         return false;
     }
 
@@ -237,8 +232,7 @@ public class MethodParser implements Parser {
             } else {
                 throw new ParserException(METHOD_INVALID_PARAMETERS_ERROR);
             }
-        }
-        else {
+        } else {
             throw new ParserException(METHOD_INVALID_PARAMETERS_ERROR);
         }
         return null;
@@ -254,14 +248,11 @@ public class MethodParser implements Parser {
 
         if (intMatcher.matches()) {
             return VariableType.INT;
-        }
-        else if (doubleMatcher.matches()) {
+        } else if (doubleMatcher.matches()) {
             return VariableType.DOUBLE;
-        }
-        else if (boolMatcher.matches()) {
+        } else if (boolMatcher.matches()) {
             return VariableType.BOOLEAN;
-        }
-        else {
+        } else {
             return null;
         }
 

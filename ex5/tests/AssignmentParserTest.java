@@ -3,8 +3,8 @@ package ex5.tests;
 import ex5.parsing.AssignmentParser;
 import ex5.scope_managing.SymbolTable;
 import ex5.scope_managing.SymbolTableException;
-import ex5.util.Constants.VariableType;
 import ex5.util.Constants.AssignmentStatus;
+import ex5.util.Constants.VariableType;
 
 public class AssignmentParserTest {
 

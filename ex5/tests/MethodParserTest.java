@@ -3,15 +3,15 @@ package ex5.tests;
 import ex5.parsing.MethodParser;
 import ex5.parsing.ParserException;
 import ex5.scope_managing.ScopeManager;
-import ex5.scope_managing.ScopeManagerException;
 import ex5.scope_managing.SymbolTable;
 import ex5.scope_managing.SymbolTableException;
-import ex5.Variable;
-import static ex5.util.Constants.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import static ex5.util.Constants.ScopeKind;
+import static ex5.util.Constants.VariableType;
 
 public class MethodParserTest {
     public static void main(String[] args) {
@@ -103,7 +103,6 @@ public class MethodParserTest {
         // Test 5.5: empty parameters list
         parser.parse("testEmptyMethod();");
         System.out.println("Test 5.5 Passed: Valid empty method call");
-
 
 
         // Add method to method map for call testing

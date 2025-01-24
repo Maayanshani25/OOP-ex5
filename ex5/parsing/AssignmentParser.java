@@ -41,10 +41,10 @@ public class AssignmentParser implements Parser {
      * - Proper assignment syntax.
      *
      * @param line The assignment line to parse and validate.
-     * @throws ParserException        If the assignment line contains errors (e.g., type mismatch,
-     *                                invalid variable, or syntax errors).
-     * @throws SymbolTableException   If there are issues with symbol table operations (e.g.,
-     *                                accessing undeclared variables).
+     * @throws ParserException      If the assignment line contains errors (e.g., type mismatch,
+     *                              invalid variable, or syntax errors).
+     * @throws SymbolTableException If there are issues with symbol table operations (e.g.,
+     *                              accessing undeclared variables).
      */
     @Override
     public void parse(String line) throws ParserException, SymbolTableException {

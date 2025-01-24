@@ -1,7 +1,6 @@
 package ex5.parsing;
 
 
-import ex5.scope_managing.SymbolTable;
 import ex5.scope_managing.SymbolTableException;
 
 public interface Parser {

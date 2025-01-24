@@ -1,16 +1,16 @@
 package ex5;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.BufferedReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 public class FileReader {
 
-    public static List<String> readLines(String filePath) throws IOException{
+    public static List<String> readLines(String filePath) throws IOException {
         List<String> lines = new ArrayList<>();
         try (BufferedReader bufferedReader = new BufferedReader(new java.io.FileReader(filePath))) {
             String currentLine;
