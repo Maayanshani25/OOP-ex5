@@ -1,8 +1,5 @@
 package ex5.tests;
 
-/** todo: 1. seperate declaration and assignment classes
- *        2. all in regex
- */
 
 import ex5.parsing.DeclarationParser;
 import ex5.scope_managing.SymbolTable;

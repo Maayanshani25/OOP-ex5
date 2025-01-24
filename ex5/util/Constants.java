@@ -75,8 +75,11 @@ public class Constants {
             WRONG_ASSIGNMENT_FORMAT = "Invalid assignment line: ",
             VARIABLE_NOT_DECLARED_ERROR = "Variable '%s' is not declared.",
             INVALID_VALUE_ERROR = "Invalid value '%s' for variable '%s' with type '%s'.",
+            CANNOT_BE_ASSIGNED_ERROR = "Variable '%s' can only be assigned on the declaration line or " +
+                                        "the following line.",
 
-            // Method parser and Method reader error messages:
+
+    // Method parser and Method reader error messages:
             METHOD_GENERAL_SYNTAX_ERROR = "Method syntax is invalid.",
             METHOD_DECLARE_SYNTAX_ERROR = "Method declaration syntax is invalid.",
             INVALID_METHOD_ENDING_ERROR = "Method ends without return;.",

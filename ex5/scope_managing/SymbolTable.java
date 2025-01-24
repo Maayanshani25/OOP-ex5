@@ -8,9 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// TODO: add new documentation
-
-
 /**
  * A SymbolTable manages variables and their types across multiple nested scopes.
  * Each scope is represented as a map, with variable names as keys and their types as values.
@@ -39,6 +36,7 @@ public class SymbolTable {
      *
      * @throws SymbolTableException if no scopes exist.
      */
+    // todo: rotem use this func
     public void removeScope() throws SymbolTableException {
         if (!table.isEmpty()) {
             table.remove(table.size() - 1);
@@ -69,10 +67,11 @@ public class SymbolTable {
 
     /**
      * Adds a variable to the current scope with specific attributes.
+     * Variables with the status `CANT_BE_ASSIGNED` or invalid types cannot be added.
      *
      * @param varName  The name of the variable.
      * @param type     The type of the variable.
-     * @param status   The assignment status of the variable.
+     * @param status   The assignment status of the variable (`DECLARED`, `ASSIGNED`, etc.).
      * @param isFinal  Whether the variable is declared as final.
      * @throws SymbolTableException If no scopes exist or if the variable already exists in the current scope.
      */
@@ -96,15 +95,18 @@ public class SymbolTable {
 
     /**
      * Assigns a value to a variable in the nearest scope where it is declared.
-     * Ensures that final variables cannot be reassigned and that the assigned value matches the variable's type.
+     * Ensures:
+     * - Final variables cannot be reassigned.
+     * - Variables with the status `CANT_BE_ASSIGNED` cannot be assigned.
+     * - The type of the value being assigned matches the variable's type.
      *
      * @param varName      The name of the variable.
      * @param variableType The type of the value being assigned.
-     * @throws SymbolTableException If the variable is not declared, if it is final, or if the type does not match.
+     * @throws SymbolTableException If the variable is not declared, is final, has an invalid status, or the type does not match.
      */
     public void assignVar(String varName, VariableType variableType) throws SymbolTableException {
-        // todo: implement.
-        //      check if it's inside the correct method
+        // todo:  check if it's inside the correct method.
+        //     HOW?
 
         for (int i = table.size() - 1; i >= 0; i--) {
             if (table.get(i).containsKey(varName)) {
@@ -114,6 +116,12 @@ public class SymbolTable {
                 if (curVar.isFinal()) {
                     throw new SymbolTableException(
                             String.format(FINAL_VARIABLE_ASSIGN_ERROR, varName)
+                    );
+                }
+
+                if (curVar.getStatus() == AssignmentStatus.CANT_BE_ASSIGNED) {
+                    throw new SymbolTableException(
+                            String.format(CANNOT_BE_ASSIGNED_ERROR, varName)
                     );
                 }
 
@@ -148,10 +156,10 @@ public class SymbolTable {
     }
 
     /**
-     * Retrieves the type of a variable from the nearest scope where it is declared.
+     * Checks if a variable has been assigned a value in the nearest scope where it is declared.
      *
-     * @param varName The variable name.
-     * @return The type of the variable, or null if the variable is not found.
+     * @param varName The name of the variable.
+     * @return true if the variable is assigned, false otherwise.
      */
     public boolean isVariableAssigned(String varName) {
         for (int i = table.size() - 1; i >= 0; i--) {
@@ -162,6 +170,12 @@ public class SymbolTable {
         return false;
     }
 
+    /**
+     * Updates the status of all variables in the current scope.
+     * - Variables with the status `DECLARED` are changed to `DECLARED_LAST_ROW`.
+     * - Variables with the status `DECLARED_LAST_ROW` are changed to `CANT_BE_ASSIGNED`.
+     * This method ensures that variables cannot be reassigned after their allowed assignment window.
+     */
     public void updateVarsStatus() {
         for (Variable var : table.get(table.size() - 1).values()) {
             if (var.getStatus() == AssignmentStatus.DECLARED) {

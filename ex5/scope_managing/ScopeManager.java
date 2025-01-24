@@ -6,6 +6,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.EmptyStackException;
 
+// todo: rotem exit scope in symbol table
 
 public class ScopeManager {
     private final Deque<Constants.ScopeKind> scopeStack;

@@ -16,10 +16,6 @@ import static ex5.util.Constants.*;
  */
 
 /**
- * todo: make sure it's not CANT_BE_ASSIGNED
- */
-
-/**
  * The AssignmentParser class is responsible for parsing and validating assignment statements
  * in the given code. It ensures that the variables being assigned values are declared, the
  * assigned values match the expected types, and that the assignments follow the correct format.
