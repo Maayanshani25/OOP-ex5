@@ -54,7 +54,7 @@ public class MethodParser implements Parser {
             String parametersString = matcher.group(2);
 
             // Check if not in other method scope
-            if (scopeManager.getMethodsCounter() > 0) {
+            if (scopeManager.getMethodsCounter() > 1) {
                 throw new ParserException(METHOD_DECLARE_IN_METHOD_SCOPE_ERROR);
             }
 
@@ -105,7 +105,7 @@ public class MethodParser implements Parser {
             String parametersString = matcher.group(2);
 
             // Check is in another method scope:
-            if (scopeManager.getMethodsCounter() == 0) {
+            if (scopeManager.getMethodsCounter() == 1) {
                 throw new ParserException(METHOD_CALL_OUT_OF_METHOD_SCOPE);
             }
 

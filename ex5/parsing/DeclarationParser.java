@@ -118,7 +118,6 @@ public class DeclarationParser implements Parser {
 
                     // If the value is another variable, ensure it is declared and assigned
                         if (isValueVariableName(value)) {
-                            System.out.println("DEBUGGING2: " + value);
                             validateAssignedVariable(value, variableType);
                         }
                     }
