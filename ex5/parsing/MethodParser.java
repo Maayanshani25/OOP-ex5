@@ -68,20 +68,14 @@ public class MethodParser implements Parser {
             }
 
             // Check if method name already exists - already been checked in MethodReader
-//            if (methods.containsKey(methodName)) {
-//                throw new ParserException(METHOD_NAME_ALREADY_EXIST_ERROR);
-//            }
 
-            // Check parameters name are not already exist, and are valid:
+            // Check parameters name are valid:
             String[] parametersAndTypes = parametersString.split("\\s*,\\s*"); // TODO: check
             if (!(parametersAndTypes.length==1 && parametersAndTypes[0].equals(""))) {
                 for (String parameter : parametersAndTypes) {
                     Variable variable = parseParameter(parameter);
                     if (variable != null) {
                         String parameterName = variable.getName();
-                        if (symbolTable.isVariableDeclared(parameterName)) {
-                            throw new ParserException(METHOD_PARAMETERS_ALREADY_EXIST_ERROR);
-                        }
                         // add var to symboltable
                         symbolTable.addVarToScope(parameterName, variable);
                     }
@@ -113,7 +107,7 @@ public class MethodParser implements Parser {
             String parametersString = matcher.group(2);
 
             // Check is in another method scope:
-            if (scopeManager.getMethodsCounter() == 1) {
+            if (scopeManager.getMethodsCounter() == 0) {
                 throw new ParserException(METHOD_CALL_OUT_OF_METHOD_SCOPE);
             }
 
@@ -130,7 +124,7 @@ public class MethodParser implements Parser {
                     throw new ParserException(METHOD_INVALID_PARAMETERS_ERROR);
                 }
                 for (int i = 0; i < parameters.length; i++) {
-                    String parameterName = parameters[i];
+                    String parameterName = parameters[i].trim();
                     VariableType expectedType = methods.get(methodName).get(i);
 
                     // Check if constant
@@ -247,12 +241,17 @@ public class MethodParser implements Parser {
     }
 
     private static VariableType ConstantParameter(String parameter) {
+        parameter = parameter.trim();
         Pattern intPattern = Pattern.compile(INT_VALUE_REGEX);
         Matcher intMatcher = intPattern.matcher(parameter);
         Pattern doublePattern = Pattern.compile(DOUBLE_VALUE_REGEX);
         Matcher doubleMatcher = doublePattern.matcher(parameter);
         Pattern boolPattern = Pattern.compile(BOOLEAN_CONSTANT_REGEX);
         Matcher boolMatcher = boolPattern.matcher(parameter);
+        Pattern charPattern = Pattern.compile(CHAR_VALUE_REGEX);
+        Matcher charMatcher = charPattern.matcher(parameter);
+        Pattern stringPattern = Pattern.compile(STRING_VALUE_REGEX);
+        Matcher stringMatcher = stringPattern.matcher(parameter);
 
         if (intMatcher.matches()) {
             return VariableType.INT;
@@ -260,6 +259,10 @@ public class MethodParser implements Parser {
             return VariableType.DOUBLE;
         } else if (boolMatcher.matches()) {
             return VariableType.BOOLEAN;
+        } else if (charMatcher.matches()) {
+            return VariableType.CHAR;
+        } else if (stringMatcher.matches()) {
+            return VariableType.STRING;
         } else {
             return null;
         }

@@ -53,21 +53,24 @@ public class IfAndWhileParser implements Parser {
         Matcher ifMatcher = ifPattern.matcher(currentLine);
         Matcher whileMatcher = whilePattern.matcher(currentLine);
 
-        if (!ifMatcher.matches() && !whileMatcher.matches()) {
+        if (!(ifMatcher.matches() || whileMatcher.matches())) {
             throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
         }
 
         // Check valid condition:
-        String condition = ifMatcher.group(1);
-        if (!parseFullCondition(condition)) {
-            throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
-        }
-
         if (ifMatcher.matches()) {
             scopeManager.enterNewScope(ScopeKind.IF);
+            String condition = ifMatcher.group(1);
+            if (!parseFullCondition(condition)) {
+                throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
+            }
         }
         else if (whileMatcher.matches()) {
             scopeManager.enterNewScope(ScopeKind.WHILE);
+            String condition = whileMatcher.group(1);
+            if (!parseFullCondition(condition)) {
+                throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
+            }
         }
 
     }
