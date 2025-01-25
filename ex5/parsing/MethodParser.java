@@ -65,19 +65,21 @@ public class MethodParser implements Parser {
                 throw new ParserException(INVALID_METHOD_NAME_ERROR);
             }
 
-            // Check if method name already exists
-            if (methods.containsKey(methodName)) {
-                throw new ParserException(METHOD_NAME_ALREADY_EXIST_ERROR);
-            }
+            // Check if method name already exists - already been checked in MethodReader
+//            if (methods.containsKey(methodName)) {
+//                throw new ParserException(METHOD_NAME_ALREADY_EXIST_ERROR);
+//            }
 
             // Check parameters name are not already exist, and are valid:
             String[] parametersAndTypes = parametersString.split("\\s*,\\s*"); // TODO: check
-            for (String parameter : parametersAndTypes) {
-                Variable variable = parseParameter(parameter);
-                if (variable != null) {
-                    String parameterName = variable.getName();
-                    if (symbolTable.isVariableDeclared(parameterName)) {
-                        throw new ParserException(METHOD_PARAMETERS_ALREADY_EXIST_ERROR);
+            if (!(parametersAndTypes.length==1 && parametersAndTypes[0].equals(""))) {
+                for (String parameter : parametersAndTypes) {
+                    Variable variable = parseParameter(parameter);
+                    if (variable != null) {
+                        String parameterName = variable.getName();
+                        if (symbolTable.isVariableDeclared(parameterName)) {
+                            throw new ParserException(METHOD_PARAMETERS_ALREADY_EXIST_ERROR);
+                        }
                     }
                 }
             }
@@ -86,11 +88,13 @@ public class MethodParser implements Parser {
 
             // if passes all test, add vars and open new scope
             scopeManager.enterNewScope(ScopeKind.METHOD);
-            for (String parameter : parametersAndTypes) {
-                Variable variable = parseParameter(parameter);
-                if (variable == null) {
-                    String parameterName = variable.getName();
-                    symbolTable.addVarToScope(parameterName, variable);
+            if (!(parametersAndTypes.length==1 && parametersAndTypes[0].equals(""))) {
+                for (String parameter : parametersAndTypes) {
+                    Variable variable = parseParameter(parameter);
+                    if (variable == null) {
+                        String parameterName = variable.getName();
+                        symbolTable.addVarToScope(parameterName, variable);
+                    }
                 }
             }
         } else {
@@ -161,7 +165,7 @@ public class MethodParser implements Parser {
         if (declareMatcher.matches()) {
             String methodName = declareMatcher.group(1); // TODO: check
             //  Check method_name isn't already exists
-            if (methods.get(methodName) != null) {
+            if (methods.containsKey(methodName)) {
                 throw new ParserException(METHOD_NAME_ALREADY_EXIST_ERROR);
             }
             // Check valid parameters and create type list for the method

@@ -61,7 +61,7 @@ public class Validator {
 
             // Handle method syntax
             if (keyword.equals(VOID)) {
-                scopeManager.enterNewScope(ScopeKind.METHOD); // Open a new method scope
+                // todo maayan: open a new scope? already in whileParser
                 methodParser.parse(trimmedLine);
                 return true;
             }
@@ -69,16 +69,16 @@ public class Validator {
             // Handle "while" syntax
             if (keyword.equals(WHILE)) {
                 ifAndWhileParser.parse(trimmedLine);
-                // todo: open a new scope?
-                scopeManager.enterNewScope(ScopeKind.WHILE);
+                // todo maayan: open a new scope? already in whileandifParser
+//                scopeManager.enterNewScope(ScopeKind.WHILE);
                 return true;
             }
 
             // Handle "if" syntax
             if (keyword.equals(IF)) {
                 ifAndWhileParser.parse(trimmedLine);
-                // todo: open a new scope?
-                scopeManager.enterNewScope(ScopeKind.IF);
+                // todo maayan: open a new scope? already in whileandifParser
+//                scopeManager.enterNewScope(ScopeKind.IF);
                 return true;
             }
 
@@ -90,12 +90,6 @@ public class Validator {
                 return true;
             }
 
-            // what about assignment? is this good?
-            if (keyword.matches(VARIABLE_NAME_REGEX)) {
-                assignmentsParser.parse(trimmedLine);
-                return true;
-            }
-
             // Handle return statement
             if (keyword.equals(RETURN)) {
                 if (!trimmedLine.equals(RETURN_LINE)) {
@@ -103,6 +97,14 @@ public class Validator {
                 }
                 return true;
             }
+
+            // what about assignment? is this good?
+            if (keyword.matches(VARIABLE_NAME_REGEX)) {
+                assignmentsParser.parse(trimmedLine);
+                return true;
+            }
+
+
 
             if (keyword.equals(END_OF_SCOPE)) {
                 scopeManager.exitScope();

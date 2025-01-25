@@ -63,6 +63,13 @@ public class IfAndWhileParser implements Parser {
             throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
         }
 
+        if (ifMatcher.matches()) {
+            scopeManager.enterNewScope(ScopeKind.IF);
+        }
+        else if (whileMatcher.matches()) {
+            scopeManager.enterNewScope(ScopeKind.WHILE);
+        }
+
     }
 
     private boolean parseFullCondition(String condition) throws ParserException, SymbolTableException {
