@@ -16,6 +16,7 @@ import static ex5.util.Constants.*;
 
 /**
  * The Validator class is responsible for validating lines of code and directing them to the appropriate parsers.
+ * It ensures that lines conform to the correct syntax and semantics, leveraging various parsers and a symbol table.
  */
 public class Validator {
 
@@ -26,6 +27,13 @@ public class Validator {
     private final ScopeManager scopeManager;
     private final Map<String, ArrayList<VariableType>> methods;
 
+    /**
+     * Constructs a Validator instance with the provided symbol table, scope manager, and methods map.
+     *
+     * @param symbolTable   The symbol table used for variable and method scope management.
+     * @param scopeManager  The scope manager to track and manage scopes.
+     * @param methods       A map of method names to their parameter types.
+     */
     public Validator(SymbolTable symbolTable,
                      ScopeManager scopeManager,
                      Map<String, ArrayList<VariableType>> methods) {
@@ -35,17 +43,16 @@ public class Validator {
         this.declarationParser = new DeclarationParser(symbolTable);
         this.ifAndWhileParser = new IfAndWhileParser(symbolTable, scopeManager);
         this.methodParser = new MethodParser(symbolTable, scopeManager, methods);
-
     }
 
-
     /**
-     * Validates a line of code and delegates to the appropriate parser.
+     * Validates a line of code and delegates it to the appropriate parser.
      *
      * @param line The line of code to validate.
      * @return True if the line is valid, false otherwise.
      * @throws ParserException      If the syntax or semantics of the line are invalid.
      * @throws SymbolTableException If there are issues with the symbol table (e.g., scope management).
+     * @throws ScopeManagerException If there are issues with scope management (e.g., invalid scope transitions).
      */
     public boolean isValidLine(String line) throws ParserException, SymbolTableException, ScopeManagerException {
         String trimmedLine = line.trim();
@@ -83,8 +90,6 @@ public class Validator {
             // Handle variable declaration syntax
             if (keyword.matches(DECLARATION_REGEX)) {
                 declarationParser.parse(trimmedLine);
-                // TODO: if declare without assign, check if being assigned in the next line (can use a
-                //  flag, initilize as false, if declare without assign)
                 return true;
             }
 
@@ -96,18 +101,19 @@ public class Validator {
                 return true;
             }
 
-            // what about assignment? is this good?
+            // Handle assignment syntax
             if (keyword.matches(VARIABLE_NAME_REGEX)) {
                 assignmentsParser.parse(trimmedLine);
                 return true;
             }
 
-
+            // Handle end of scope
             if (keyword.equals(END_OF_SCOPE)) {
                 scopeManager.exitScope();
                 return true;
             }
         }
+
         // If no valid keyword or pattern matched, throw an exception
         throw new ParserException(UNRECOGNIZED_INVALIE_LINE_MESSAGE + trimmedLine);
     }
