@@ -55,13 +55,13 @@ public class SymbolTable {
      */
     // todo: rotem what is this func?
     public void addVarToScope(String varName, Variable var) throws SymbolTableException {
-        if (!table.isEmpty()) {
+        if (table.isEmpty()) {
             throw new SymbolTableException(SYMBOL_TABLE_SCOPE_ERROR_MESSAGE);
         }
 
         Map<String, Variable> currentScope = table.get(table.size() - 1);
         if (currentScope.containsKey(varName)) {
-            throw new SymbolTableException(SYMBOL_TABLE_VAR_ERROR_MESSAGE + ": " + varName);
+            throw new SymbolTableException(String.format(ASSIGN_TO_EXIST_VARNAME_ERROR, varName));
         }
         currentScope.put(varName, var);
     }
@@ -85,12 +85,12 @@ public class SymbolTable {
             throw new SymbolTableException(SYMBOL_TABLE_SCOPE_ERROR_MESSAGE);
         }
 
-        Variable var = new Variable(varName, type, status, isFinal);
-
         Map<String, Variable> currentScope = table.get(table.size() - 1);
         if (currentScope.containsKey(varName)) {
-            throw new SymbolTableException(SYMBOL_TABLE_VAR_ERROR_MESSAGE + ": " + varName);
+            throw new SymbolTableException(String.format(ASSIGN_TO_EXIST_VARNAME_ERROR, varName));
         }
+
+        Variable var = new Variable(varName, type, status, isFinal);
         currentScope.put(varName, var);
     }
 

@@ -49,6 +49,8 @@ public class MethodParser implements Parser {
 
     private void parseMethodDeclaration(Matcher matcher, String line) throws ParserException, SymbolTableException {
         // Checks valid regex
+        scopeManager.enterNewScope(ScopeKind.METHOD);
+
         if (matcher.matches()) {
             String methodName = matcher.group(1);
             String parametersString = matcher.group(2);
@@ -80,6 +82,8 @@ public class MethodParser implements Parser {
                         if (symbolTable.isVariableDeclared(parameterName)) {
                             throw new ParserException(METHOD_PARAMETERS_ALREADY_EXIST_ERROR);
                         }
+                        // add var to symboltable
+                        symbolTable.addVarToScope(parameterName, variable);
                     }
                 }
             }
@@ -87,7 +91,6 @@ public class MethodParser implements Parser {
             // Check that ends with "return;" and "{} - alredy in MethodReader
 
             // if passes all test, add vars and open new scope
-            scopeManager.enterNewScope(ScopeKind.METHOD);
             if (!(parametersAndTypes.length==1 && parametersAndTypes[0].equals(""))) {
                 for (String parameter : parametersAndTypes) {
                     Variable variable = parseParameter(parameter);
@@ -103,6 +106,7 @@ public class MethodParser implements Parser {
 
     }
 
+    // todo: what is this method?
     private void parseMethodCall(Matcher matcher, String line) throws ParserException, SymbolTableException {
         if (matcher.matches()) {
             String methodName = matcher.group(1);

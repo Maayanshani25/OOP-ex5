@@ -5,6 +5,7 @@ import ex5.scope_managing.ScopeManager;
 import ex5.scope_managing.ScopeManagerException;
 import ex5.scope_managing.SymbolTable;
 import ex5.scope_managing.SymbolTableException;
+import ex5.util.Constants;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -23,11 +24,13 @@ public class Validator {
     private final IfAndWhileParser ifAndWhileParser;
     private final MethodParser methodParser;
     private final ScopeManager scopeManager;
+    private final Map<String, ArrayList<VariableType>> methods;
 
     public Validator(SymbolTable symbolTable,
                      ScopeManager scopeManager,
                      Map<String, ArrayList<VariableType>> methods) {
         this.scopeManager = scopeManager;
+        this.methods = methods;
         this.assignmentsParser = new AssignmentParser(symbolTable);
         this.declarationParser = new DeclarationParser(symbolTable);
         this.ifAndWhileParser = new IfAndWhileParser(symbolTable, scopeManager);
@@ -60,8 +63,7 @@ public class Validator {
             String keyword = keywordMatcher.group();
 
             // Handle method syntax
-            if (keyword.equals(VOID)) {
-                // todo maayan: open a new scope? already in whileParser
+            if (keyword.equals(VOID) || methods.containsKey(keyword)) {
                 methodParser.parse(trimmedLine);
                 return true;
             }
@@ -69,16 +71,12 @@ public class Validator {
             // Handle "while" syntax
             if (keyword.equals(WHILE)) {
                 ifAndWhileParser.parse(trimmedLine);
-                // todo maayan: open a new scope? already in whileandifParser
-//                scopeManager.enterNewScope(ScopeKind.WHILE);
                 return true;
             }
 
             // Handle "if" syntax
             if (keyword.equals(IF)) {
                 ifAndWhileParser.parse(trimmedLine);
-                // todo maayan: open a new scope? already in whileandifParser
-//                scopeManager.enterNewScope(ScopeKind.IF);
                 return true;
             }
 
@@ -103,7 +101,6 @@ public class Validator {
                 assignmentsParser.parse(trimmedLine);
                 return true;
             }
-
 
 
             if (keyword.equals(END_OF_SCOPE)) {

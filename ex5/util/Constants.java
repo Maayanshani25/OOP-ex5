@@ -51,6 +51,7 @@ public class Constants {
             FINAL_VARIABLE_ASSIGN_ERROR = "Cannot assign a value to final variable '%s'.",
             TYPE_MISMATCH_ASSIGN_ERROR = "Type mismatch: Variable '%s' is of type '%s', cannot assign a " +
                     "value of type '%s'.",
+            ASSIGN_TO_EXIST_VARNAME_ERROR = "Variable name '%s' already exists.",
 
     // Scope error messages:
     SCOPE_MANAGER_EXCEPTION_GENERAL_ERROR_MESSAGE = "ScopeManager Error: ",
