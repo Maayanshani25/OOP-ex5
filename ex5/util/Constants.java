@@ -25,7 +25,7 @@ public class Constants {
      * <h2> Enums </h2>
      */
     public enum ScopeKind {
-        METHOD, IF, WHILE
+        METHOD, IF, WHILE, GLOBAL
     }
 
     public enum VariableType {

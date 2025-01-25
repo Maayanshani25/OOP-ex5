@@ -38,6 +38,7 @@ public class Sjavac {
     public boolean run() throws IOException {
         try {
             methodsMap = MethodReader.readMethods(preprocessedLines);
+            scopeManager.enterNewScope(Constants.ScopeKind.GLOBAL);
             validator = new Validator(symbolTable, scopeManager, methodsMap);
 
             // For every line, check if valid
@@ -53,7 +54,7 @@ public class Sjavac {
         }
 
         // Check there are no un-closed scopes:
-        if (!scopeManager.isScopeDequeEmpty()) {
+        if (!scopeManager.areInGlobalScope()) {
             return false;
         }
         return true;

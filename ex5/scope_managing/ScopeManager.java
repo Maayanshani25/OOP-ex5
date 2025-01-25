@@ -45,8 +45,8 @@ public class ScopeManager {
         return methodsCounter;
     }
 
-    public boolean isScopeDequeEmpty() {
-        return scopeStack.isEmpty();
+    public boolean areInGlobalScope() {
+        return (scopeStack.size() ==1);
     }
 
 }
