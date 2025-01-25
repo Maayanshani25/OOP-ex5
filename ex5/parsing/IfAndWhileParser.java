@@ -17,13 +17,6 @@ import static ex5.util.Constants.*;
  * It ensures proper syntax, scope management, and type compatibility for the conditions.
  */
 public class IfAndWhileParser implements Parser {
-    // TODO: move to Constants
-    public static final String IF_CONDITION_REGEX = "if\\s*\\((.+)\\)\\s*\\{";
-    public static final String WHILE_CONDITION_REGEX = "while\\s*\\((.+)\\)\\s*\\{";
-    public static final String OR_CONDITION_REGEX = "(.+?)\\|\\|(.+)";
-    public static final String AND_CONDITION_REGEX = "(.+?)&&(.+)";
-    public static final String INT_VALUE_REGEX = "[-+]?\\d+";
-    public static final String DOUBLE_VALUE_REGEX = "[-+]?(\\d*\\.\\d+|\\d+\\.\\d*|\\d+)";
 
     private final SymbolTable symbolTable;
     private final ScopeManager scopeManager;
@@ -134,16 +127,12 @@ public class IfAndWhileParser implements Parser {
      * @throws SymbolTableException If there are issues with variable declarations or assignments.
      */
     private boolean parseSingleCondition(String condition) throws SymbolTableException {
-        String[] tokens = condition.trim().split("\\s+");
+        String[] tokens = condition.trim().split(SPLIT_BY_SPACE_REGEX);
         if (tokens.length != 1) {
             return false;
         }
         // Check if is true/false
         String token = tokens[0];
-        // TODO: i replaced with using Variable.ConstantParameter, delete if it works
-//        if (token.equals(TRUE) || token.equals(FALSE)) {
-//            return true;
-//        }
 
         // Check if is initialized boolean/int/double variable
         if (symbolTable.isVariableAssigned(token) && isValidType(token)) {
@@ -151,14 +140,6 @@ public class IfAndWhileParser implements Parser {
         }
 
         // Check if double or int constant
-//        // TODO: i replaced with using Variable.ConstantParameter, delete if it works
-//        Pattern doublePattern = Pattern.compile(DOUBLE_VALUE_REGEX);
-//        Pattern intPattern = Pattern.compile(INT_VALUE_REGEX);
-//        Matcher doubleMatcher = doublePattern.matcher(condition);
-//        Matcher intMatcher = intPattern.matcher(condition);
-//
-//        return intMatcher.matches() || doubleMatcher.matches();
-
         VariableType type = Variable.ConstantParameter(condition);
         return ( type == VariableType.BOOLEAN  ||
                 type == VariableType.DOUBLE ||

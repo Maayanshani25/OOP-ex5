@@ -37,7 +37,6 @@ public class SymbolTable {
      *
      * @throws SymbolTableException if no scopes exist.
      */
-    // todo: rotem use this func
     public void removeScope() throws SymbolTableException {
         if (!table.isEmpty()) {
             table.remove(table.size() - 1);
@@ -53,7 +52,6 @@ public class SymbolTable {
      * @param var     The Variable object to add.
      * @throws SymbolTableException If no scopes exist or if the variable already exists in the current scope.
      */
-    // todo: rotem what is this func?
     public void addVarToScope(String varName, Variable var) throws SymbolTableException {
         if (table.isEmpty()) {
             throw new SymbolTableException(SYMBOL_TABLE_SCOPE_ERROR_MESSAGE);

@@ -92,7 +92,6 @@ public class Constants {
             INVALID_METHOD_NAME_ERROR = "Method declaration syntax is invalid.",
             METHOD_DECLARE_IN_METHOD_SCOPE_ERROR = "Method can not be declare in another method scope.",
             METHOD_NAME_ALREADY_EXIST_ERROR = "Two methods with the same name are illegal",
-            METHOD_PARAMETERS_ALREADY_EXIST_ERROR = "Method's parameters name already exist.",
             METHOD_INVALID_PARAMETERS_ERROR = "Method's parameters are invalid.",
             METHOD_CALL_SYNTAX_ERROR = "Method call syntax is invalid.",
             METHOD_CALL_OUT_OF_METHOD_SCOPE = "Method must be call in another method scope.",
@@ -116,6 +115,11 @@ public class Constants {
     public static final String BOOLEAN_VALUE_REGEX = "(true|false|[-+]?\\d+(\\.\\d+)?)";
     public static final String BOOLEAN_CONSTANT_REGEX = "(true|false)";
     public static final String CHAR_VALUE_REGEX = "'[^\\\"\\\\',]'";
+    public static final String IF_CONDITION_REGEX = "if\\s*\\((.+)\\)\\s*\\{";
+    public static final String WHILE_CONDITION_REGEX = "while\\s*\\((.+)\\)\\s*\\{";
+    public static final String OR_CONDITION_REGEX = "(.+?)\\|\\|(.+)";
+    public static final String SPLIT_BY_SPACE_REGEX = "\\s+";
+    public static final String AND_CONDITION_REGEX = "(.+?)&&(.+)";
     public static final String COMMA_SEPARATION_REGEX = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
     public static final String FINAL_START_REGEX = "^(final\\s+)?";
     public static final String CLOSE_BRACKET_REGEX = "\\}";
