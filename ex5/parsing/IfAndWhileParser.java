@@ -1,5 +1,6 @@
 package ex5.parsing;
 
+import ex5.Variable;
 import ex5.scope_managing.ScopeManager;
 import ex5.scope_managing.SymbolTable;
 import ex5.scope_managing.SymbolTableException;
@@ -67,7 +68,7 @@ public class IfAndWhileParser implements Parser {
         // Check valid condition:
         if (ifMatcher.matches()) {
             scopeManager.enterNewScope(ScopeKind.IF);
-            String condition = ifMatcher.group(1);
+            String condition = ifMatcher.group(1).trim();
             if (!parseFullCondition(condition)) {
                 throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
             }
@@ -133,15 +134,16 @@ public class IfAndWhileParser implements Parser {
      * @throws SymbolTableException If there are issues with variable declarations or assignments.
      */
     private boolean parseSingleCondition(String condition) throws SymbolTableException {
-        String[] tokens = condition.split("\\s+");
+        String[] tokens = condition.trim().split("\\s+");
         if (tokens.length != 1) {
             return false;
         }
         // Check if is true/false
         String token = tokens[0];
-        if (token.equals(TRUE) || token.equals(FALSE)) {
-            return true;
-        }
+        // TODO: i replaced with using Variable.ConstantParameter, delete if it works
+//        if (token.equals(TRUE) || token.equals(FALSE)) {
+//            return true;
+//        }
 
         // Check if is initialized boolean/int/double variable
         if (symbolTable.isVariableAssigned(token) && isValidType(token)) {
@@ -149,12 +151,18 @@ public class IfAndWhileParser implements Parser {
         }
 
         // Check if double or int constant
-        Pattern doublePattern = Pattern.compile(DOUBLE_VALUE_REGEX);
-        Pattern intPattern = Pattern.compile(INT_VALUE_REGEX);
-        Matcher doubleMatcher = doublePattern.matcher(condition);
-        Matcher intMatcher = intPattern.matcher(condition);
+//        // TODO: i replaced with using Variable.ConstantParameter, delete if it works
+//        Pattern doublePattern = Pattern.compile(DOUBLE_VALUE_REGEX);
+//        Pattern intPattern = Pattern.compile(INT_VALUE_REGEX);
+//        Matcher doubleMatcher = doublePattern.matcher(condition);
+//        Matcher intMatcher = intPattern.matcher(condition);
+//
+//        return intMatcher.matches() || doubleMatcher.matches();
 
-        return intMatcher.matches() || doubleMatcher.matches();
+        VariableType type = Variable.ConstantParameter(condition);
+        return ( type == VariableType.BOOLEAN  ||
+                type == VariableType.DOUBLE ||
+                type == VariableType.INT);
     }
 
     /**

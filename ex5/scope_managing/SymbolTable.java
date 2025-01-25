@@ -178,12 +178,15 @@ public class SymbolTable {
      * This method ensures that variables cannot be reassigned after their allowed assignment window.
      */
     public void updateVarsStatus() {
-        for (Variable var : table.get(table.size() - 1).values()) {
-            if (var.getStatus() == AssignmentStatus.DECLARED) {
-                var.setStatus(AssignmentStatus.DECLARED_LAST_ROW);
-            }
-            if (var.getStatus() == AssignmentStatus.DECLARED_LAST_ROW) {
-                var.setStatus(AssignmentStatus.CANT_BE_ASSIGNED);
+        if (!table.isEmpty()) {
+            for (int i = table.size() - 1; i >= 0; i--) {
+                for (Variable var : table.get(i).values()) {
+                    if (var.getStatus() == AssignmentStatus.DECLARED) {
+                        var.setStatus(AssignmentStatus.DECLARED_LAST_ROW);
+                    } else if (var.getStatus() == AssignmentStatus.DECLARED_LAST_ROW) {
+                        var.setStatus(AssignmentStatus.CANT_BE_ASSIGNED);
+                    }
+                }
             }
         }
     }

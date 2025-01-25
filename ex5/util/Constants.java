@@ -49,8 +49,6 @@ public class Constants {
             SYMBOL_TABLE_VAR_ERROR_MESSAGE = "invalid var.",
             SYMBOL_TABLE_SCOPE_ERROR_MESSAGE = "invalid Scope.",
             FINAL_VARIABLE_ASSIGN_ERROR = "Cannot assign a value to final variable '%s'.",
-            TYPE_MISMATCH_ASSIGN_ERROR = "Type mismatch: Variable '%s' is of type '%s', cannot assign a " +
-                    "value of type '%s'.",
             ASSIGN_TO_EXIST_VARNAME_ERROR = "Variable name '%s' already exists.",
 
     // Scope error messages:
@@ -83,6 +81,8 @@ public class Constants {
             INVALID_VALUE_ERROR = "Invalid value '%s' for variable '%s' with type '%s'.",
             CANNOT_BE_ASSIGNED_ERROR = "Variable '%s' can only be assigned on the declaration line or " +
                     "the following line.",
+            TYPE_MISMATCH_ASSIGN_ERROR = "Type mismatch: Variable '%s' is of type '%s', cannot assign a " +
+                    "value of type '%s'.",
 
 
     // Method parser and Method reader error messages:
@@ -96,7 +96,8 @@ public class Constants {
             METHOD_INVALID_PARAMETERS_ERROR = "Method's parameters are invalid.",
             METHOD_CALL_SYNTAX_ERROR = "Method call syntax is invalid.",
             METHOD_CALL_OUT_OF_METHOD_SCOPE = "Method must be call in another method scope.",
-            METHOD_NAME_DOESNT_EXIST = "Method name does not exists.";
+            METHOD_NAME_DOESNT_EXIST = "Method name does not exists.",
+            RETURN_OUT_OF_METHOD_SCOPE_ERROR = "return out of method scope.";
 
 
     /**
@@ -119,7 +120,7 @@ public class Constants {
     public static final String FINAL_START_REGEX = "^(final\\s+)?";
     public static final String CLOSE_BRACKET_REGEX = "\\}";
     public static final String OPEN_BRACKET_REGEX = "\\{";
-    public static final String RETURN_LINE = "return;";
+    public static final String RETURN_LINE = "return\\s*;";
     public static final String METHOD_NAME_REGEX = "[a-zA-Z][a-zA-Z0-9_]*";
     public static final String METHOD_DECLARE_REGEX =
             "void\\s+(" + METHOD_NAME_REGEX + ")\\s*\\(([^)]*)\\)\\s*\\{";

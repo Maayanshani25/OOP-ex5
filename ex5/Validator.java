@@ -95,8 +95,14 @@ public class Validator {
 
             // Handle return statement
             if (keyword.equals(RETURN)) {
-                if (!trimmedLine.equals(RETURN_LINE)) {
+                Pattern returnPattern = Pattern.compile(RETURN_LINE);
+                Matcher returnMatcher = returnPattern.matcher(trimmedLine);
+
+                if (!returnMatcher.matches()) {
                     throw new ParserException(INVALID_RETURN_STATEMENT_SYNTAX);
+                }
+                if (scopeManager.getMethodsCounter() == 0) {
+                    throw new ParserException(RETURN_OUT_OF_METHOD_SCOPE_ERROR);
                 }
                 return true;
             }
@@ -109,8 +115,11 @@ public class Validator {
 
             // Handle end of scope
             if (keyword.equals(END_OF_SCOPE)) {
-                scopeManager.exitScope();
-                return true;
+                // check there is only one "{":
+                if (trimmedLine.equals(END_OF_SCOPE)){
+                    scopeManager.exitScope();
+                    return true;
+                }
             }
         }
 

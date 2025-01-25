@@ -48,7 +48,7 @@ public class FileReader {
         for (String line : lines) {
             // Remove comments and empty lines:
             Matcher matcher = commentLinePattern.matcher(line);
-            if (!line.isEmpty() && !matcher.find()) {
+            if (!line.trim().isEmpty() && !matcher.find()) {
                 newLines.add(line);
             }
         }

@@ -33,6 +33,7 @@ public class MethodReader {
         Pattern declarePattern = Pattern.compile(METHOD_DECLARE_REGEX);
         Pattern closeBracketPattern = Pattern.compile(CLOSE_BRACKET_REGEX);
         Pattern openBracketPattern = Pattern.compile(OPEN_BRACKET_REGEX);
+        Pattern returnPattern = Pattern.compile(RETURN_LINE);
 
         for (int i = 0; i < lines.size(); i++) {
             String currentLine = lines.get(i).trim();
@@ -72,7 +73,8 @@ public class MethodReader {
 
                 // Verify that the last line inside the method is "return;"
                 String lastLineInMethod = lines.get(currentLineIdx - 1).trim();
-                if (!lastLineInMethod.equals(RETURN_LINE)) {
+                Matcher returnMatcher = returnPattern.matcher(lastLineInMethod);
+                if (!returnMatcher.matches()) {
                     throw new ParserException(INVALID_METHOD_ENDING_ERROR);
                 }
 

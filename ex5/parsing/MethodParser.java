@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 
 import static ex5.util.Constants.*;
 
+
 /**
  * The MethodParser class is responsible for parsing and validating method declarations and calls.
  * It ensures that methods adhere to the syntax rules and interact correctly with the symbol table and scope manager.
@@ -91,7 +92,7 @@ public class MethodParser implements Parser {
 
             // Check if method name already exists - already been checked in MethodReader
             // Check parameters name are valid:
-            String[] parametersAndTypes = parametersString.split("\\s*,\\s*"); // TODO: check
+            String[] parametersAndTypes = parametersString.trim().split("\\s*,\\s*");
             if (!(parametersAndTypes.length==1 && parametersAndTypes[0].equals(""))) {
                 for (String parameter : parametersAndTypes) {
                     Variable variable = parseParameter(parameter);
@@ -100,21 +101,14 @@ public class MethodParser implements Parser {
                         // add var to symboltable
                         symbolTable.addVarToScope(parameterName, variable);
                     }
+                    else {
+                        throw new ParserException(METHOD_INVALID_PARAMETERS_ERROR);
+                    }
                 }
             }
 
             // Check that ends with "return;" and "{} - alredy in MethodReader
 
-            // if passes all test, add vars and open new scope
-            if (!(parametersAndTypes.length==1 && parametersAndTypes[0].equals(""))) {
-                for (String parameter : parametersAndTypes) {
-                    Variable variable = parseParameter(parameter);
-                    if (variable == null) {
-                        String parameterName = variable.getName();
-                        symbolTable.addVarToScope(parameterName, variable);
-                    }
-                }
-            }
         } else {
             throw new ParserException(METHOD_DECLARE_SYNTAX_ERROR);
         }
@@ -155,22 +149,21 @@ public class MethodParser implements Parser {
                     VariableType expectedType = methods.get(methodName).get(i);
 
                     // Check if constant
-                    VariableType constantType = ConstantParameter(parameterName);
+                    VariableType constantType = Variable.ConstantParameter(parameterName);
                     if (constantType != null) {
-                        if (!isTypeCompatible(constantType, expectedType)) {
+                        if (!Variable.isTypeCompatible(constantType, expectedType)) {
                             throw new ParserException(METHOD_INVALID_PARAMETERS_ERROR);
                         }
                         continue;
                     }
 
-                    // Check valid name and if exists:
-                    // TODO: must be declared or assigned? not in the forum, needs to check school solution
-                    if (!symbolTable.isVariableDeclared(parameterName)) {
+                    // Check valid name and if exists and was assigned:
+                    if (!symbolTable.isVariableAssigned(parameterName)) {
                         throw new ParserException(METHOD_INVALID_PARAMETERS_ERROR);
                     }
                     // Check valid type:
                     VariableType type = symbolTable.getVarType(parameterName);
-                    if (!isTypeCompatible(type, expectedType)) {
+                    if (!Variable.isTypeCompatible(type, expectedType)) {
                         throw new ParserException(METHOD_INVALID_PARAMETERS_ERROR);
                     }
                 }
@@ -202,10 +195,10 @@ public class MethodParser implements Parser {
             }
             // Check valid parameters and create type list for the method
             String parametersString = declareMatcher.group(2); // TODO: check
-            String[] parameters = parametersString.split(",");
+            String[] parameters = parametersString.trim().split(",");
             ArrayList<VariableType> parameterTypes = new ArrayList<>();
-            if (!parametersString.isEmpty()) {
-                for (String parameter : parameters) {
+            if (!(parameters.length==1 && parameters[0].equals(""))) {
+                    for (String parameter : parameters) {
                     Variable variable = parseParameter(parameter);
                     if (variable != null) {
                         parameterTypes.add(variable.getType());
@@ -216,20 +209,20 @@ public class MethodParser implements Parser {
         }
     }
 
-    /**
-     * Determines if a variable type is compatible with an expected type.
-     *
-     * @param actual   The actual type of the variable.
-     * @param expected The expected type for the variable.
-     * @return true if the types are compatible, false otherwise.
-     */
-    private boolean isTypeCompatible(VariableType actual, VariableType expected) {
-        if (actual == expected) return true;
-        if (expected == VariableType.DOUBLE && actual == VariableType.INT) return true;
-        if (expected == VariableType.BOOLEAN && (actual == VariableType.INT || actual == VariableType.DOUBLE))
-            return true;
-        return false;
-    }
+//    /**
+//     * Determines if a variable type is compatible with an expected type.
+//     *
+//     * @param actual   The actual type of the variable.
+//     * @param expected The expected type for the variable.
+//     * @return true if the types are compatible, false otherwise.
+//     */
+//    private boolean isTypeCompatible(VariableType actual, VariableType expected) {
+//        if (actual == expected) return true;
+//        if (expected == VariableType.DOUBLE && actual == VariableType.INT) return true;
+//        if (expected == VariableType.BOOLEAN && (actual == VariableType.INT || actual == VariableType.DOUBLE))
+//            return true;
+//        return false;
+//    }
 
     /**
      * Parses a parameter declaration and returns a Variable object.
@@ -246,7 +239,10 @@ public class MethodParser implements Parser {
                 String parameterName = parameterStrings[2];
                 VariableType parameterType = parseType(parameterStrings[1]);
                 return new Variable(parameterName, parameterType, AssignmentStatus.ASSIGNED, true);
+            } else {
+                throw new ParserException(METHOD_INVALID_PARAMETERS_ERROR);
             }
+
         } else if (parameterStrings.length == 2) {
             if (isValidName(parameterStrings[1])) {
                 String parameterName = parameterStrings[1];
@@ -258,7 +254,6 @@ public class MethodParser implements Parser {
         } else {
             throw new ParserException(METHOD_INVALID_PARAMETERS_ERROR);
         }
-        return null;
     }
 
     /**
@@ -273,39 +268,39 @@ public class MethodParser implements Parser {
         return nameMatcher.matches();
     }
 
-    /**
-     * Determines the type of a constant parameter.
-     *
-     * @param parameter The constant parameter string.
-     * @return The VariableType of the constant, or null if invalid.
-     */
-    private static VariableType ConstantParameter(String parameter) {
-        parameter = parameter.trim();
-        Pattern intPattern = Pattern.compile(INT_VALUE_REGEX);
-        Matcher intMatcher = intPattern.matcher(parameter);
-        Pattern doublePattern = Pattern.compile(DOUBLE_VALUE_REGEX);
-        Matcher doubleMatcher = doublePattern.matcher(parameter);
-        Pattern boolPattern = Pattern.compile(BOOLEAN_CONSTANT_REGEX);
-        Matcher boolMatcher = boolPattern.matcher(parameter);
-        Pattern charPattern = Pattern.compile(CHAR_VALUE_REGEX);
-        Matcher charMatcher = charPattern.matcher(parameter);
-        Pattern stringPattern = Pattern.compile(STRING_VALUE_REGEX);
-        Matcher stringMatcher = stringPattern.matcher(parameter);
-
-        if (intMatcher.matches()) {
-            return VariableType.INT;
-        } else if (doubleMatcher.matches()) {
-            return VariableType.DOUBLE;
-        } else if (boolMatcher.matches()) {
-            return VariableType.BOOLEAN;
-        } else if (charMatcher.matches()) {
-            return VariableType.CHAR;
-        } else if (stringMatcher.matches()) {
-            return VariableType.STRING;
-        } else {
-            return null;
-        }
-    }
+//    /**
+//     * Determines the type of a constant parameter.
+//     *
+//     * @param parameter The constant parameter string.
+//     * @return The VariableType of the constant, or null if invalid.
+//     */
+//    private static VariableType ConstantParameter(String parameter) {
+//        parameter = parameter.trim();
+//        Pattern intPattern = Pattern.compile(INT_VALUE_REGEX);
+//        Matcher intMatcher = intPattern.matcher(parameter);
+//        Pattern doublePattern = Pattern.compile(DOUBLE_VALUE_REGEX);
+//        Matcher doubleMatcher = doublePattern.matcher(parameter);
+//        Pattern boolPattern = Pattern.compile(BOOLEAN_CONSTANT_REGEX);
+//        Matcher boolMatcher = boolPattern.matcher(parameter);
+//        Pattern charPattern = Pattern.compile(CHAR_VALUE_REGEX);
+//        Matcher charMatcher = charPattern.matcher(parameter);
+//        Pattern stringPattern = Pattern.compile(STRING_VALUE_REGEX);
+//        Matcher stringMatcher = stringPattern.matcher(parameter);
+//
+//        if (intMatcher.matches()) {
+//            return VariableType.INT;
+//        } else if (doubleMatcher.matches()) {
+//            return VariableType.DOUBLE;
+//        } else if (boolMatcher.matches()) {
+//            return VariableType.BOOLEAN;
+//        } else if (charMatcher.matches()) {
+//            return VariableType.CHAR;
+//        } else if (stringMatcher.matches()) {
+//            return VariableType.STRING;
+//        } else {
+//            return null;
+//        }
+//    }
 
     /**
      * Parses the type of a parameter and returns its VariableType.

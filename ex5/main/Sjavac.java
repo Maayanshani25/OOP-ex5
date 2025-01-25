@@ -16,6 +16,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// TODO: notes from drive tests:
+// 1. we should first add all global vars to symbolTable?
+//          tester_files/tests/BaraksTests/if/14.sjava
+//          tester_files/tests/BaraksTests/if/30.sjava
+//          tester_files/tests/BaraksTests/variables/70.sjava
+//          tester_files/tests/BaraksTests/variables/70.sjava
+//          tester_files/tests/BaraksTests/variables/80.sjava
+//          tester_files/tests/BaraksTests/while/14.sjava
+//          tester_files/tests/SchoolTests/test251.sjava
+//          tester_files/tests/SchoolTests/test257.sjava
+// 2. (FIXED) should make sure using trim() everywhere, i fixed everything the test capture
+// 3. (FIXED) parameters in while, if, methods should be assigned, not only declared
+// 4. (FIXED) return is valid only in method scope
+// 5. (FIXED) problem with assigning int into bool - isValidConversion was only checked in assignmentParser,
+//      not DeclarationParser
+//      TODO maayan: can use instead MethodParser.isTypeCompatible? i moved it to Variable class
+
+
 public class Sjavac {
     private final List<String> preprocessedLines;
     private Map<String, ArrayList<Constants.VariableType>> methodsMap;

@@ -164,7 +164,13 @@ public class DeclarationParser implements Parser {
         }
 
         VariableType actualType = symbolTable.getVarType(variableName);
-        if (actualType != expectedType) {
+        // Allow valid type conversions or exact matches
+        boolean isValidConversion = (actualType == expectedType) ||
+                (expectedType == VariableType.DOUBLE && actualType == VariableType.INT) ||
+                (expectedType == VariableType.BOOLEAN &&
+                        (actualType == VariableType.DOUBLE || actualType == VariableType.INT));
+
+        if (!isValidConversion) {
             throw new ParserException(String.format(TYPE_MISMATCH_ASSIGN_ERROR, variableName,
                     expectedType, actualType));
         }
