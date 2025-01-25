@@ -17,7 +17,7 @@ public class MethodParserTest {
     public static void main(String[] args) {
         try {
             SymbolTable symbolTable = new SymbolTable();
-            ScopeManager scopeManager = new ScopeManager();
+            ScopeManager scopeManager = new ScopeManager(symbolTable);
             Map<String, ArrayList<VariableType>> methods = new HashMap<>();
             MethodParser parser = new MethodParser(symbolTable, scopeManager, methods);
 
@@ -34,7 +34,7 @@ public class MethodParserTest {
 
     private static void testMethodDeclaration(MethodParser parser) throws ParserException, SymbolTableException {
         SymbolTable symbolTable = new SymbolTable();
-        ScopeManager scopeManager = new ScopeManager();
+        ScopeManager scopeManager = new ScopeManager(symbolTable);
         Map<String, ArrayList<VariableType>> methods = new HashMap<>();
 
         // Test 1: Valid method declaration
@@ -82,7 +82,7 @@ public class MethodParserTest {
 
     private static void testMethodCall(MethodParser parserr) throws ParserException, SymbolTableException {
         SymbolTable symbolTable = new SymbolTable();
-        ScopeManager scopeManager = new ScopeManager();
+        ScopeManager scopeManager = new ScopeManager(symbolTable);
         scopeManager.enterNewScope(ScopeKind.METHOD);
         Map<String, ArrayList<VariableType>> methods = new HashMap<>();
         MethodParser parser = new MethodParser(symbolTable, scopeManager, methods);

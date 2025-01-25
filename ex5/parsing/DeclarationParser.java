@@ -89,7 +89,9 @@ public class DeclarationParser implements Parser {
      */
     private void parseType(String typeValueRegex, VariableType variableType, String type, boolean isFinal)
             throws ParserException, SymbolTableException {
-        final String singleDeclaration = "(" + VARIABLE_NAME_REGEX + ")(\\s*=\\s*(" + typeValueRegex + "))?";
+        final String singleDeclaration = "(" + VARIABLE_NAME_REGEX + ")\\s*(=\\s*(" + typeValueRegex + "|" +
+                VARIABLE_NAME_REGEX + "))?";
+
         final String multipleDeclarations = singleDeclaration + "(\\s*,\\s*" + singleDeclaration + ")*";
         final String correctLineRegex = FINAL_START_REGEX + type + "\\s+" + multipleDeclarations + "\\s*;$";
 
@@ -110,7 +112,18 @@ public class DeclarationParser implements Parser {
 
                 if (singleMatcher.matches()) {
                     String variableName = singleMatcher.group(1);
-                    AssignmentStatus assignmentStatus = getAssignmentStatus(isFinal, singleMatcher, variableName);
+                    String value = singleMatcher.group(4); // Extract assigned value, if any
+
+                    if (value != null) {
+
+                    // If the value is another variable, ensure it is declared and assigned
+                        if (isValueVariableName(value)) {
+                            System.out.println("DEBUGGING2: " + value);
+                            validateAssignedVariable(value, variableType);
+                        }
+                    }
+
+                    AssignmentStatus assignmentStatus = getAssignmentStatus(isFinal, value, variableName);
 
                     // Add the variable to the symbol table
                     symbolTable.addVarToScope(variableName, variableType, assignmentStatus, isFinal);
@@ -124,20 +137,55 @@ public class DeclarationParser implements Parser {
     }
 
     /**
+     * Checks if a given value matches the format of a variable name.
+     *
+     * @param value The value to check.
+     * @return True if the value is a valid variable name, false otherwise.
+     */
+    private boolean isValueVariableName(String value) {
+        return value.matches(VARIABLE_NAME_REGEX);
+    }
+
+    /**
+     * Validates that a given variable (used as a value) is declared, assigned, and of the correct type.
+     *
+     * @param variableName The name of the variable used as a value.
+     * @param expectedType The expected type of the variable.
+     * @throws ParserException If the variable is not declared, not assigned, or if the type mismatches.
+     */
+    private void validateAssignedVariable(String variableName,
+                                          VariableType expectedType) throws ParserException {
+        // If value is a variable, check if it's declared and assigned
+        if (!symbolTable.isVariableDeclared(variableName)) {
+            throw new ParserException(String.format(VARIABLE_NOT_DECLARED_ERROR, variableName));
+        }
+
+        if (!symbolTable.isVariableAssigned(variableName)) {
+            throw new ParserException(String.format(VARIABLE_NOT_ASSIGNED_ERROR, variableName));
+        }
+
+        VariableType actualType = symbolTable.getVarType(variableName);
+        if (actualType != expectedType) {
+            throw new ParserException(String.format(TYPE_MISMATCH_ASSIGN_ERROR, variableName, expectedType, actualType));
+        }
+    }
+
+
+
+    /**
      * Determines the assignment status of a variable declaration based on whether the variable
      * is declared as `final` and whether it has an assigned value.
      *
      * @param isFinal       Whether the variable is declared as `final`.
-     * @param singleMatcher A matcher that contains the current declaration being validated.
+     * @param value         The value assigned to the variable (if any).
      * @param variableName  The name of the variable being declared.
      * @return The assignment status (ASSIGNED or DECLARED).
      * @throws ParserException If a `final` variable is declared without an assigned value.
      */
     private static AssignmentStatus getAssignmentStatus(boolean isFinal,
-                                                        Matcher singleMatcher,
+                                                        String value,
                                                         String variableName)
             throws ParserException {
-        String value = singleMatcher.group(3); // Group 3 contains just the value
         boolean hasValue = value != null && !value.trim().isEmpty();
 
         // If 'final', enforce assignment

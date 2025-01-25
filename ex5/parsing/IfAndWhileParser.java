@@ -76,28 +76,6 @@ public class IfAndWhileParser implements Parser {
             return true;
         }
 
-        // TODO: delete
-//        while (orMatcher.find()) {
-//            String leftCondition = orMatcher.group(1).trim();
-//            String rightCondition = orMatcher.group(2).trim();
-//            if (!parseFullCondition(leftCondition) || !parseFullCondition(rightCondition)) {
-//                throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
-//            }
-//            return true;
-//        }
-//
-//        // Check recursive AND condition:
-//        Pattern andPattern = Pattern.compile(AND_CONDITION_REGEX);
-//        Matcher andMatcher = andPattern.matcher(condition);
-//
-//        while (andMatcher.find()) {
-//            String leftCondition = andMatcher.group(1).trim();
-//            String rightCondition = andMatcher.group(2).trim();
-//            if (!parseFullCondition(leftCondition) || !parseFullCondition(rightCondition)) {
-//                throw new ParserException(LOOP_OR_CONDITION_PARSER_EXCEPTION_MESSAGE);
-//            }
-//            return true;
-//        }
 
         if (!parseSingleCondition(condition)) {
             return false;

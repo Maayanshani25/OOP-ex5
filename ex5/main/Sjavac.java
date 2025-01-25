@@ -8,6 +8,7 @@ import ex5.scope_managing.ScopeManager;
 import ex5.scope_managing.ScopeManagerException;
 import ex5.scope_managing.SymbolTable;
 import ex5.scope_managing.SymbolTableException;
+import ex5.tests.DeclarationParserTest;
 import ex5.util.Constants;
 
 import java.io.IOException;
@@ -30,7 +31,7 @@ public class Sjavac {
         preprocessedLines = FileReader.preProcessLines(allLines);
         methodsMap = new HashMap<>();
         symbolTable = new SymbolTable();
-        scopeManager = new ScopeManager();
+        scopeManager = new ScopeManager(symbolTable);
 
     }
 
@@ -61,7 +62,6 @@ public class Sjavac {
     // TODO: make sure handling IOExceptions correctly
     public static void main(String[] args) throws IOException {
         // TODO: if the args num is invalid, filename is wrong, or file is not sJava - throw IOException
-        //  (for now, being catch in the FileReader)
 
         try {
             if (args.length != 1) {
@@ -83,7 +83,7 @@ public class Sjavac {
         }
     }
 
-    // main function for tests
+//     main function for tests
 //    public static void main(String[] args) {
 //        System.out.println("Running all tests...\n");
 //

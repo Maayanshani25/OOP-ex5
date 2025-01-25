@@ -11,24 +11,28 @@ import java.util.EmptyStackException;
 public class ScopeManager {
     private final Deque<Constants.ScopeKind> scopeStack;
     private int methodsCounter;
+    private SymbolTable symbolTable;
 
-    public ScopeManager() {
+    public ScopeManager(SymbolTable symbolTable) {
         scopeStack = new ArrayDeque<>();
         methodsCounter = 0;
+        this.symbolTable = symbolTable;
     }
 
     // being called from the parsers:
     public void enterNewScope(Constants.ScopeKind scopeKind) {
         scopeStack.push(scopeKind);
+        symbolTable.addScope();
         if (scopeKind == Constants.ScopeKind.METHOD) {
             methodsCounter++;
         }
     }
 
     // being called from the Validator if a line is '}':
-    public void exitScope() throws ScopeManagerException {
+    public void exitScope() throws ScopeManagerException, SymbolTableException{
         try {
             Constants.ScopeKind lastScopeKind = scopeStack.pop();
+            symbolTable.removeScope();
             if (lastScopeKind == Constants.ScopeKind.METHOD) {
                 methodsCounter--;
             }

@@ -12,7 +12,7 @@ import ex5.util.Constants.VariableType;
 public class WhileParserTest {
     public static void main(String[] args) {
         SymbolTable symbolTable = new SymbolTable();
-        ScopeManager scopeManager = new ScopeManager();
+        ScopeManager scopeManager = new ScopeManager(symbolTable);
         IfAndWhileParser whileParser = new IfAndWhileParser(symbolTable, scopeManager);
 
         try {

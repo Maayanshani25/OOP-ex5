@@ -74,6 +74,7 @@ public class Constants {
             PARSER_WRONG_LINE_FORMAT = "Invalid variable declaration: ",
             INVALID_TYPE_ERROR = "Invalid type keyword: ",
             FINAL_VARIABLE_ASSIGNMENT_ERROR = "Final variable '%s' must have an assigned value.",
+            VARIABLE_NOT_ASSIGNED_ERROR = "Cant assign to not assigned variable '%s'.",
 
     // Assignment parser error messages
     WRONG_ASSIGNMENT_FORMAT = "Invalid assignment line: ",
