@@ -8,7 +8,6 @@ import ex5.scope_managing.ScopeManager;
 import ex5.scope_managing.ScopeManagerException;
 import ex5.scope_managing.SymbolTable;
 import ex5.scope_managing.SymbolTableException;
-import ex5.tests.DeclarationParserTest;
 import ex5.util.Constants;
 
 import java.io.IOException;
@@ -25,6 +24,14 @@ public class Sjavac {
     private ScopeManager scopeManager;
 
     // TODO: to make sure constructor can throw IOError
+
+    /**
+     * Constructor for the Sjavac class.
+     * Initializes the necessary components for validating the given sJava file.
+     *
+     * @param filePath The path to the sJava file to be validated.
+     * @throws IOException If an error occurs while reading or preprocessing the file.
+     */
     public Sjavac(String filePath) throws IOException {
         // Read and pre-process the file:
         List<String> allLines = FileReader.readLines(filePath);
@@ -32,9 +39,15 @@ public class Sjavac {
         methodsMap = new HashMap<>();
         symbolTable = new SymbolTable();
         scopeManager = new ScopeManager(symbolTable);
-
     }
 
+    /**
+     * Runs the validation process on the sJava file.
+     * Validates method declarations, scopes, and individual lines of code.
+     *
+     * @return true if the file is valid, false otherwise.
+     * @throws IOException If an IO error occurs during file handling.
+     */
     public boolean run() throws IOException {
         try {
             methodsMap = MethodReader.readMethods(preprocessedLines);
@@ -61,6 +74,19 @@ public class Sjavac {
     }
 
     // TODO: make sure handling IOExceptions correctly
+
+
+    /**
+     * Entry point for the Sjavac program.
+     * Validates the provided sJava file and prints the corresponding exit code.
+     * Exit codes:
+     * 0 - The file is valid.
+     * 1 - The file has invalid syntax or semantics.
+     * 2 - An IO error occurred (e.g., invalid file path or incorrect file format).
+     *
+     * @param args Command-line arguments. Expects a single argument: the file path.
+     * @throws IOException If an IO error occurs during file handling.
+     */
     public static void main(String[] args) throws IOException {
         // TODO: if the args num is invalid, filename is wrong, or file is not sJava - throw IOException
 
@@ -83,17 +109,4 @@ public class Sjavac {
             System.out.println(2);
         }
     }
-
-//     main function for tests
-//    public static void main(String[] args) {
-//        System.out.println("Running all tests...\n");
-//
-//        // Call runTests for each test class
-////        SymbolTableTest.runTests();
-//        DeclarationParserTest.runTests();
-//        AssignmentParserTest.runTests();
-//
-//        System.out.println("All tests completed.");
-//    }
-
 }

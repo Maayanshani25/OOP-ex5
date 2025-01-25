@@ -13,12 +13,23 @@ import java.util.regex.Pattern;
 
 import static ex5.util.Constants.*;
 
+/**
+ * The MethodParser class is responsible for parsing and validating method declarations and calls.
+ * It ensures that methods adhere to the syntax rules and interact correctly with the symbol table and scope manager.
+ */
 public class MethodParser implements Parser {
 
     private final SymbolTable symbolTable;
     private final ScopeManager scopeManager;
     private final Map<String, ArrayList<VariableType>> methods;
 
+    /**
+     * Constructor for MethodParser.
+     *
+     * @param symbolTable  The SymbolTable instance for managing variable scopes.
+     * @param scopeManager The ScopeManager instance for managing nested scopes.
+     * @param methods      A map of method names to their respective parameter types.
+     */
     public MethodParser(SymbolTable symbolTable, ScopeManager scopeManager,
                         Map<String, ArrayList<VariableType>> methods) {
         this.symbolTable = symbolTable;
@@ -26,6 +37,13 @@ public class MethodParser implements Parser {
         this.methods = methods;
     }
 
+    /**
+     * Parses a line of code to determine if it is a method declaration or call, delegating as needed.
+     *
+     * @param line The line of code to parse.
+     * @throws ParserException      If the syntax of the line is invalid.
+     * @throws SymbolTableException If there are issues with variable declarations or scopes.
+     */
     @Override
     public void parse(String line) throws ParserException, SymbolTableException {
         String currentLine = line.trim();
@@ -35,20 +53,24 @@ public class MethodParser implements Parser {
         Pattern declarePattern = Pattern.compile(METHOD_DECLARE_REGEX);
         Matcher declareMatcher = declarePattern.matcher(currentLine);
 
-        // If is a call regex:
         if (callMatcher.matches()) {
             parseMethodCall(callMatcher, line);
-        }
-        // If is a declaration regex:
-        else if (declareMatcher.matches()) {
+        } else if (declareMatcher.matches()) {
             parseMethodDeclaration(declareMatcher, line);
         } else {
             throw new ParserException(METHOD_GENERAL_SYNTAX_ERROR);
         }
     }
 
+    /**
+     * Parses and validates a method declaration.
+     *
+     * @param matcher The Matcher object for the method declaration regex.
+     * @param line    The line of code containing the method declaration.
+     * @throws ParserException      If the method declaration is invalid.
+     * @throws SymbolTableException If there are issues with variable declarations or scopes.
+     */
     private void parseMethodDeclaration(Matcher matcher, String line) throws ParserException, SymbolTableException {
-        // Checks valid regex
         scopeManager.enterNewScope(ScopeKind.METHOD);
 
         if (matcher.matches()) {
@@ -68,7 +90,6 @@ public class MethodParser implements Parser {
             }
 
             // Check if method name already exists - already been checked in MethodReader
-
             // Check parameters name are valid:
             String[] parametersAndTypes = parametersString.split("\\s*,\\s*"); // TODO: check
             if (!(parametersAndTypes.length==1 && parametersAndTypes[0].equals(""))) {
@@ -97,10 +118,16 @@ public class MethodParser implements Parser {
         } else {
             throw new ParserException(METHOD_DECLARE_SYNTAX_ERROR);
         }
-
     }
 
-    // todo: what is this method?
+    /**
+     * Parses and validates a method call.
+     *
+     * @param matcher The Matcher object for the method call regex.
+     * @param line    The line of code containing the method call.
+     * @throws ParserException      If the method call is invalid.
+     * @throws SymbolTableException If there are issues with variable declarations or scopes.
+     */
     private void parseMethodCall(Matcher matcher, String line) throws ParserException, SymbolTableException {
         if (matcher.matches()) {
             String methodName = matcher.group(1);
@@ -154,9 +181,16 @@ public class MethodParser implements Parser {
         }
     }
 
+    /**
+     * Adds a method declaration to the method map, validating its syntax and parameters.
+     *
+     * @param line    The line of code containing the method declaration.
+     * @param methods The map of methods to update.
+     * @throws ParserException If the method declaration is invalid.
+     */
     public static void addToMethodMap(String line, Map<String, ArrayList<Constants.VariableType>> methods)
             throws ParserException {
-        String currentLine = line.trim(); // Trim leading and trailing whitespace
+        String currentLine = line.trim();
         Pattern declarePattern = Pattern.compile(METHOD_DECLARE_REGEX);
         Matcher declareMatcher = declarePattern.matcher(currentLine);
 
@@ -182,6 +216,13 @@ public class MethodParser implements Parser {
         }
     }
 
+    /**
+     * Determines if a variable type is compatible with an expected type.
+     *
+     * @param actual   The actual type of the variable.
+     * @param expected The expected type for the variable.
+     * @return true if the types are compatible, false otherwise.
+     */
     private boolean isTypeCompatible(VariableType actual, VariableType expected) {
         if (actual == expected) return true;
         if (expected == VariableType.DOUBLE && actual == VariableType.INT) return true;
@@ -190,35 +231,15 @@ public class MethodParser implements Parser {
         return false;
     }
 
-    private static VariableType parseType(String parameterType) throws ParserException {
-        switch (parameterType) {
-            case INT:
-                return VariableType.INT;
-            case DOUBLE:
-                return VariableType.DOUBLE;
-            case STRING:
-                return VariableType.STRING;
-            case CHAR:
-                return VariableType.CHAR;
-            case BOOLEAN:
-                return VariableType.BOOLEAN;
-            default:
-                throw new ParserException(INVALID_TYPE_ERROR + parameterType);
-        }
-    }
-
-    private static boolean isValidName(String name) {
-        Pattern namePattern = Pattern.compile(VARIABLE_NAME_REGEX);
-        Matcher nameMatcher = namePattern.matcher(name);
-        if (!nameMatcher.matches()) {
-            return false;
-        }
-        return true;
-    }
-
+    /**
+     * Parses a parameter declaration and returns a Variable object.
+     *
+     * @param parameter The parameter declaration string.
+     * @return A Variable object representing the parameter.
+     * @throws ParserException If the parameter declaration is invalid.
+     */
     private static Variable parseParameter(String parameter) throws ParserException {
         String[] parameterStrings = parameter.trim().split("\\s+");
-        // If 3 strings: Final, type, name
         if (parameterStrings.length == 3) {
             if (parameterStrings[0].equals(FINAL) &&
                     isValidName(parameterStrings[2])) {
@@ -240,6 +261,24 @@ public class MethodParser implements Parser {
         return null;
     }
 
+    /**
+     * Validates a parameter name against the variable naming rules.
+     *
+     * @param name The parameter name to validate.
+     * @return true if the name is valid, false otherwise.
+     */
+    private static boolean isValidName(String name) {
+        Pattern namePattern = Pattern.compile(VARIABLE_NAME_REGEX);
+        Matcher nameMatcher = namePattern.matcher(name);
+        return nameMatcher.matches();
+    }
+
+    /**
+     * Determines the type of a constant parameter.
+     *
+     * @param parameter The constant parameter string.
+     * @return The VariableType of the constant, or null if invalid.
+     */
     private static VariableType ConstantParameter(String parameter) {
         parameter = parameter.trim();
         Pattern intPattern = Pattern.compile(INT_VALUE_REGEX);
@@ -266,7 +305,29 @@ public class MethodParser implements Parser {
         } else {
             return null;
         }
-
     }
 
+    /**
+     * Parses the type of a parameter and returns its VariableType.
+     *
+     * @param parameterType The type string of the parameter.
+     * @return The corresponding VariableType.
+     * @throws ParserException If the type is invalid.
+     */
+    private static VariableType parseType(String parameterType) throws ParserException {
+        switch (parameterType) {
+            case INT:
+                return VariableType.INT;
+            case DOUBLE:
+                return VariableType.DOUBLE;
+            case STRING:
+                return VariableType.STRING;
+            case CHAR:
+                return VariableType.CHAR;
+            case BOOLEAN:
+                return VariableType.BOOLEAN;
+            default:
+                throw new ParserException(INVALID_TYPE_ERROR + parameterType);
+        }
+    }
 }

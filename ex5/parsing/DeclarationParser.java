@@ -116,7 +116,7 @@ public class DeclarationParser implements Parser {
 
                     if (value != null) {
 
-                    // If the value is another variable, ensure it is declared and assigned
+                        // If the value is another variable, ensure it is declared and assigned
                         if (isValueVariableName(value)) {
                             validateAssignedVariable(value, variableType);
                         }
@@ -165,19 +165,19 @@ public class DeclarationParser implements Parser {
 
         VariableType actualType = symbolTable.getVarType(variableName);
         if (actualType != expectedType) {
-            throw new ParserException(String.format(TYPE_MISMATCH_ASSIGN_ERROR, variableName, expectedType, actualType));
+            throw new ParserException(String.format(TYPE_MISMATCH_ASSIGN_ERROR, variableName,
+                    expectedType, actualType));
         }
     }
-
 
 
     /**
      * Determines the assignment status of a variable declaration based on whether the variable
      * is declared as `final` and whether it has an assigned value.
      *
-     * @param isFinal       Whether the variable is declared as `final`.
-     * @param value         The value assigned to the variable (if any).
-     * @param variableName  The name of the variable being declared.
+     * @param isFinal      Whether the variable is declared as `final`.
+     * @param value        The value assigned to the variable (if any).
+     * @param variableName The name of the variable being declared.
      * @return The assignment status (ASSIGNED or DECLARED).
      * @throws ParserException If a `final` variable is declared without an assigned value.
      */

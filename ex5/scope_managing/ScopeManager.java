@@ -29,7 +29,7 @@ public class ScopeManager {
     }
 
     // being called from the Validator if a line is '}':
-    public void exitScope() throws ScopeManagerException, SymbolTableException{
+    public void exitScope() throws ScopeManagerException, SymbolTableException {
         try {
             Constants.ScopeKind lastScopeKind = scopeStack.pop();
             symbolTable.removeScope();
@@ -46,7 +46,7 @@ public class ScopeManager {
     }
 
     public boolean areInGlobalScope() {
-        return (scopeStack.size() ==1);
+        return (scopeStack.size() == 1);
     }
 
 }

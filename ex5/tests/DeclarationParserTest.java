@@ -12,7 +12,7 @@ public class DeclarationParserTest {
 //                "int a;",                        // Single variable, no initialization
 //                "int b, c, d;",                  // Multiple variables, no initialization
             "int e = 5;",                    // Single variable, with initialization
-            "int eeee = e;" ,                // Single variable, with initialization
+            "int eeee = e;",                // Single variable, with initialization
             "int f = 3, g = 4, h;",      // Multiple variables, with initialization
             "int _underscore;",              // Variable name starting with an underscore
             "int _a, b_c, _123;",            // Variables with underscores and digits
@@ -48,7 +48,7 @@ public class DeclarationParserTest {
             "int a = , b = 2;",              // Missing value for one variable
             "int a b;",                      // Missing comma between variable names
             "int ,;",                        // Comma without variables
-            "int a,,b;"      ,                // Double commas between variables
+            "int a,,b;",                // Double commas between variables
             "int ggggg = notexist;"              // assign to not exist variable
     };
 
