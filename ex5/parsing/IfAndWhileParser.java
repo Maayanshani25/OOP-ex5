@@ -10,8 +10,6 @@ import java.util.regex.Pattern;
 
 import static ex5.util.Constants.*;
 
-// TODO: who is responsible to check scope length? at least java.lang.Integer.MAX VALUE
-
 /**
  * The IfAndWhileParser class handles parsing and validation of "if" and "while" conditions in the code.
  * It ensures proper syntax, scope management, and type compatibility for the conditions.
@@ -141,7 +139,7 @@ public class IfAndWhileParser implements Parser {
 
         // Check if double or int constant
         VariableType type = Variable.ConstantParameter(condition);
-        return ( type == VariableType.BOOLEAN  ||
+        return (type == VariableType.BOOLEAN ||
                 type == VariableType.DOUBLE ||
                 type == VariableType.INT);
     }

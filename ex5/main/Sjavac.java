@@ -16,21 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// TODO: notes from drive tests:
-// 1. we should first add all global vars to symbolTable:
-//          tester_files/tests/BaraksTests/if/14.sjava
-//          tester_files/tests/BaraksTests/if/30.sjava
-//          tester_files/tests/BaraksTests/variables/70.sjava
-//          tester_files/tests/BaraksTests/variables/80.sjava
-//          tester_files/tests/BaraksTests/while/14.sjava
-//          tester_files/tests/SchoolTests/test251.sjava
-// 2. (FIXED) should make sure using trim() everywhere, i fixed everything the test capture
-// 3. (FIXED) parameters in while, if, methods should be assigned, not only declared
-// 4. (FIXED) return is valid only in method scope
-// 5. (FIXED) problem with assigning int into bool - isValidConversion was only checked in assignmentParser,
-//      not DeclarationParser
 //      TODO maayan: can use instead Variable.isTypeCompatible? it was in MethodParser and i moved it to Variable class
-
 
 public class Sjavac {
     private final List<String> preprocessedLines;
@@ -38,8 +24,6 @@ public class Sjavac {
     private final SymbolTable symbolTable;
     private Validator validator;
     private ScopeManager scopeManager;
-
-    // TODO: to make sure constructor can throw IOError
 
     /**
      * Constructor for the Sjavac class.
@@ -89,9 +73,6 @@ public class Sjavac {
         return true;
     }
 
-    // TODO: make sure handling IOExceptions correctly
-
-
     /**
      * Entry point for the Sjavac program.
      * Validates the provided sJava file and prints the corresponding exit code.
@@ -104,7 +85,6 @@ public class Sjavac {
      * @throws IOException If an IO error occurs during file handling.
      */
     public static void main(String[] args) throws IOException {
-        // TODO: if the args num is invalid, filename is wrong, or file is not sJava - throw IOException
 
         try {
             if (args.length != 1) {

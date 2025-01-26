@@ -9,13 +9,6 @@ import java.util.regex.Pattern;
 import static ex5.util.Constants.*;
 
 /**
- * todo: Local variables can only be assigned inside the
- *   method they were declared in, including any scopes nested in it (since they can only be
- *   accessed inside the scope they were declared in - see section 5.2.3). Global variables may be
- *   assigned multiple times both inside and outside a method
- */
-
-/**
  * The AssignmentParser class is responsible for parsing and validating assignment statements
  * in the given code. It ensures that the variables being assigned values are declared, the
  * assigned values match the expected types, and that the assignments follow the correct format.

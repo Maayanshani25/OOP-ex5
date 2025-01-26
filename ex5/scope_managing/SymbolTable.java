@@ -66,13 +66,27 @@ public class SymbolTable {
 
     /**
      * Adds a variable to the current scope with specific attributes.
-     * Variables with the status `CANT_BE_ASSIGNED` or invalid types cannot be added.
      *
-     * @param varName The name of the variable.
-     * @param type    The type of the variable.
-     * @param status  The assignment status of the variable (`DECLARED`, `ASSIGNED`, etc.).
-     * @param isFinal Whether the variable is declared as final.
-     * @throws SymbolTableException If no scopes exist or if the variable already exists in the current scope.
+     * For variables in non-global scopes:
+     * - Ensures the variable is not already declared in the current scope.
+     *
+     * For variables in the global scope:
+     * - If the variable has already been declared as `GLOBAL_DECLARED` or `GLOBAL_ASSIGNED`,
+     *   it updates the status based on the provided `status`.
+     * - If the variable has not been declared, it adds the variable with the provided attributes.
+     *
+     * Rules:
+     * - Variables with the status `CANT_BE_ASSIGNED` cannot be added.
+     * - Variables cannot be redeclared in the same scope unless updating their status is explicitly allowed (e.g., global variables).
+     *
+     * @param varName The name of the variable to add.
+     * @param type    The type of the variable (e.g., `int`, `double`, etc.).
+     * @param status  The assignment status of the variable (`DECLARED`, `ASSIGNED`, `GLOBAL_DECLARED`, etc.).
+     * @param isFinal Whether the variable is declared as final (immutable).
+     * @throws SymbolTableException If:
+     *                              - No scopes exist.
+     *                              - A variable with the same name already exists in the current scope
+     *                                and cannot be redeclared or updated.
      */
     public void addVarToScope(String varName,
                               VariableType type,
@@ -85,7 +99,7 @@ public class SymbolTable {
 
         Map<String, Variable> currentScope = table.get(table.size() - 1);
         // if not in global scope:
-        if (table.size()>1) {
+        if (table.size() > 1) {
             // if already exits:
             if (currentScope.containsKey(varName)) {
                 throw new SymbolTableException(String.format(ASSIGN_TO_EXIST_VARNAME_ERROR, varName));
@@ -103,9 +117,8 @@ public class SymbolTable {
                 if (currentScope.get(varName).getStatus() == AssignmentStatus.GLOBAL_DECLARED &&
                         status == AssignmentStatus.ASSIGNED) {
                     currentScope.get(varName).setStatus(AssignmentStatus.GLOBAL_ASSIGNED);
-                }
-                else if (currentScope.get(varName).getStatus() == AssignmentStatus.GLOBAL_DECLARED ||
-                                currentScope.get(varName).getStatus() == AssignmentStatus.GLOBAL_ASSIGNED) {
+                } else if (currentScope.get(varName).getStatus() == AssignmentStatus.GLOBAL_DECLARED ||
+                        currentScope.get(varName).getStatus() == AssignmentStatus.GLOBAL_ASSIGNED) {
                     currentScope.get(varName).setStatus(status);
                 }
 
@@ -121,7 +134,6 @@ public class SymbolTable {
                     var.setStatus(AssignmentStatus.GLOBAL_ASSIGNED);
                 }
                 currentScope.put(varName, var);
-                // TODO: check if needed to be changed in the symbolTable status
             }
         }
     }
@@ -138,8 +150,6 @@ public class SymbolTable {
      * @throws SymbolTableException If the variable is not declared, is final, has an invalid status, or the type does not match.
      */
     public void assignVar(String varName, VariableType variableType) throws SymbolTableException {
-        // todo:  check if it's inside the correct method.
-        //     HOW?
 
         for (int i = table.size() - 1; i >= 0; i--) {
             if (table.get(i).containsKey(varName)) {
@@ -166,8 +176,7 @@ public class SymbolTable {
                 }
                 if (curVar.getStatus() == AssignmentStatus.GLOBAL_DECLARED) {
                     curVar.setStatus(AssignmentStatus.GLOBAL_ASSIGNED);
-                }
-                else {
+                } else {
                     curVar.setStatus(AssignmentStatus.ASSIGNED);
                 }
                 table.get(i).put(varName, curVar);

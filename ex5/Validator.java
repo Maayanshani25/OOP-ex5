@@ -30,9 +30,9 @@ public class Validator {
     /**
      * Constructs a Validator instance with the provided symbol table, scope manager, and methods map.
      *
-     * @param symbolTable   The symbol table used for variable and method scope management.
-     * @param scopeManager  The scope manager to track and manage scopes.
-     * @param methods       A map of method names to their parameter types.
+     * @param symbolTable  The symbol table used for variable and method scope management.
+     * @param scopeManager The scope manager to track and manage scopes.
+     * @param methods      A map of method names to their parameter types.
      */
     public Validator(SymbolTable symbolTable,
                      ScopeManager scopeManager,
@@ -50,8 +50,8 @@ public class Validator {
      *
      * @param line The line of code to validate.
      * @return True if the line is valid, false otherwise.
-     * @throws ParserException      If the syntax or semantics of the line are invalid.
-     * @throws SymbolTableException If there are issues with the symbol table (e.g., scope management).
+     * @throws ParserException       If the syntax or semantics of the line are invalid.
+     * @throws SymbolTableException  If there are issues with the symbol table (e.g., scope management).
      * @throws ScopeManagerException If there are issues with scope management (e.g., invalid scope transitions).
      */
     public boolean isValidLine(String line) throws ParserException, SymbolTableException, ScopeManagerException {
@@ -116,7 +116,7 @@ public class Validator {
             // Handle end of scope
             if (keyword.equals(END_OF_SCOPE)) {
                 // check there is only one "{":
-                if (trimmedLine.equals(END_OF_SCOPE)){
+                if (trimmedLine.equals(END_OF_SCOPE)) {
                     scopeManager.exitScope();
                     return true;
                 }

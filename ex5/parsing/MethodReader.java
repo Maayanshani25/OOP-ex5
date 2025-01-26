@@ -26,6 +26,7 @@ public class MethodReader {
      * Reads and parses method declarations from a list of code lines.
      *
      * @param lines A list of code lines to analyze for method declarations.
+     * @param symbolTable The SymbolTable instance used for managing variable scopes.
      * @return A map where the keys are method names and the values are lists of parameter types for each method.
      * @throws ParserException If a method declaration is invalid or ends improperly.
      */
@@ -85,7 +86,7 @@ public class MethodReader {
             }
 
             // while out of declaration:
-            if (i>= lines.size()) {
+            if (i >= lines.size()) {
                 continue;
             }
             AssignmentParser assignmentsParser = new AssignmentParser(symbolTable);
@@ -110,11 +111,9 @@ public class MethodReader {
                     assignmentsParser.parse(currentLine);
                     continue;
                 }
-
             }
         }
         return methods;
     }
-
 }
 

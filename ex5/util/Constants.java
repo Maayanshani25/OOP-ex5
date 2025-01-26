@@ -44,12 +44,9 @@ public class Constants {
      */
     // Messeges:
     public static final String
-            ILLEGAL_CODE_MESSAGE = "",
-            IO_ERROR_MESSAGE = "",
 
     // SymbolTable error messages:
     SYMBOL_TABLE_EXCEPTION_GENERAL_ERROR_MESSAGE = "SymbolTable Error: ",
-            SYMBOL_TABLE_VAR_ERROR_MESSAGE = "invalid var.",
             SYMBOL_TABLE_SCOPE_ERROR_MESSAGE = "invalid Scope.",
             FINAL_VARIABLE_ASSIGN_ERROR = "Cannot assign a value to final variable '%s'.",
             ASSIGN_TO_EXIST_VARNAME_ERROR = "Variable name '%s' already exists.",
@@ -137,7 +134,6 @@ public class Constants {
      * <h2> saved words </h2>
      */
     public static final String
-            METHOD = "Method",
             IF = "if",
             WHILE = "while",
             VOID = "void",
@@ -145,8 +141,6 @@ public class Constants {
             DOUBLE = "double",
             STRING = "String",
             BOOLEAN = "boolean",
-            TRUE = "true",
-            FALSE = "false",
             CHAR = "char",
             RETURN = "return",
             FINAL = "final",

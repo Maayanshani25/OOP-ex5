@@ -8,8 +8,6 @@ import java.util.regex.Pattern;
 
 import static ex5.util.Constants.*;
 
-// TODO: Make sure we not assign to NOT ASSIGNED VALUES
-
 /**
  * The DeclarationParser class is responsible for parsing variable declarations in the provided code.
  * It ensures variables are declared with valid syntax, types are compatible, and proper assignments

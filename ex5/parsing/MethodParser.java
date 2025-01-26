@@ -93,20 +93,18 @@ public class MethodParser implements Parser {
             // Check if method name already exists - already been checked in MethodReader
             // Check parameters name are valid:
             String[] parametersAndTypes = parametersString.trim().split("\\s*,\\s*");
-            if (!(parametersAndTypes.length==1 && parametersAndTypes[0].equals(""))) {
+            if (!(parametersAndTypes.length == 1 && parametersAndTypes[0].equals(""))) {
                 for (String parameter : parametersAndTypes) {
                     Variable variable = parseParameter(parameter);
                     if (variable != null) {
                         String parameterName = variable.getName();
                         // add var to symboltable
                         symbolTable.addVarToScope(parameterName, variable);
-                    }
-                    else {
+                    } else {
                         throw new ParserException(METHOD_INVALID_PARAMETERS_ERROR);
                     }
                 }
             }
-
             // Check that ends with "return;" and "{} - alredy in MethodReader
 
         } else {
@@ -188,17 +186,17 @@ public class MethodParser implements Parser {
         Matcher declareMatcher = declarePattern.matcher(currentLine);
 
         if (declareMatcher.matches()) {
-            String methodName = declareMatcher.group(1); // TODO: check
+            String methodName = declareMatcher.group(1);
             //  Check method_name isn't already exists
             if (methods.containsKey(methodName)) {
                 throw new ParserException(METHOD_NAME_ALREADY_EXIST_ERROR);
             }
             // Check valid parameters and create type list for the method
-            String parametersString = declareMatcher.group(2); // TODO: check
+            String parametersString = declareMatcher.group(2);
             String[] parameters = parametersString.trim().split(",");
             ArrayList<VariableType> parameterTypes = new ArrayList<>();
-            if (!(parameters.length==1 && parameters[0].equals(""))) {
-                    for (String parameter : parameters) {
+            if (!(parameters.length == 1 && parameters[0].equals(""))) {
+                for (String parameter : parameters) {
                     Variable variable = parseParameter(parameter);
                     if (variable != null) {
                         parameterTypes.add(variable.getType());
@@ -208,21 +206,6 @@ public class MethodParser implements Parser {
             methods.put(methodName, parameterTypes);
         }
     }
-
-//    /**
-//     * Determines if a variable type is compatible with an expected type.
-//     *
-//     * @param actual   The actual type of the variable.
-//     * @param expected The expected type for the variable.
-//     * @return true if the types are compatible, false otherwise.
-//     */
-//    private boolean isTypeCompatible(VariableType actual, VariableType expected) {
-//        if (actual == expected) return true;
-//        if (expected == VariableType.DOUBLE && actual == VariableType.INT) return true;
-//        if (expected == VariableType.BOOLEAN && (actual == VariableType.INT || actual == VariableType.DOUBLE))
-//            return true;
-//        return false;
-//    }
 
     /**
      * Parses a parameter declaration and returns a Variable object.
@@ -267,40 +250,6 @@ public class MethodParser implements Parser {
         Matcher nameMatcher = namePattern.matcher(name);
         return nameMatcher.matches();
     }
-
-//    /**
-//     * Determines the type of a constant parameter.
-//     *
-//     * @param parameter The constant parameter string.
-//     * @return The VariableType of the constant, or null if invalid.
-//     */
-//    private static VariableType ConstantParameter(String parameter) {
-//        parameter = parameter.trim();
-//        Pattern intPattern = Pattern.compile(INT_VALUE_REGEX);
-//        Matcher intMatcher = intPattern.matcher(parameter);
-//        Pattern doublePattern = Pattern.compile(DOUBLE_VALUE_REGEX);
-//        Matcher doubleMatcher = doublePattern.matcher(parameter);
-//        Pattern boolPattern = Pattern.compile(BOOLEAN_CONSTANT_REGEX);
-//        Matcher boolMatcher = boolPattern.matcher(parameter);
-//        Pattern charPattern = Pattern.compile(CHAR_VALUE_REGEX);
-//        Matcher charMatcher = charPattern.matcher(parameter);
-//        Pattern stringPattern = Pattern.compile(STRING_VALUE_REGEX);
-//        Matcher stringMatcher = stringPattern.matcher(parameter);
-//
-//        if (intMatcher.matches()) {
-//            return VariableType.INT;
-//        } else if (doubleMatcher.matches()) {
-//            return VariableType.DOUBLE;
-//        } else if (boolMatcher.matches()) {
-//            return VariableType.BOOLEAN;
-//        } else if (charMatcher.matches()) {
-//            return VariableType.CHAR;
-//        } else if (stringMatcher.matches()) {
-//            return VariableType.STRING;
-//        } else {
-//            return null;
-//        }
-//    }
 
     /**
      * Parses the type of a parameter and returns its VariableType.

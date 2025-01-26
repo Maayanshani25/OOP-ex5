@@ -1,7 +1,5 @@
 package ex5;
 
-// TODO: think about the relevant package
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,9 +18,9 @@ public class Variable {
     /**
      * Constructs a new Variable instance.
      *
-     * @param name   The name of the variable.
-     * @param type   The type of the variable (e.g., INT, DOUBLE, STRING).
-     * @param status The initial assignment status of the variable (e.g., DECLARED, ASSIGNED).
+     * @param name    The name of the variable.
+     * @param type    The type of the variable (e.g., INT, DOUBLE, STRING).
+     * @param status  The initial assignment status of the variable (e.g., DECLARED, ASSIGNED).
      * @param isFinal Whether the variable is declared as final (immutable).
      */
     public Variable(String name, VariableType type, AssignmentStatus status, Boolean isFinal) {
