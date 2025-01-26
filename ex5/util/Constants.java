@@ -33,8 +33,11 @@ public class Constants {
     }
 
     public enum AssignmentStatus {
-        ASSIGNED, DECLARED, DECLARED_LAST_ROW, CANT_BE_ASSIGNED
+        ASSIGNED, DECLARED, DECLARED_LAST_ROW, CANT_BE_ASSIGNED,
+        GLOBAL_ASSIGNED, GLOBAL_DECLARED,
     }
+    // declared in global -> global
+    // assighned in global -> global
 
     /**
      * <h2> String constants </h2>

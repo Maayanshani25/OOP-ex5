@@ -1,5 +1,7 @@
 package ex5.parsing;
 
+import ex5.scope_managing.SymbolTable;
+import ex5.scope_managing.SymbolTableException;
 import ex5.util.Constants;
 
 import java.util.ArrayList;
@@ -27,8 +29,8 @@ public class MethodReader {
      * @return A map where the keys are method names and the values are lists of parameter types for each method.
      * @throws ParserException If a method declaration is invalid or ends improperly.
      */
-    public static Map<String, ArrayList<Constants.VariableType>> readMethods(List<String> lines)
-            throws ParserException {
+    public static Map<String, ArrayList<Constants.VariableType>> readMethods(
+            List<String> lines, SymbolTable symbolTable) throws ParserException, SymbolTableException {
         Map<String, ArrayList<Constants.VariableType>> methods = new HashMap<>();
         Pattern declarePattern = Pattern.compile(METHOD_DECLARE_REGEX);
         Pattern closeBracketPattern = Pattern.compile(CLOSE_BRACKET_REGEX);
@@ -81,8 +83,38 @@ public class MethodReader {
                 // Move the index to the end of the method
                 i = currentLineIdx;
             }
-        }
 
+            // while out of declaration:
+            if (i>= lines.size()) {
+                continue;
+            }
+            AssignmentParser assignmentsParser = new AssignmentParser(symbolTable);
+            DeclarationParser declarationParser = new DeclarationParser(symbolTable);
+            currentLine = lines.get(i).trim();
+
+            // Check for valid declaration
+            Pattern keywordPattern = Pattern.compile(KEYWORDS_REGEX);
+            Matcher keywordMatcher = keywordPattern.matcher(currentLine);
+
+            if (keywordMatcher.find()) {
+                String keyword = keywordMatcher.group();
+
+                // Handle variable declaration syntax
+                if (keyword.matches(DECLARATION_REGEX)) {
+                    declarationParser.parse(currentLine);
+                    continue;
+                }
+
+                // Handle assignment syntax
+                if (keyword.matches(VARIABLE_NAME_REGEX)) {
+                    assignmentsParser.parse(currentLine);
+                    continue;
+                }
+
+            }
+        }
         return methods;
     }
+
 }
+

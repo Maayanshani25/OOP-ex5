@@ -84,12 +84,46 @@ public class SymbolTable {
         }
 
         Map<String, Variable> currentScope = table.get(table.size() - 1);
-        if (currentScope.containsKey(varName)) {
-            throw new SymbolTableException(String.format(ASSIGN_TO_EXIST_VARNAME_ERROR, varName));
+        // if not in global scope:
+        if (table.size()>1) {
+            // if already exits:
+            if (currentScope.containsKey(varName)) {
+                throw new SymbolTableException(String.format(ASSIGN_TO_EXIST_VARNAME_ERROR, varName));
+            }
+
+            Variable var = new Variable(varName, type, status, isFinal);
+            currentScope.put(varName, var);
         }
 
-        Variable var = new Variable(varName, type, status, isFinal);
-        currentScope.put(varName, var);
+        // if in global scope:
+        else {
+            // if already been declared
+            if (currentScope.containsKey(varName)) {
+                // if only in MethodReader, change to Declared but don't add again:
+                if (currentScope.get(varName).getStatus() == AssignmentStatus.GLOBAL_DECLARED &&
+                        status == AssignmentStatus.ASSIGNED) {
+                    currentScope.get(varName).setStatus(AssignmentStatus.GLOBAL_ASSIGNED);
+                }
+                else if (currentScope.get(varName).getStatus() == AssignmentStatus.GLOBAL_DECLARED ||
+                                currentScope.get(varName).getStatus() == AssignmentStatus.GLOBAL_ASSIGNED) {
+                    currentScope.get(varName).setStatus(status);
+                }
+
+                // if already been declared/assigned more than in MethodReader,
+                else {
+                    throw new SymbolTableException(String.format(ASSIGN_TO_EXIST_VARNAME_ERROR, varName));
+                }
+            }
+            // If hasn't been declared
+            else {
+                Variable var = new Variable(varName, type, AssignmentStatus.GLOBAL_DECLARED, isFinal);
+                if (status == AssignmentStatus.ASSIGNED) {
+                    var.setStatus(AssignmentStatus.GLOBAL_ASSIGNED);
+                }
+                currentScope.put(varName, var);
+                // TODO: check if needed to be changed in the symbolTable status
+            }
+        }
     }
 
     /**
@@ -130,7 +164,12 @@ public class SymbolTable {
                             String.format(TYPE_MISMATCH_ASSIGN_ERROR, varName, curVar.getType(), variableType)
                     );
                 }
-                curVar.setStatus(AssignmentStatus.ASSIGNED);
+                if (curVar.getStatus() == AssignmentStatus.GLOBAL_DECLARED) {
+                    curVar.setStatus(AssignmentStatus.GLOBAL_ASSIGNED);
+                }
+                else {
+                    curVar.setStatus(AssignmentStatus.ASSIGNED);
+                }
                 table.get(i).put(varName, curVar);
                 return;
             }
@@ -163,7 +202,8 @@ public class SymbolTable {
     public boolean isVariableAssigned(String varName) {
         for (int i = table.size() - 1; i >= 0; i--) {
             if (table.get(i).containsKey(varName)) {
-                return (table.get(i).get(varName).getStatus() == AssignmentStatus.ASSIGNED);
+                return (table.get(i).get(varName).getStatus() == AssignmentStatus.ASSIGNED ||
+                        table.get(i).get(varName).getStatus() == AssignmentStatus.GLOBAL_ASSIGNED);
             }
         }
         return false;

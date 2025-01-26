@@ -21,7 +21,6 @@ import java.util.Map;
 //          tester_files/tests/BaraksTests/if/14.sjava
 //          tester_files/tests/BaraksTests/if/30.sjava
 //          tester_files/tests/BaraksTests/variables/70.sjava
-//          tester_files/tests/BaraksTests/variables/70.sjava
 //          tester_files/tests/BaraksTests/variables/80.sjava
 //          tester_files/tests/BaraksTests/while/14.sjava
 //          tester_files/tests/SchoolTests/test251.sjava
@@ -67,8 +66,8 @@ public class Sjavac {
      */
     public boolean run() throws IOException {
         try {
-            methodsMap = MethodReader.readMethods(preprocessedLines);
             scopeManager.enterNewScope(Constants.ScopeKind.GLOBAL);
+            methodsMap = MethodReader.readMethods(preprocessedLines, symbolTable);
             validator = new Validator(symbolTable, scopeManager, methodsMap);
 
             // For every line, check if valid

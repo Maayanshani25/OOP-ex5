@@ -2,6 +2,7 @@ package ex5.tests;
 
 import ex5.parsing.MethodReader;
 import ex5.parsing.ParserException;
+import ex5.scope_managing.SymbolTable;
 import ex5.util.Constants;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class MethodReaderTest {
             lines.add("    return;");
             lines.add("}");
 
-            Map<String, ArrayList<Constants.VariableType>> methods = MethodReader.readMethods(lines);
+            Map<String, ArrayList<Constants.VariableType>> methods = MethodReader.readMethods(lines, new SymbolTable());
             if (methods.containsKey("validMethod") &&
                     methods.get("validMethod").size() == 2 &&
                     methods.get("validMethod").get(0) == Constants.VariableType.INT &&
@@ -46,7 +47,7 @@ public class MethodReaderTest {
             lines.add("    return;");
             lines.add("}");
 
-            MethodReader.readMethods(lines);
+            MethodReader.readMethods(lines, new SymbolTable());
             System.out.println("testInvalidMethodDeclaration: FAIL - Expected ParserException was not thrown.");
         } catch (ParserException e) {
             System.out.println("testInvalidMethodDeclaration: PASS - Caught expected exception: " + e.getMessage());
@@ -62,7 +63,7 @@ public class MethodReaderTest {
             lines.add("    int x = 20;");
             lines.add("}");
 
-            MethodReader.readMethods(lines);
+            MethodReader.readMethods(lines, new SymbolTable());
             System.out.println("testMissingReturnLine: FAIL - Expected ParserException was not thrown.");
         } catch (ParserException e) {
             System.out.println("testMissingReturnLine: PASS - Caught expected exception: " + e.getMessage());
@@ -83,7 +84,7 @@ public class MethodReaderTest {
             lines.add("    return;");
             lines.add("}");
 
-            MethodReader.readMethods(lines);
+            MethodReader.readMethods(lines, new SymbolTable());
             System.out.println("testNestedBrackets: PASS");
         } catch (Exception e) {
             System.out.println("testNestedBrackets: FAIL - Unexpected exception: " + e.getMessage());
