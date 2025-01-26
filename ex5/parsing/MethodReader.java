@@ -14,7 +14,8 @@ import java.util.regex.Pattern;
 import static ex5.util.Constants.*;
 
 /**
- * The MethodReader class is responsible for reading and validating method declarations from a list of code lines.
+ * The MethodReader class is responsible for reading and validating method declarations from a
+ * list of code lines.
  * It ensures that:
  * - Methods are correctly declared.
  * - Methods end with a valid "return;" statement.
@@ -25,9 +26,10 @@ public class MethodReader {
     /**
      * Reads and parses method declarations from a list of code lines.
      *
-     * @param lines A list of code lines to analyze for method declarations.
+     * @param lines       A list of code lines to analyze for method declarations.
      * @param symbolTable The SymbolTable instance used for managing variable scopes.
-     * @return A map where the keys are method names and the values are lists of parameter types for each method.
+     * @return A map where the keys are method names and the values are lists of parameter types
+     * for each method.
      * @throws ParserException If a method declaration is invalid or ends improperly.
      */
     public static Map<String, ArrayList<Constants.VariableType>> readMethods(

@@ -7,7 +7,7 @@ import ex5.util.Constants;
  * These exceptions occur when there are errors related to entering or exiting scopes,
  * such as trying to exit a scope when none exists.
  */
-public class    ScopeManagerException extends Exception {
+public class ScopeManagerException extends Exception {
 
     /**
      * Constructs a new ScopeManagerException with the specified error message.

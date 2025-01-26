@@ -32,7 +32,8 @@ public class MethodParserTest {
         }
     }
 
-    private static void testMethodDeclaration(MethodParser parser) throws ParserException, SymbolTableException {
+    private static void testMethodDeclaration(MethodParser parser)
+            throws ParserException, SymbolTableException {
         SymbolTable symbolTable = new SymbolTable();
         ScopeManager scopeManager = new ScopeManager(symbolTable);
         Map<String, ArrayList<VariableType>> methods = new HashMap<>();

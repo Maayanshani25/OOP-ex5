@@ -26,7 +26,8 @@ public class MethodReaderTest {
             lines.add("    return;");
             lines.add("}");
 
-            Map<String, ArrayList<Constants.VariableType>> methods = MethodReader.readMethods(lines, new SymbolTable());
+            Map<String, ArrayList<Constants.VariableType>> methods =
+                    MethodReader.readMethods(lines, new SymbolTable());
             if (methods.containsKey("validMethod") &&
                     methods.get("validMethod").size() == 2 &&
                     methods.get("validMethod").get(0) == Constants.VariableType.INT &&
@@ -48,11 +49,14 @@ public class MethodReaderTest {
             lines.add("}");
 
             MethodReader.readMethods(lines, new SymbolTable());
-            System.out.println("testInvalidMethodDeclaration: FAIL - Expected ParserException was not thrown.");
+            System.out.println(
+                    "testInvalidMethodDeclaration: FAIL - Expected ParserException was not thrown.");
         } catch (ParserException e) {
-            System.out.println("testInvalidMethodDeclaration: PASS - Caught expected exception: " + e.getMessage());
+            System.out.println(
+                    "testInvalidMethodDeclaration: PASS - Caught expected exception: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("testInvalidMethodDeclaration: FAIL - Unexpected exception: " + e.getMessage());
+            System.out.println(
+                    "testInvalidMethodDeclaration: FAIL - Unexpected exception: " + e.getMessage());
         }
     }
 

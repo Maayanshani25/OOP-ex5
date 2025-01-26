@@ -15,8 +15,10 @@ import java.util.regex.Pattern;
 import static ex5.util.Constants.*;
 
 /**
- * The Validator class is responsible for validating lines of code and directing them to the appropriate parsers.
- * It ensures that lines conform to the correct syntax and semantics, leveraging various parsers and a symbol table.
+ * The Validator class is responsible for validating lines of code and directing them to the
+ * appropriate parsers.
+ * It ensures that lines conform to the correct syntax and semantics,
+ * leveraging various parsers and a symbol table.
  */
 public class Validator {
 
@@ -52,9 +54,10 @@ public class Validator {
      * @return True if the line is valid, false otherwise.
      * @throws ParserException       If the syntax or semantics of the line are invalid.
      * @throws SymbolTableException  If there are issues with the symbol table (e.g., scope management).
-     * @throws ScopeManagerException If there are issues with scope management (e.g., invalid scope transitions).
+     * @throws ScopeManagerException If there are issues with scope management
      */
-    public boolean isValidLine(String line) throws ParserException, SymbolTableException, ScopeManagerException {
+    public boolean isValidLine(String line)
+            throws ParserException, SymbolTableException, ScopeManagerException {
         String trimmedLine = line.trim();
 
         // Check if the line ends with valid characters

@@ -16,5 +16,6 @@ public interface Parser {
      * @throws ParserException      If the syntax or semantics of the line are invalid.
      * @throws SymbolTableException If there are issues related to the symbol table, such as scope management.
      */
-    void parse(String line) throws ParserException, SymbolTableException; // No boolean, exceptions handle errors
+    void parse(String line)
+            throws ParserException, SymbolTableException; // No boolean, exceptions handle errors
 }

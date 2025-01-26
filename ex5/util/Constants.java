@@ -45,8 +45,8 @@ public class Constants {
     // Messeges:
     public static final String
 
-    // SymbolTable error messages:
-    SYMBOL_TABLE_EXCEPTION_GENERAL_ERROR_MESSAGE = "SymbolTable Error: ",
+            // SymbolTable error messages:
+            SYMBOL_TABLE_EXCEPTION_GENERAL_ERROR_MESSAGE = "SymbolTable Error: ",
             SYMBOL_TABLE_SCOPE_ERROR_MESSAGE = "invalid Scope.",
             FINAL_VARIABLE_ASSIGN_ERROR = "Cannot assign a value to final variable '%s'.",
             ASSIGN_TO_EXIST_VARNAME_ERROR = "Variable name '%s' already exists.",

@@ -66,18 +66,19 @@ public class SymbolTable {
 
     /**
      * Adds a variable to the current scope with specific attributes.
-     *
+     * <p>
      * For variables in non-global scopes:
      * - Ensures the variable is not already declared in the current scope.
-     *
+     * <p>
      * For variables in the global scope:
      * - If the variable has already been declared as `GLOBAL_DECLARED` or `GLOBAL_ASSIGNED`,
-     *   it updates the status based on the provided `status`.
+     * it updates the status based on the provided `status`.
      * - If the variable has not been declared, it adds the variable with the provided attributes.
-     *
+     * <p>
      * Rules:
      * - Variables with the status `CANT_BE_ASSIGNED` cannot be added.
-     * - Variables cannot be redeclared in the same scope unless updating their status is explicitly allowed (e.g., global variables).
+     * - Variables cannot be redeclared in the same scope unless updating their status is explicitly
+     * allowed (e.g., global variables).
      *
      * @param varName The name of the variable to add.
      * @param type    The type of the variable (e.g., `int`, `double`, etc.).
@@ -86,7 +87,7 @@ public class SymbolTable {
      * @throws SymbolTableException If:
      *                              - No scopes exist.
      *                              - A variable with the same name already exists in the current scope
-     *                                and cannot be redeclared or updated.
+     *                              and cannot be redeclared or updated.
      */
     public void addVarToScope(String varName,
                               VariableType type,
@@ -147,7 +148,8 @@ public class SymbolTable {
      *
      * @param varName      The name of the variable.
      * @param variableType The type of the value being assigned.
-     * @throws SymbolTableException If the variable is not declared, is final, has an invalid status, or the type does not match.
+     * @throws SymbolTableException If the variable is not declared, is final, has an invalid status,
+     * or the type does not match.
      */
     public void assignVar(String varName, VariableType variableType) throws SymbolTableException {
 

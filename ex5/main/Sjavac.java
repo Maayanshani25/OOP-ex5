@@ -16,8 +16,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//      TODO maayan: can use instead Variable.isTypeCompatible? it was in MethodParser and i moved it to Variable class
-
+/**
+ * The Sjavac class validates sJava files by parsing, preprocessing,
+ * and checking for syntax and semantic correctness.
+ * Provides methods to execute validation and handle scopes, variables,
+ * and methods within the file.
+ */
 public class Sjavac {
     private final List<String> preprocessedLines;
     private Map<String, ArrayList<Constants.VariableType>> methodsMap;

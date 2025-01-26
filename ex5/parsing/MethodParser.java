@@ -16,7 +16,8 @@ import static ex5.util.Constants.*;
 
 /**
  * The MethodParser class is responsible for parsing and validating method declarations and calls.
- * It ensures that methods adhere to the syntax rules and interact correctly with the symbol table and scope manager.
+ * It ensures that methods adhere to the syntax rules and interact correctly with the symbol
+ * table and scope manager.
  */
 public class MethodParser implements Parser {
 
@@ -71,7 +72,8 @@ public class MethodParser implements Parser {
      * @throws ParserException      If the method declaration is invalid.
      * @throws SymbolTableException If there are issues with variable declarations or scopes.
      */
-    private void parseMethodDeclaration(Matcher matcher, String line) throws ParserException, SymbolTableException {
+    private void parseMethodDeclaration(Matcher matcher, String line)
+            throws ParserException, SymbolTableException {
         scopeManager.enterNewScope(ScopeKind.METHOD);
 
         if (matcher.matches()) {
