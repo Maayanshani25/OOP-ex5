@@ -31,7 +31,7 @@ public class SymbolTable {
     public void addScope() throws SymbolTableException {
         table.add(new HashMap<>());
         for (Variable var: table.getLast().values()) {
-            addVarToScope(var.getName(), var);
+            addVarToScope(var.getName(), var.getType(), var.getStatus(), var.isFinal());
         }
     }
 
@@ -210,12 +210,12 @@ public class SymbolTable {
      * @return true if the variable is assigned, false otherwise.
      */
     public boolean isVariableAssigned(String varName) {
-        for (int i = table.size() - 1; i >= 0; i--) {
-            if (table.get(i).containsKey(varName)) {
-                return (table.get(i).get(varName).getStatus() == AssignmentStatus.ASSIGNED_THIS_SCOPE ||
-                        table.get(i).get(varName).getStatus() == AssignmentStatus.GLOBAL_ASSIGNED);
+//        for (int i = table.size() - 1; i >= 0; i--) {
+            if (table.getLast().containsKey(varName)) {
+                return (table.getLast().get(varName).getStatus() == AssignmentStatus.ASSIGNED_THIS_SCOPE ||
+                        table.getLast().get(varName).getStatus() == AssignmentStatus.GLOBAL_ASSIGNED);
             }
-        }
+//        }
         return false;
     }
 
