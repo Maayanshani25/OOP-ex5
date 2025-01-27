@@ -180,6 +180,7 @@ public class SymbolTable {
                 return;
             }
         }
+
         // If not found, throw error
         throw new SymbolTableException(String.format(VARIABLE_NOT_DECLARED_ERROR, varName));
     }
