@@ -115,6 +115,11 @@ public class AssignmentParser implements Parser {
         if (!symbolTable.isVariableDeclared(variableName)) {
             throw new ParserException(String.format(VARIABLE_NOT_DECLARED_ERROR, variableName));
         }
+
+        if (!symbolTable.isVariableAssigned(variableName)) {
+            throw new ParserException(String.format(VARIABLE_NOT_ASSIGNED_ERROR, variableName));
+        }
+
         // Ensure the source variable is assigned
         VariableType variableNameType = symbolTable.getVarType(variableName);
 
