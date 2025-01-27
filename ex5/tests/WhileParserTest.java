@@ -25,7 +25,7 @@ public class WhileParserTest {
             System.out.println("Test 1: " + testWhileParser(validTrueCondition, whileParser));
 
             // Test 2: Valid condition using boolean variable
-            symbolTable.addVarToScope("a", VariableType.BOOLEAN, AssignmentStatus.ASSIGNED, false);
+            symbolTable.addVarToScope("a", VariableType.BOOLEAN, AssignmentStatus.ASSIGNED_THIS_SCOPE, false);
             String validBooleanVariable = "if (a) {";
             System.out.println("Test 2: " + testWhileParser(validBooleanVariable, whileParser));
 
@@ -39,7 +39,7 @@ public class WhileParserTest {
             }
 
             // Test 4: Valid OR condition with boolean variables
-            symbolTable.addVarToScope("b", VariableType.BOOLEAN, AssignmentStatus.ASSIGNED, false);
+            symbolTable.addVarToScope("b", VariableType.BOOLEAN, AssignmentStatus.ASSIGNED_THIS_SCOPE, false);
             String validOrCondition = "if (a || b) {";
             System.out.println("Test 4: " + testWhileParser(validOrCondition, whileParser));
 

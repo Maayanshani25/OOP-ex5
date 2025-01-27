@@ -66,11 +66,11 @@ public class AssignmentParserTest {
             symbolTable.addVarToScope("letter", VariableType.CHAR, AssignmentStatus.DECLARED, false);
 
             // Add final variables
-            symbolTable.addVarToScope("finalX", VariableType.INT, AssignmentStatus.ASSIGNED, true);
-            symbolTable.addVarToScope("finalY", VariableType.DOUBLE, AssignmentStatus.ASSIGNED, true);
-            symbolTable.addVarToScope("finalText", VariableType.STRING, AssignmentStatus.ASSIGNED, true);
-            symbolTable.addVarToScope("finalFlag", VariableType.BOOLEAN, AssignmentStatus.ASSIGNED, true);
-            symbolTable.addVarToScope("finalLetter", VariableType.CHAR, AssignmentStatus.ASSIGNED, true);
+            symbolTable.addVarToScope("finalX", VariableType.INT, AssignmentStatus.ASSIGNED_THIS_SCOPE, true);
+            symbolTable.addVarToScope("finalY", VariableType.DOUBLE, AssignmentStatus.ASSIGNED_THIS_SCOPE, true);
+            symbolTable.addVarToScope("finalText", VariableType.STRING, AssignmentStatus.ASSIGNED_THIS_SCOPE, true);
+            symbolTable.addVarToScope("finalFlag", VariableType.BOOLEAN, AssignmentStatus.ASSIGNED_THIS_SCOPE, true);
+            symbolTable.addVarToScope("finalLetter", VariableType.CHAR, AssignmentStatus.ASSIGNED_THIS_SCOPE, true);
         } catch (SymbolTableException e) {
             System.out.println("Error setting up symbol table: " + e.getMessage());
         }

@@ -33,7 +33,7 @@ public class Constants {
     }
 
     public enum AssignmentStatus {
-        ASSIGNED, DECLARED,
+        ASSIGNED_THIS_SCOPE, DECLARED,
         GLOBAL_ASSIGNED, GLOBAL_DECLARED,
     }
 

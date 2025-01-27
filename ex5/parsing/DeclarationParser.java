@@ -196,6 +196,6 @@ public class DeclarationParser implements Parser {
             throw new ParserException(String.format(FINAL_VARIABLE_ASSIGNMENT_ERROR, variableName));
         }
 
-        return hasValue ? AssignmentStatus.ASSIGNED : AssignmentStatus.DECLARED;
+        return hasValue ? AssignmentStatus.ASSIGNED_THIS_SCOPE : AssignmentStatus.DECLARED;
     }
 }

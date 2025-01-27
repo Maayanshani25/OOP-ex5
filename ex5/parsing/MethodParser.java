@@ -223,7 +223,7 @@ public class MethodParser implements Parser {
                     isValidName(parameterStrings[2])) {
                 String parameterName = parameterStrings[2];
                 VariableType parameterType = parseType(parameterStrings[1]);
-                return new Variable(parameterName, parameterType, AssignmentStatus.ASSIGNED, true);
+                return new Variable(parameterName, parameterType, AssignmentStatus.ASSIGNED_THIS_SCOPE, true);
             } else {
                 throw new ParserException(METHOD_INVALID_PARAMETERS_ERROR);
             }
@@ -232,7 +232,7 @@ public class MethodParser implements Parser {
             if (isValidName(parameterStrings[1])) {
                 String parameterName = parameterStrings[1];
                 VariableType parameterType = parseType(parameterStrings[0]);
-                return new Variable(parameterName, parameterType, AssignmentStatus.ASSIGNED, false);
+                return new Variable(parameterName, parameterType, AssignmentStatus.ASSIGNED_THIS_SCOPE, false);
             } else {
                 throw new ParserException(METHOD_INVALID_PARAMETERS_ERROR);
             }
