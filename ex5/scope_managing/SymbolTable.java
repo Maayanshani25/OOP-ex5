@@ -28,8 +28,11 @@ public class SymbolTable {
     /**
      * Adds a new scope to the symbol table.
      */
-    public void addScope() {
+    public void addScope() throws SymbolTableException {
         table.add(new HashMap<>());
+        for (Variable var: table.getLast().values()) {
+            addVarToScope(var.getName(), var);
+        }
     }
 
     /**
@@ -58,7 +61,7 @@ public class SymbolTable {
             throw new SymbolTableException(SYMBOL_TABLE_SCOPE_ERROR_MESSAGE);
         }
 
-        Map<String, Variable> currentScope = table.get(table.size() - 1);
+        Map<String, Variable> currentScope = table.getLast();
         if (currentScope.containsKey(varName)) {
             throw new SymbolTableException(String.format(ASSIGN_TO_EXIST_VARNAME_ERROR, varName));
         }
@@ -224,11 +227,9 @@ public class SymbolTable {
      */
     private void updateVarsStatus() {
         if (!table.isEmpty()) {
-            for (int i = table.size() - 1; i >= 0; i--) {
-                for (Variable var : table.get(i).values()) {
-                    if (var.getStatus() == AssignmentStatus.ASSIGNED_THIS_SCOPE) {
-                        var.setStatus(AssignmentStatus.DECLARED);
-                    }
+            for (Variable var : table.getLast().values()) {
+                if (var.getStatus() == AssignmentStatus.ASSIGNED_THIS_SCOPE) {
+                    var.setStatus(AssignmentStatus.DECLARED);
                 }
             }
         }

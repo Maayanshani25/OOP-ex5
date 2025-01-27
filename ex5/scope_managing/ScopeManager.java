@@ -32,7 +32,7 @@ public class ScopeManager {
      *
      * @param scopeKind The kind of scope being entered (e.g., METHOD, IF, WHILE, etc.).
      */
-    public void enterNewScope(Constants.ScopeKind scopeKind) {
+    public void enterNewScope(Constants.ScopeKind scopeKind) throws SymbolTableException {
         scopeStack.push(scopeKind);
         symbolTable.addScope();
         if (scopeKind == Constants.ScopeKind.METHOD) {
