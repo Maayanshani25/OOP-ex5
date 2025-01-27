@@ -76,7 +76,6 @@ public class SymbolTable {
      * - If the variable has not been declared, it adds the variable with the provided attributes.
      * <p>
      * Rules:
-     * - Variables with the status `CANT_BE_ASSIGNED` cannot be added.
      * - Variables cannot be redeclared in the same scope unless updating their status is explicitly
      * allowed (e.g., global variables).
      *
@@ -164,12 +163,6 @@ public class SymbolTable {
                     );
                 }
 
-                if (curVar.getStatus() == AssignmentStatus.CANT_BE_ASSIGNED) {
-                    throw new SymbolTableException(
-                            String.format(CANNOT_BE_ASSIGNED_ERROR, varName)
-                    );
-                }
-
                 // Check if the type matches
                 if (curVar.getType() != variableType) {
                     throw new SymbolTableException(
@@ -218,26 +211,6 @@ public class SymbolTable {
             }
         }
         return false;
-    }
-
-    /**
-     * Updates the status of all variables in the current scope.
-     * - Variables with the status `DECLARED` are changed to `DECLARED_LAST_ROW`.
-     * - Variables with the status `DECLARED_LAST_ROW` are changed to `CANT_BE_ASSIGNED`.
-     * This method ensures that variables cannot be reassigned after their allowed assignment window.
-     */
-    public void updateVarsStatus() {
-        if (!table.isEmpty()) {
-            for (int i = table.size() - 1; i >= 0; i--) {
-                for (Variable var : table.get(i).values()) {
-                    if (var.getStatus() == AssignmentStatus.DECLARED) {
-                        var.setStatus(AssignmentStatus.DECLARED_LAST_ROW);
-                    } else if (var.getStatus() == AssignmentStatus.DECLARED_LAST_ROW) {
-                        var.setStatus(AssignmentStatus.CANT_BE_ASSIGNED);
-                    }
-                }
-            }
-        }
     }
 
     /**

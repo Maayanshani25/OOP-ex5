@@ -63,7 +63,6 @@ public class Sjavac {
                 if (!validator.isValidLine(line)) { // Use the validator instance
                     return false;
                 }
-                symbolTable.updateVarsStatus();
             }
         } catch (ParserException | SymbolTableException | ScopeManagerException e) {
             System.err.println(e.getMessage()); // Log the exception (optional)
